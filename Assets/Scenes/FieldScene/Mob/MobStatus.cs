@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class MobStatus : MonoBehaviour
+public class MobStatus
 {
     protected enum StateEnum //キャラクターの状態
     {
@@ -16,23 +16,4 @@ public abstract class MobStatus : MonoBehaviour
 
     public bool IsMovable => (state == StateEnum.Normal); //状態がNormalであればtrueを返す
     public bool IsAttackable => (state == StateEnum.Normal); //状態がNormalであればtrueを返す
-
-    protected Animator animator; //アニメーターを格納
-
-    void Awake()
-    { 
-        animator = this.GetComponent<Animator>(); //アニメーターを取得
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

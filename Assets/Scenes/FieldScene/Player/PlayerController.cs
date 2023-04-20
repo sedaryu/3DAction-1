@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlayerController : MobController
 {
+    [SerializeField] private GameObject projectilePrefab;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -14,6 +16,11 @@ public class PlayerController : MobController
     void Update()
     {
         InputMoving();
+
+        if (Input.GetButtonDown("Fire1"))
+        { 
+            Instantiate(projectilePrefab, new Vector3(transform.position.x, 0.5f, transform.position.z), transform.rotation);
+        }
     }
 
     //移動に関する入力を受け付けるメソッド
