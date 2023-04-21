@@ -30,9 +30,13 @@ public class EnemyController : MobController
         {
             Knockback(other.transform.forward.normalized * 1.5f); //ノックバックを実行
             Destroy(other.gameObject); //飛び道具を消滅
-            StartCoroutine(FrameOfDamageState());
+            StartCoroutine(FrameOfDamageState()); //キャラの状態をDamageに遷移
         }
+    }
 
+    //壁めり込み時の処理
+    private void OnTriggerStay(Collider other)
+    {
         if (other.CompareTag("Obstacle") && status.IsDamageble) //障害物にめり込んだ場合
         {
             Debug.Log("BANG!!");

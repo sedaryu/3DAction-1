@@ -15,6 +15,7 @@ public class MobStatus
     protected StateEnum state = StateEnum.Normal; //‰Šú’l‚ÍNormal
 
     public bool IsMovable => (state == StateEnum.Normal); //ó‘Ô‚ªNormal‚Å‚ ‚ê‚Îtrue‚ğ•Ô‚·
+
     public bool IsDamageble => (state == StateEnum.Damage);
 
     public void GoToDamageStateIfPossible() //ó‘Ô‚ªDamage‚É‘JˆÚ‚·‚é
@@ -24,6 +25,7 @@ public class MobStatus
 
     public void GoToNormalStateIfPossible() //ó‘Ô‚ªNormal‚É‘JˆÚ‚·‚é
     {
+        if (state == StateEnum.Die) return;
         state = StateEnum.Normal;
     }
 }
