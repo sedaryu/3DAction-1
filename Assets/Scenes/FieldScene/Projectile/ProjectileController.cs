@@ -13,12 +13,12 @@ public class ProjectileController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.Translate(new Vector3(0, 0, 50 * Time.deltaTime));
+        transform.Translate(new Vector3(0, 0, 25 * Time.deltaTime));
     }
 
     private IEnumerator DestroyProjectile() //ˆê’èŠÔŒo‰ßŒã”ò‚Ñ“¹‹ï‚ªÁ–Å‚·‚éˆ—
     {
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(0.5f);
         Destroy(gameObject);
     }
 }

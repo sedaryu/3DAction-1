@@ -32,10 +32,10 @@ public class PlayerController : MobController
         Vector3 moving = new Vector3(0, 0, 0);
 
         //キー入力
-        //moving.x = Input.GetButton("Horizontal") ? Input.GetAxis("Horizontal") : 0; //横方向の移動入力を取得
-        //moving.z = Input.GetButton("Vertical") ? Input.GetAxis("Vertical") : 0; //縦方向の移動入力を取得
-        moving.x = virtualStick.Horizontal;
-        moving.z = virtualStick.Vertical;
+        moving.x = Input.GetButton("Horizontal") ? Input.GetAxis("Horizontal") : 0; //横方向の移動入力を取得
+        moving.z = Input.GetButton("Vertical") ? Input.GetAxis("Vertical") : 0; //縦方向の移動入力を取得
+        //moving.x = virtualStick.Horizontal;
+        //moving.z = virtualStick.Vertical;
 
         //アナログスティック入力
         moving.x = Input.GetAxis("ASHorizontal") == 0 ? moving.x : Input.GetAxis("ASHorizontal"); //横方向の移動入力を取得

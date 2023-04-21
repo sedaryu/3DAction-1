@@ -6,9 +6,9 @@ using UnityEngine.AI;
 public class MobController : MonoBehaviour
 {
     //パラメーター
-    [SerializeField] protected MobParam mobParam;
+    [SerializeField] protected MobParam param;
     //ステータス
-    protected MobStatus mobStatus;
+    protected MobStatus status;
     //キャラクターの移動はNavMeshAgentで行う
     protected NavMeshAgent agent;
     //アニメーターを格納
@@ -16,7 +16,7 @@ public class MobController : MonoBehaviour
 
     protected void Awake()
     {
-        mobStatus = new MobStatus();
+        status = new MobStatus();
         agent = GetComponent<NavMeshAgent>(); //エージェントを取得
         animator = GetComponent<Animator>(); //アニメーターを取得
     }
@@ -35,9 +35,9 @@ public class MobController : MonoBehaviour
     //キャラクターの移動を管理するメソッド
     protected void Move(Vector3 vector)
     {
-        if (!mobStatus.IsMovable) return;
+        if (!status.IsMovable) return;
 
-        agent.Move(vector * mobParam.Speed * Time.deltaTime); //移動入力を更新
+        agent.Move(vector * param.Speed * Time.deltaTime); //移動入力を更新
 
         //キャラクターの向きを更新
         if (vector != Vector3.zero)

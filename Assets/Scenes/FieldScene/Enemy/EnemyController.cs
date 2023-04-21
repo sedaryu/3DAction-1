@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class EnemyController : MobController
@@ -12,13 +13,14 @@ public class EnemyController : MobController
     void Start()
     {
         player = GameObject.Find("Player").GetComponent<Transform>(); //プレイヤーの位置を取得
-        agent.speed = mobParam.Speed; //パラメーターからスピードを取得
+        agent.speed = Random.Range(0.5f, 2.0f); //param.Speed; //パラメーターからスピードを取得
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (JudgeGrounded()) agent.destination = player.position;
+        if (status.IsMovable) agent.destination = player.position;
+        //if (JudgeGrounded()) agent.destination = player.position; //落下撃破ありの場合
     }
 
     //攻撃ヒット時の処理
@@ -28,6 +30,12 @@ public class EnemyController : MobController
         {
             Knockback(other.transform.forward.normalized * 1.5f); //ノックバックを実行
             Destroy(other.gameObject); //飛び道具を消滅
+            StartCoroutine(FrameOfDamageState());
+        }
+
+        if (other.CompareTag("Obstacle") && status.IsDamageble) //障害物にめり込んだ場合
+        {
+            Debug.Log("BANG!!");
         }
     }
 
@@ -35,6 +43,16 @@ public class EnemyController : MobController
     public void Knockback(Vector3 vector)
     { 
         transform.Translate(vector, Space.World); //飛び道具の方向にノックバック
+    }
+
+    private IEnumerator FrameOfDamageState() //3フレームだけキャラの状態がDamageになる
+    { 
+        status.GoToDamageStateIfPossible();
+        for (int i = 0; i < 3; i++)
+        {
+            yield return null;
+        }
+        status.GoToNormalStateIfPossible();
     }
 
     protected bool JudgeGrounded() //接地判定処理を行う

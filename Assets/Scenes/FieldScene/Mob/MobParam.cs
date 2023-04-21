@@ -5,7 +5,13 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "MobParam", menuName = "Custom/MobParam")]
 public class MobParam : ScriptableObject
 {
-    public float Speed
+    public float HitPoint //0‚É‚È‚é‚Æ‚Æ‚Ç‚ß‚ğh‚³‚ê‚é
+    {
+        get => _hitPoint;
+    }
+    [SerializeField] private float _hitPoint;
+
+    public float Speed //ˆÚ“®‘¬“x
     {
         get => _speed;
     }
