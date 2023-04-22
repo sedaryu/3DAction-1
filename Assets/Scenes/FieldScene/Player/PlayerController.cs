@@ -34,8 +34,8 @@ public class PlayerController : MobController
         //キー入力
         moving.x = Input.GetButton("Horizontal") ? Input.GetAxis("Horizontal") : 0; //横方向の移動入力を取得
         moving.z = Input.GetButton("Vertical") ? Input.GetAxis("Vertical") : 0; //縦方向の移動入力を取得
-        //moving.x = virtualStick.Horizontal;
-        //moving.z = virtualStick.Vertical;
+        moving.x = virtualStick.Horizontal;
+        moving.z = virtualStick.Vertical;
 
         //アナログスティック入力
         moving.x = Input.GetAxis("ASHorizontal") == 0 ? moving.x : Input.GetAxis("ASHorizontal"); //横方向の移動入力を取得
