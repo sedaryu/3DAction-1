@@ -1592,6 +1592,7 @@ GameObject:
   - component: {fileID: 6793829147152302988}
   - component: {fileID: 6793829147152302978}
   - component: {fileID: 6793829147152302989}
+  - component: {fileID: 3901755319367530151}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -1637,6 +1638,7 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!54 &6793829147152302988
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1666,7 +1668,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _param: {fileID: 11400000, guid: e3b6d11ca8f7ccd4796386e3fadc38ba, type: 2}
-  projectilePrefab: {fileID: 6044048286852949548, guid: 19200f4b165dcab4997d9aca2a940222, type: 3}
 --- !u!195 &6793829147152302989
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -1689,6 +1690,19 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 1
   m_ObstacleAvoidanceType: 1
+--- !u!114 &3901755319367530151
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7892119916735403539}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e30d348ad3040a4fac7420ea86522d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  param: {fileID: 11400000, guid: 123761ae75250c6459f42c7f45014a74, type: 2}
 --- !u!1 &7954235998624993380
 GameObject:
   m_ObjectHideFlags: 0
@@ -1797,6 +1811,7 @@ GameObject:
   - component: {fileID: 7149307649603132887}
   - component: {fileID: 1667634036431800745}
   - component: {fileID: 8461223611881029964}
+  - component: {fileID: 67708389774265391}
   m_Layer: 0
   m_Name: MeshCollider
   m_TagString: Untagged
@@ -1895,6 +1910,51 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d83caa3a3384bb04283345c3c7553ba5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &67708389774265391
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8296485458954850808}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb4b7aacb25852944ade0dc1d5f6a4d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onTriggerEnter:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 3901755319367530151}
+        m_TargetAssemblyTypeName: PlayerShoot, Assembly-CSharp
+        m_MethodName: EnemyInCollider
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onTriggerStay:
+    m_PersistentCalls:
+      m_Calls: []
+  onTriggerExit:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 3901755319367530151}
+        m_TargetAssemblyTypeName: PlayerShoot, Assembly-CSharp
+        m_MethodName: EnemyOutCollider
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &8343859970277922322
 GameObject:
   m_ObjectHideFlags: 0

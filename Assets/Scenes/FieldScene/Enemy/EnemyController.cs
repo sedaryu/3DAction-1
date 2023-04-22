@@ -12,18 +12,21 @@ public class EnemyController : MobController
     //追跡するプレイヤー
     private Transform player;
 
+    //圧迫判定用
+    private Vector3 presentPosition;
+    private float knockbackMagnitude;
+
     // Start is called before the first frame update
     void Start()
     {
         param = (EnemyParam)_param;
         player = GameObject.Find("Player").GetComponent<Transform>(); //プレイヤーの位置を取得
-        agent.speed = Random.Range(0.5f, 2.0f); //param.Speed; //パラメーターからスピードを取得
+        agent.speed = 0;// Random.Range(0.5f, 2.0f); //param.Speed; //パラメーターからスピードを取得
     }
 
     // Update is called once per frame
     void Update()
     {
-        status.GoToNormalStateIfPossible();
         if (status.IsMovable) agent.destination = player.position; //プレイヤーを追跡
         //if (JudgeGrounded()) agent.destination = player.position; //落下撃破ありの場合
     }
@@ -50,16 +53,45 @@ public class EnemyController : MobController
         }
     }
 
+    public void Hit(Vector3 vector, float attack)
+    {
+        presentPosition = transform.position;
+        knockbackMagnitude = Knockback(vector);
+        Damage(attack);
+        StartCoroutine(FrameOfDamageState());
+        //Debug.Log($"enemyKB: {(transform.position - presentPosition).magnitude + 0.001} KB: {knockbackMagnitude}");
+    }
+
     //ノックバック処理
-    public void Knockback(Vector3 vector)
-    { 
-        transform.Translate(vector, Space.World); //飛び道具の方向にノックバック
+    public float Knockback(Vector3 vector)
+    {
+        Vector3 knockback = vector * param.Weight;
+        transform.Translate(knockback, Space.World); //飛び道具の方向にノックバック
+        return knockback.magnitude;
     }
 
     //ダメージ処理
     protected override void Damage(float attack)
     {
         param.HitPoint -= attack;
+    }
+
+    private IEnumerator FrameOfDamageState()
+    {
+        status.GoToDamageStateIfPossible(); //キャラの状態をDamageに遷移
+        yield return null;
+        JudgeCollapsed();
+        status.GoToNormalStateIfPossible();
+    }
+
+    private void JudgeCollapsed()
+    {
+        //Debug.Log($"enemyKB: {(transform.position - presentPosition).magnitude + 0.1f} KB: {knockbackMagnitude}");
+        //圧迫判定
+        if ((transform.position - presentPosition).magnitude + 0.1f < knockbackMagnitude)
+        {
+            Debug.Log("Critical!!!");
+        }
     }
 
     protected bool JudgeGrounded() //接地判定処理を行う

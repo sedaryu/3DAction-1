@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class PlayerController : MobController
 {
-    [SerializeField] private GameObject projectilePrefab;
-
     //バーチャルスティック
     private Joystick virtualStick;
 
@@ -19,11 +17,6 @@ public class PlayerController : MobController
     void Update()
     {
         InputMoving();
-
-        if (Input.GetButtonDown("Fire1"))
-        { 
-            Instantiate(projectilePrefab, new Vector3(transform.position.x, 0.5f, transform.position.z), transform.rotation);
-        }
     }
 
     //移動に関する入力を受け付けるメソッド
@@ -34,8 +27,8 @@ public class PlayerController : MobController
         //キー入力
         moving.x = Input.GetButton("Horizontal") ? Input.GetAxis("Horizontal") : 0; //横方向の移動入力を取得
         moving.z = Input.GetButton("Vertical") ? Input.GetAxis("Vertical") : 0; //縦方向の移動入力を取得
-        //moving.x = virtualStick.Horizontal;
-        //moving.z = virtualStick.Vertical;
+        moving.x = virtualStick.Horizontal;
+        moving.z = virtualStick.Vertical;
 
         //アナログスティック入力
         moving.x = Input.GetAxis("ASHorizontal") == 0 ? moving.x : Input.GetAxis("ASHorizontal"); //横方向の移動入力を取得
@@ -52,11 +45,12 @@ public class PlayerController : MobController
         agent.Move(vector * _param.Speed * Time.deltaTime); //移動入力を更新
 
         //キャラクターの向きを更新
-        if (vector != Vector3.zero)
-        {
-            Quaternion targetRotation = Quaternion.LookRotation(vector);
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, 2000 * Time.deltaTime);
-        }
+        if (vector != Vector3.zero) transform.rotation = Quaternion.LookRotation(vector);
+        //if (vector != Vector3.zero)
+        //{
+        //    Quaternion targetRotation = Quaternion.LookRotation(vector);
+        //    transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, 2000 * Time.deltaTime);
+        //}
         //アニメーターに移動スピードを反映
         animator.SetFloat("MoveSpeed", vector.magnitude);
     }
