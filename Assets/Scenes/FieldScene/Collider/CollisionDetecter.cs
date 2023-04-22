@@ -21,7 +21,7 @@ public class CollisionDetecter : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Enemy"))
-        { Debug.Log("Target!!"); }
+        //if (other.CompareTag("Enemy"))
+        //{ Debug.Log("Target!!"); }
     }
 }
