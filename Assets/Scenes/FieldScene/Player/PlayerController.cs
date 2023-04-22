@@ -49,7 +49,7 @@ public class PlayerController : MobController
     {
         if (!status.IsMovable) return;
 
-        agent.Move(vector * param.Speed * Time.deltaTime); //移動入力を更新
+        agent.Move(vector * _param.Speed * Time.deltaTime); //移動入力を更新
 
         //キャラクターの向きを更新
         if (vector != Vector3.zero)

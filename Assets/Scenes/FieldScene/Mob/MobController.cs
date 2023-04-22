@@ -6,7 +6,7 @@ using UnityEngine.AI;
 public class MobController : MonoBehaviour
 {
     //パラメーター
-    [SerializeField] protected MobParam param;
+    [SerializeField] protected MobParam _param;
     //ステータス
     protected MobStatus status;
     //キャラクターの移動はNavMeshAgentで行う
@@ -30,5 +30,10 @@ public class MobController : MonoBehaviour
     void Update()
     {
         
+    }
+
+    protected virtual void Damage(float attack)
+    {
+        Debug.Log("Damage");
     }
 }

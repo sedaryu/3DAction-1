@@ -6,12 +6,15 @@ using UnityEngine;
 
 public class EnemyController : MobController
 {
+    //パラメーター
+    private EnemyParam param;
     //追跡するプレイヤー
     private Transform player;
 
     // Start is called before the first frame update
     void Start()
     {
+        param = (EnemyParam)_param;
         player = GameObject.Find("Player").GetComponent<Transform>(); //プレイヤーの位置を取得
         agent.speed = Random.Range(0.5f, 2.0f); //param.Speed; //パラメーターからスピードを取得
     }
@@ -19,7 +22,8 @@ public class EnemyController : MobController
     // Update is called once per frame
     void Update()
     {
-        if (status.IsMovable) agent.destination = player.position;
+        status.GoToNormalStateIfPossible();
+        if (status.IsMovable) agent.destination = player.position; //プレイヤーを追跡
         //if (JudgeGrounded()) agent.destination = player.position; //落下撃破ありの場合
     }
 
@@ -28,9 +32,11 @@ public class EnemyController : MobController
     {
         if (other.CompareTag("Projectile")) //飛び道具が当たった場合
         {
-            Knockback(other.transform.forward.normalized * 1.5f); //ノックバックを実行
+            ProjectileParam projectileParam = other.GetComponent<ProjectileController>().Param;
+            Knockback(other.transform.forward.normalized * param.Weight * projectileParam.Knockback); //ノックバックを実行
+            Damage(projectileParam.Attack); //ダメージ処理を実行
             Destroy(other.gameObject); //飛び道具を消滅
-            StartCoroutine(FrameOfDamageState()); //キャラの状態をDamageに遷移
+            status.GoToDamageStateIfPossible(); //キャラの状態をDamageに遷移
         }
     }
 
@@ -39,7 +45,7 @@ public class EnemyController : MobController
     {
         if (other.CompareTag("Obstacle") && status.IsDamageble) //障害物にめり込んだ場合
         {
-            Debug.Log("BANG!!");
+            Debug.Log("Damage!!");
         }
     }
 
@@ -49,14 +55,10 @@ public class EnemyController : MobController
         transform.Translate(vector, Space.World); //飛び道具の方向にノックバック
     }
 
-    private IEnumerator FrameOfDamageState() //3フレームだけキャラの状態がDamageになる
-    { 
-        status.GoToDamageStateIfPossible();
-        for (int i = 0; i < 3; i++)
-        {
-            yield return null;
-        }
-        status.GoToNormalStateIfPossible();
+    //ダメージ処理
+    protected override void Damage(float attack)
+    {
+        param.HitPoint -= attack;
     }
 
     protected bool JudgeGrounded() //接地判定処理を行う
