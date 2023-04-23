@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class PlayerShoot : MonoBehaviour
 {
-    [SerializeField] private ProjectileParam param;
+    [SerializeField] private GunParam param;
 
     //捕捉した敵オブジェクトを格納
     List<EnemyController> lockOnEnemies = new List<EnemyController>();
@@ -21,11 +21,8 @@ public class PlayerShoot : MonoBehaviour
     {
         if (Input.GetButtonDown("Fire1") && lockOnEnemies.Count > 0)
         {
-            List<float> distances = lockOnEnemies.Select(x => Vector3.Distance(transform.position, x.transform.position)).ToList();
-            EnemyController enemy = lockOnEnemies[distances.FindIndex(x => x == distances.Min())];
-            transform.LookAt(enemy.transform);
-            Vector3 vector = transform.forward.normalized * param.Knockback;
-            enemy.Hit(vector, param.Attack);
+            param.HittingEnemy.Invoke(this.transform, lockOnEnemies, param);
+
             //Instantiate(projectilePrefab, new Vector3(transform.position.x, 0.5f, transform.position.z), transform.rotation);
         }
     }

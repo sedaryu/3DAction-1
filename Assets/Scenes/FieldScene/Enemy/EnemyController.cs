@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
+using Vector3 = UnityEngine.Vector3;
 
 public class EnemyController : MobController
 {
@@ -21,13 +23,14 @@ public class EnemyController : MobController
     {
         param = (EnemyParam)_param;
         player = GameObject.Find("Player").GetComponent<Transform>(); //プレイヤーの位置を取得
-        agent.speed = 0;// Random.Range(0.5f, 2.0f); //param.Speed; //パラメーターからスピードを取得
+        agent.speed = Random.Range(0.5f, 2.0f); //param.Speed; //パラメーターからスピードを取得
     }
 
     // Update is called once per frame
     void Update()
     {
         if (status.IsMovable) agent.destination = player.position; //プレイヤーを追跡
+        animator.SetFloat("MoveSpeed", agent.velocity.magnitude); //アニメーターに移動スピードを反映
         //if (JudgeGrounded()) agent.destination = player.position; //落下撃破ありの場合
     }
 
@@ -36,20 +39,11 @@ public class EnemyController : MobController
     {
         if (other.CompareTag("Projectile")) //飛び道具が当たった場合
         {
-            ProjectileParam projectileParam = other.GetComponent<ProjectileController>().Param;
+            GunParam projectileParam = other.GetComponent<ProjectileController>().Param;
             Knockback(other.transform.forward.normalized * param.Weight * projectileParam.Knockback); //ノックバックを実行
             Damage(projectileParam.Attack); //ダメージ処理を実行
             Destroy(other.gameObject); //飛び道具を消滅
             status.GoToDamageStateIfPossible(); //キャラの状態をDamageに遷移
-        }
-    }
-
-    //壁めり込み時の処理
-    private void OnTriggerStay(Collider other)
-    {
-        if (other.CompareTag("Obstacle") && status.IsDamageble) //障害物にめり込んだ場合
-        {
-            Debug.Log("Damage!!");
         }
     }
 
@@ -59,7 +53,6 @@ public class EnemyController : MobController
         knockbackMagnitude = Knockback(vector);
         Damage(attack);
         StartCoroutine(FrameOfDamageState());
-        //Debug.Log($"enemyKB: {(transform.position - presentPosition).magnitude + 0.001} KB: {knockbackMagnitude}");
     }
 
     //ノックバック処理
@@ -86,7 +79,6 @@ public class EnemyController : MobController
 
     private void JudgeCollapsed()
     {
-        //Debug.Log($"enemyKB: {(transform.position - presentPosition).magnitude + 0.1f} KB: {knockbackMagnitude}");
         //圧迫判定
         if ((transform.position - presentPosition).magnitude + 0.1f < knockbackMagnitude)
         {

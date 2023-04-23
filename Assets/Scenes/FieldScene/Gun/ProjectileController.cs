@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class ProjectileController : MonoBehaviour
 {
-    public ProjectileParam Param
+    public GunParam Param
     {
         get => _param;
     }
-    [SerializeField] private ProjectileParam _param;
+    [SerializeField] private GunParam _param;
 
     // Start is called before the first frame update
     void Start()
@@ -19,7 +19,7 @@ public class ProjectileController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.Translate(new Vector3(0, 0, Param.Speed * Time.deltaTime));
+        //transform.Translate(new Vector3(0, 0, Param.Speed * Time.deltaTime));
     }
 
     private IEnumerator DestroyProjectile() //ˆê’èŠÔŒo‰ßŒã”ò‚Ñ“¹‹ï‚ªÁ–Å‚·‚éˆ—

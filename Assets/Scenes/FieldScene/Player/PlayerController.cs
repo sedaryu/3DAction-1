@@ -46,11 +46,6 @@ public class PlayerController : MobController
 
         //キャラクターの向きを更新
         if (vector != Vector3.zero) transform.rotation = Quaternion.LookRotation(vector);
-        //if (vector != Vector3.zero)
-        //{
-        //    Quaternion targetRotation = Quaternion.LookRotation(vector);
-        //    transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, 2000 * Time.deltaTime);
-        //}
         //アニメーターに移動スピードを反映
         animator.SetFloat("MoveSpeed", vector.magnitude);
     }
