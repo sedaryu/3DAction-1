@@ -26,7 +26,10 @@ public class PlayerController : MobController
 
         //ヴァーチャルスティック入力
         moving.x = virtualStick.Horizontal; //横方向の移動入力を取得
-        moving.z = virtualStick.Vertical; //縦方向の移動入力を取得
+        moving.z = virtualStick.Vertical; //縦方向の移動入力を取
+
+        moving.x = Input.GetAxis("ASHorizontal");
+        moving.z = Input.GetAxis("ASVertical");
 
         Move(moving); //入力を反映
     }

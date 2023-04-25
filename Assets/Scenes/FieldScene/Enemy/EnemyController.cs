@@ -14,23 +14,21 @@ public class EnemyController : MobController
     private EnemyParam param;
     //追跡するプレイヤー
     private Transform player;
-
-    //圧迫判定用
-    private Vector3 presentPosition;
-    private float knockbackMagnitude;
+    //HitPoint表示UI
+    private GameObject hitPointCircle;
 
     // Start is called before the first frame update
     void Start()
     {
         param = (EnemyParam)_param;
+        agent.speed = Random.Range(0.5f, 4.0f); //param.Speed; //パラメーターからスピードを取得
         player = GameObject.Find("Player").GetComponent<Transform>(); //プレイヤーの位置を取得
-        agent.speed = Random.Range(0.5f, 2.0f); //param.Speed; //パラメーターからスピードを取得
+        hitPointCircle = transform.Find("HitPointCircle").gameObject;
     }
 
     // Update is called once per frame
     void Update()
     {
-        status.GoToNormalStateIfPossible(); //キャラの状態をNormalに遷移
         if (status.IsMovable) agent.destination = player.position; //プレイヤーを追跡
         animator.SetFloat("MoveSpeed", agent.velocity.magnitude); //アニメーターに移動スピードを反映
         //if (JudgeGrounded()) agent.destination = player.position; //落下撃破ありの場合
@@ -39,31 +37,34 @@ public class EnemyController : MobController
     public void Hit(Vector3 vector, float attack)
     {
         status.GoToDamageStateIfPossible(); //キャラの状態をDamageに遷移
+        animator.SetTrigger("Damage");
         transform.rotation = Quaternion.LookRotation(-vector.normalized);
+        StartCoroutine(FreezeMotion(vector, attack));
+    }
+
+    private IEnumerator FreezeMotion(Vector3 vector, float attack)
+    {
+        hitPointCircle.transform.Translate(vector * param.Weight * 0.25f, Space.World);
+        yield return new WaitForSeconds(0.03f);
+        hitPointCircle.transform.Translate(vector * param.Weight, Space.World);
+        yield return new WaitForSeconds(0.03f);
+        hitPointCircle.transform.localPosition = new Vector3(0, 0.001f, 0);
         JudgeCollapsed(vector);
-        knockbackMagnitude = Knockback(vector);
+        Knockback(vector);
         Damage(attack);
+        status.GoToNormalStateIfPossible(); //キャラの状態をNormalに遷移
     }
 
     //ノックバック処理
-    public float Knockback(Vector3 vector)
+    public void Knockback(Vector3 vector)
     {
-        Vector3 knockback = vector * param.Weight;
-        transform.Translate(knockback, Space.World); //飛び道具の方向にノックバック
-        return knockback.magnitude;
+        transform.Translate(vector * param.Weight, Space.World); //飛び道具の方向にノックバック
     }
 
     //ダメージ処理
     protected override void Damage(float attack)
     {
         param.HitPoint -= attack;
-    }
-
-    private IEnumerator FrameOfDamageState()
-    {
-        status.GoToDamageStateIfPossible(); //キャラの状態をDamageに遷移
-        yield return null;
-        status.GoToNormalStateIfPossible();
     }
 
     private void JudgeCollapsed(Vector3 vector)
