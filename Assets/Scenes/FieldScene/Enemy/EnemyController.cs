@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
+using Vector3 = UnityEngine.Vector3;
 
 public class EnemyController : MobController
 {
@@ -11,6 +13,10 @@ public class EnemyController : MobController
     private EnemyParam param;
     //追跡するプレイヤー
     private Transform player;
+
+    //圧迫判定用
+    private Vector3 presentPosition;
+    private float knockbackMagnitude;
 
     // Start is called before the first frame update
     void Start()
@@ -23,8 +29,8 @@ public class EnemyController : MobController
     // Update is called once per frame
     void Update()
     {
-        status.GoToNormalStateIfPossible();
         if (status.IsMovable) agent.destination = player.position; //プレイヤーを追跡
+        animator.SetFloat("MoveSpeed", agent.velocity.magnitude); //アニメーターに移動スピードを反映
         //if (JudgeGrounded()) agent.destination = player.position; //落下撃破ありの場合
     }
 
@@ -33,7 +39,7 @@ public class EnemyController : MobController
     {
         if (other.CompareTag("Projectile")) //飛び道具が当たった場合
         {
-            ProjectileParam projectileParam = other.GetComponent<ProjectileController>().Param;
+            GunParam projectileParam = other.GetComponent<ProjectileController>().Param;
             Knockback(other.transform.forward.normalized * param.Weight * projectileParam.Knockback); //ノックバックを実行
             Damage(projectileParam.Attack); //ダメージ処理を実行
             Destroy(other.gameObject); //飛び道具を消滅
@@ -41,25 +47,43 @@ public class EnemyController : MobController
         }
     }
 
-    //壁めり込み時の処理
-    private void OnTriggerStay(Collider other)
+    public void Hit(Vector3 vector, float attack)
     {
-        if (other.CompareTag("Obstacle") && status.IsDamageble) //障害物にめり込んだ場合
-        {
-            Debug.Log("Damage!!");
-        }
+        presentPosition = transform.position;
+        knockbackMagnitude = Knockback(vector);
+        Damage(attack);
+        StartCoroutine(FrameOfDamageState());
     }
 
     //ノックバック処理
-    public void Knockback(Vector3 vector)
-    { 
-        transform.Translate(vector, Space.World); //飛び道具の方向にノックバック
+    public float Knockback(Vector3 vector)
+    {
+        Vector3 knockback = vector * param.Weight;
+        transform.Translate(knockback, Space.World); //飛び道具の方向にノックバック
+        return knockback.magnitude;
     }
 
     //ダメージ処理
     protected override void Damage(float attack)
     {
         param.HitPoint -= attack;
+    }
+
+    private IEnumerator FrameOfDamageState()
+    {
+        status.GoToDamageStateIfPossible(); //キャラの状態をDamageに遷移
+        yield return null;
+        JudgeCollapsed();
+        status.GoToNormalStateIfPossible();
+    }
+
+    private void JudgeCollapsed()
+    {
+        //圧迫判定
+        if ((transform.position - presentPosition).magnitude + 0.1f < knockbackMagnitude)
+        {
+            Debug.Log("Critical!!!");
+        }
     }
 
     protected bool JudgeGrounded() //接地判定処理を行う

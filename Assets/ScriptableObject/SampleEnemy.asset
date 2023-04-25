@@ -13,4 +13,6 @@ MonoBehaviour:
   m_Name: SampleEnemy
   m_EditorClassIdentifier: 
   _speed: 1
-  _hitPoint: 10
+  _hitPointMax: 0
+  _hitPoint: 0
+  _weight: 1

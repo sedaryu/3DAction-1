@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class PlayerController : MobController
 {
-    [SerializeField] private GameObject projectilePrefab;
-
     //バーチャルスティック
     private Joystick virtualStick;
 
@@ -19,11 +17,6 @@ public class PlayerController : MobController
     void Update()
     {
         InputMoving();
-
-        if (Input.GetButtonDown("Fire1"))
-        { 
-            Instantiate(projectilePrefab, new Vector3(transform.position.x, 0.5f, transform.position.z), transform.rotation);
-        }
     }
 
     //移動に関する入力を受け付けるメソッド
@@ -31,17 +24,13 @@ public class PlayerController : MobController
     {
         Vector3 moving = new Vector3(0, 0, 0);
 
-        //キー入力
-        moving.x = Input.GetButton("Horizontal") ? Input.GetAxis("Horizontal") : 0; //横方向の移動入力を取得
-        moving.z = Input.GetButton("Vertical") ? Input.GetAxis("Vertical") : 0; //縦方向の移動入力を取得
-        //moving.x = virtualStick.Horizontal;
-        //moving.z = virtualStick.Vertical;
+        //ヴァーチャルスティック入力
+        moving.x = virtualStick.Horizontal; //横方向の移動入力を取得
+        moving.z = virtualStick.Vertical; //縦方向の移動入力を取得
 
-        //アナログスティック入力
-        moving.x = Input.GetAxis("ASHorizontal") == 0 ? moving.x : Input.GetAxis("ASHorizontal"); //横方向の移動入力を取得
-        moving.z = Input.GetAxis("ASVertical") == 0 ? moving.z : Input.GetAxis("ASVertical"); //縦方向の移動入力を取得
+        Debug.Log(moving);
 
-        Move(moving.normalized); //入力を反映
+        Move(moving); //入力を反映
     }
 
     //キャラクターの移動を管理するメソッド
@@ -52,11 +41,7 @@ public class PlayerController : MobController
         agent.Move(vector * _param.Speed * Time.deltaTime); //移動入力を更新
 
         //キャラクターの向きを更新
-        if (vector != Vector3.zero)
-        {
-            Quaternion targetRotation = Quaternion.LookRotation(vector);
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, 2000 * Time.deltaTime);
-        }
+        if (vector != Vector3.zero) transform.rotation = Quaternion.LookRotation(vector);
         //アニメーターに移動スピードを反映
         animator.SetFloat("MoveSpeed", vector.magnitude);
     }
