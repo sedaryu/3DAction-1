@@ -7,7 +7,6 @@ public class HittingEnemy : MonoBehaviour
 {
     public void PistolHittingEnemy(Transform player, List<EnemyController> enemies, GunParam param)
     {
-
         List<float> distances = enemies.Select(x => Vector3.Distance(player.position, x.transform.position)).ToList();
         EnemyController enemy = enemies[distances.FindIndex(x => x == distances.Min())];
         player.LookAt(enemy.transform);

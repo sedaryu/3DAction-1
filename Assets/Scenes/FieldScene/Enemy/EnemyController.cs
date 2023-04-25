@@ -5,6 +5,7 @@ using System.Numerics;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
+using Quaternion = UnityEngine.Quaternion;
 using Vector3 = UnityEngine.Vector3;
 
 public class EnemyController : MobController
@@ -29,30 +30,19 @@ public class EnemyController : MobController
     // Update is called once per frame
     void Update()
     {
+        status.GoToNormalStateIfPossible(); //キャラの状態をNormalに遷移
         if (status.IsMovable) agent.destination = player.position; //プレイヤーを追跡
         animator.SetFloat("MoveSpeed", agent.velocity.magnitude); //アニメーターに移動スピードを反映
         //if (JudgeGrounded()) agent.destination = player.position; //落下撃破ありの場合
     }
 
-    //攻撃ヒット時の処理
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Projectile")) //飛び道具が当たった場合
-        {
-            GunParam projectileParam = other.GetComponent<ProjectileController>().Param;
-            Knockback(other.transform.forward.normalized * param.Weight * projectileParam.Knockback); //ノックバックを実行
-            Damage(projectileParam.Attack); //ダメージ処理を実行
-            Destroy(other.gameObject); //飛び道具を消滅
-            status.GoToDamageStateIfPossible(); //キャラの状態をDamageに遷移
-        }
-    }
-
     public void Hit(Vector3 vector, float attack)
     {
-        presentPosition = transform.position;
+        status.GoToDamageStateIfPossible(); //キャラの状態をDamageに遷移
+        transform.rotation = Quaternion.LookRotation(-vector.normalized);
+        JudgeCollapsed(vector);
         knockbackMagnitude = Knockback(vector);
         Damage(attack);
-        StartCoroutine(FrameOfDamageState());
     }
 
     //ノックバック処理
@@ -73,16 +63,39 @@ public class EnemyController : MobController
     {
         status.GoToDamageStateIfPossible(); //キャラの状態をDamageに遷移
         yield return null;
-        JudgeCollapsed();
         status.GoToNormalStateIfPossible();
     }
 
-    private void JudgeCollapsed()
+    private void JudgeCollapsed(Vector3 vector)
     {
-        //圧迫判定
-        if ((transform.position - presentPosition).magnitude + 0.1f < knockbackMagnitude)
+        Vector3 avoidSpace = transform.forward * -0.1f * agent.radius;
+        Ray[] rays = new Ray[5]
         {
-            Debug.Log("Critical!!!");
+            new Ray(this.transform.position + transform.right * -agent.radius + avoidSpace, vector.normalized),
+            new Ray(this.transform.position + transform.right * -0.5f * agent.radius + transform.forward * -0.86f * agent.radius + avoidSpace, vector.normalized),
+            new Ray(this.transform.position + transform.forward * -agent.radius + avoidSpace, vector.normalized),
+            new Ray(this.transform.position + transform.right * 0.5f * agent.radius + transform.forward * -0.86f * agent.radius + avoidSpace, vector.normalized),
+            new Ray(this.transform.position + transform.right * agent.radius + avoidSpace, vector.normalized),
+        };
+
+        for (int i = 0; i < 5; i++)
+        {
+            Debug.DrawRay(rays[i].origin, vector * param.Weight, Color.red);
+            Debug.DrawRay(rays[i].origin, avoidSpace, Color.green);
+            if (Physics.Raycast(rays[i], out RaycastHit hit, (vector * param.Weight).magnitude - avoidSpace.magnitude, 1 << 7 | 1 << 8))
+            {
+                if (hit.transform.gameObject.CompareTag("Obstacle"))
+                {
+                    Debug.Log($"ObstacleCollapsel!!! : {hit.transform.gameObject.name}");
+                }
+
+                if (hit.transform.gameObject.CompareTag("Enemy"))
+                {
+                    Debug.Log($"EnemyCollapse!!! : {hit.transform.gameObject.name}");
+                }
+
+                break;
+            }
         }
     }
 

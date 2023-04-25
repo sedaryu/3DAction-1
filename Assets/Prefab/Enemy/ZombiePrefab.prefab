@@ -811,7 +811,7 @@ GameObject:
   - component: {fileID: 8755620938029959834}
   - component: {fileID: 8755620938029959835}
   - component: {fileID: 8755620938029959838}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: ZombiePrefab
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -864,8 +864,17 @@ CapsuleCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8757099459607125388}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 1
+  m_ProvidesContacts: 0
   m_Enabled: 1
+  serializedVersion: 2
   m_Radius: 0.4
   m_Height: 1.8
   m_Direction: 1

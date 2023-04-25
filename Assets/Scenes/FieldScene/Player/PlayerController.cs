@@ -28,8 +28,6 @@ public class PlayerController : MobController
         moving.x = virtualStick.Horizontal; //‰¡•ûŒü‚ÌˆÚ“®“ü—Í‚ğæ“¾
         moving.z = virtualStick.Vertical; //c•ûŒü‚ÌˆÚ“®“ü—Í‚ğæ“¾
 
-        Debug.Log(moving);
-
         Move(moving); //“ü—Í‚ğ”½‰f
     }
 
