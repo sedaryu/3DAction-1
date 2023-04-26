@@ -42,18 +42,28 @@ public class EnemyController : MobController
         status.GoToDamageStateIfPossible(); //ƒLƒƒƒ‰‚Ìó‘Ô‚ğDamage‚É‘JˆÚ
         status.Animator.SetTrigger("Damage");
         transform.rotation = Quaternion.LookRotation(-vector.normalized);
-        StartCoroutine(FreezeMotion(vector, attack));
+        StartCoroutine(SmashHit(vector, attack));
     }
 
-    private IEnumerator FreezeMotion(Vector3 vector, float attack)
+    private IEnumerator SmashHit(Vector3 vector, float attack)
     {
         hitPointCircle.transform.Translate(vector * status.Param.Weight * 0.25f, Space.World);
         yield return new WaitForSeconds(0.03f);
         hitPointCircle.transform.Translate(vector * status.Param.Weight, Space.World);
         yield return new WaitForSeconds(0.03f);
         hitPointCircle.transform.localPosition = new Vector3(0, 0.001f, 0);
-        JudgeCollapsed(vector);
+        JudgeCollapsed(vector, attack);
         Knockback(vector);
+        Damage(attack);
+        status.GoToNormalStateIfPossible(); //ƒLƒƒƒ‰‚Ìó‘Ô‚ğNormal‚É‘JˆÚ
+    }
+
+    public IEnumerator ScratchHit(float attack)
+    {
+        Debug.Log("Scratch");
+        status.GoToDamageStateIfPossible();
+        status.Animator.SetTrigger("Damage");
+        yield return new WaitForSeconds(0.06f);
         Damage(attack);
         status.GoToNormalStateIfPossible(); //ƒLƒƒƒ‰‚Ìó‘Ô‚ğNormal‚É‘JˆÚ
     }
@@ -70,7 +80,7 @@ public class EnemyController : MobController
         status.Damage(attack);
     }
 
-    private void JudgeCollapsed(Vector3 vector)
+    private void JudgeCollapsed(Vector3 vector, float attack)
     {
         Vector3 avoidSpace = transform.forward * -0.1f * status.Agent.radius;
         Ray[] rays = new Ray[5]
@@ -91,14 +101,15 @@ public class EnemyController : MobController
                 if (hit.transform.gameObject.CompareTag("Obstacle"))
                 {
                     Debug.Log($"ObstacleCollapsel!!! : {hit.transform.gameObject.name}");
+                    Damage(attack * 2f);
                 }
 
                 if (hit.transform.gameObject.CompareTag("Enemy"))
                 {
                     Debug.Log($"EnemyCollapse!!! : {hit.transform.gameObject.name}");
+                    Damage(attack);
+                    hit.transform.gameObject.GetComponent<EnemyController>().StartCoroutine(ScratchHit(attack));
                 }
-
-                break;
             }
         }
     }

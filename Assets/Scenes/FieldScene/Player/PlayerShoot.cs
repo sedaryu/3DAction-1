@@ -25,9 +25,8 @@ public class PlayerShoot : MonoBehaviour
     {
         if (Input.GetButtonDown("Fire1") && lockOnEnemies.Count > 0)
         {
+            RemoveDeadEnemyInLockOn();
             Param.HittingEnemy.Invoke(this.transform, lockOnEnemies, Param);
-
-            //Instantiate(projectilePrefab, new Vector3(transform.position.x, 0.5f, transform.position.z), transform.rotation);
         }
     }
 
@@ -47,5 +46,11 @@ public class PlayerShoot : MonoBehaviour
         {
             lockOnEnemies.Remove(other.GetComponent<EnemyController>());
         }
+    }
+
+    //Ž€–S‚µ‚½“G‚ðƒƒbƒNƒIƒ“‚©‚çœŠO
+    private void RemoveDeadEnemyInLockOn()
+    {
+        lockOnEnemies.RemoveAll(x => x == null);
     }
 }

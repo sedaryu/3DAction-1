@@ -41,6 +41,13 @@ public class MobStatus : MonoBehaviour
         state = StateEnum.Damage;
     }
 
+    public void GoToDieStateIfPossible() //ó‘Ô‚ªDie‚É‘JˆÚ‚·‚é
+    {
+        if (state == StateEnum.Die) return;
+        state = StateEnum.Die;
+        Destroy(gameObject);
+    }
+
     public void GoToNormalStateIfPossible() //ó‘Ô‚ªNormal‚É‘JˆÚ‚·‚é
     {
         if (state == StateEnum.Die) return;

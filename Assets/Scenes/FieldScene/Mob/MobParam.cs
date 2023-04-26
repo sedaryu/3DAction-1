@@ -6,9 +6,15 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "MobParam", menuName = "Custom/MobParam")]
 public class MobParam : ScriptableObject
 {
-    public float Speed //ˆÚ“®‘¬“x
+    public float SpeedMax //Å‚‘¬“x
     {
-        get => _speed;
+        get => _speedMax;
     }
-    [SerializeField] protected float _speed;
+    [SerializeField] protected float _speedMax;
+
+    public float SpeedMin //Å’á‘¬“x
+    {
+        get => _speedMin;
+    }
+    [SerializeField] protected float _speedMin;
 }

@@ -47,7 +47,8 @@ public class PlayerController : MobController
     {
         if (!status.IsMovable) return;
 
-        status.Agent.Move(vector * status.Param.Speed * Time.deltaTime); //移動入力を更新
+        status.Agent.Move(vector * status.Param.SpeedMax * Time.deltaTime); //移動入力を更新
+        Debug.Log((vector * status.Param.SpeedMax * Time.deltaTime).magnitude);
 
         //キャラクターの向きを更新
         if (vector != Vector3.zero) transform.rotation = Quaternion.LookRotation(vector);

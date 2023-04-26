@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 329e0a9cb7b1dc2408e214a5cea1329b, type: 3}
   m_Name: SampleEnemy
   m_EditorClassIdentifier: 
-  _speed: 1
+  _speedMax: 1
+  _speedMin: 0.5
   _hitPointMax: 10
   _hitPoint: 10
   _weight: 1
+  _recover: 2.5

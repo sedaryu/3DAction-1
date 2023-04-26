@@ -23,18 +23,23 @@ public class EnemyStatus : MobStatus
     // Start is called before the first frame update
     void Start()
     {
-        Agent.speed = Random.Range(0.5f, 4.0f); //param.Speed; //パラメーターからスピードを取得
+        Agent.speed = Random.Range(Param.SpeedMin, Param.SpeedMax); //param.Speed; //パラメーターからスピードを取得
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        RecoverDamage();
     }
 
     public void Damage(float damage)
     {
         _param.HitPoint -= damage;
-        if(Param.HitPoint == 0) gameObject.SetActive(false);
+        if (Param.HitPoint <= 0) GoToDieStateIfPossible();
+    }
+
+    public void RecoverDamage()
+    {
+        _param.HitPoint += Param.Recover * Time.deltaTime;
     }
 }
