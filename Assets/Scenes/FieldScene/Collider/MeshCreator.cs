@@ -4,10 +4,20 @@ using UnityEngine;
 
 public class MeshCreator : MonoBehaviour
 {
-    private float reach = 7.5f; //縦幅
-    private float range = 5f; //横幅
+    private GunParam param;
 
     private void Awake()
+    {
+        param = GetComponentInParent<PlayerShoot>().Param;
+    }
+
+    private void Start()
+    {
+        CreateMeshCollider();
+    }
+
+    //GunParamの値に対応したメッシュコリダーの作成
+    public void CreateMeshCollider()
     {
         // メッシュの作成  
         Mesh mesh = new Mesh();
@@ -16,11 +26,11 @@ public class MeshCreator : MonoBehaviour
         mesh.SetVertices(new Vector3[]
         {
             new Vector3 (0, 0.0005f, 0), //0
-            new Vector3 (range * -0.5f, 0.0005f, reach), //1
-            new Vector3 (range * 0.5f, 0.0005f, reach), //2
+            new Vector3 (param.Range * -0.5f, 0.0005f, param.Reach), //1
+            new Vector3 (param.Range * 0.5f, 0.0005f, param.Reach), //2
             new Vector3 (0, 0, 0), //3
-            new Vector3 (range * -0.5f, 0, reach), //4
-            new Vector3 (range * 0.5f, 0, reach), //5
+            new Vector3 (param.Range * -0.5f, 0, param.Reach), //4
+            new Vector3 (param.Range * 0.5f, 0, param.Reach), //5
         });
 
         // インデックス配列をメッシュにセット  
@@ -32,9 +42,5 @@ public class MeshCreator : MonoBehaviour
         // MeshFilterを通してメッシュをMeshRendererにセット  
         MeshFilter filter = GetComponent<MeshFilter>();
         filter.sharedMesh = mesh;
-    }
-
-    private void Start()
-    {
     }
 }

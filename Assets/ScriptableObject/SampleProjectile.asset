@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: SampleProjectile
   m_EditorClassIdentifier: 
   _type: 0
-  _reach: 0.5
-  _range: 0
-  _attack: 0
+  _reach: 7.5
+  _range: 5
+  _attack: 1
   _knockback: 1
   _hittingEnemy:
     m_PersistentCalls:

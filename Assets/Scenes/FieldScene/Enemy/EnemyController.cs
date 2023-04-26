@@ -10,43 +10,46 @@ using Vector3 = UnityEngine.Vector3;
 
 public class EnemyController : MobController
 {
-    //パラメーター
-    private EnemyParam param;
+    //ステータス
+    private EnemyStatus status;
     //追跡するプレイヤー
     private Transform player;
     //HitPoint表示UI
     private GameObject hitPointCircle;
 
+    void Awake()
+    {
+        status = GetComponent<EnemyStatus>();
+        hitPointCircle = transform.Find("HitPointCircle").gameObject;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
-        param = (EnemyParam)_param;
-        agent.speed = Random.Range(0.5f, 4.0f); //param.Speed; //パラメーターからスピードを取得
         player = GameObject.Find("Player").GetComponent<Transform>(); //プレイヤーの位置を取得
-        hitPointCircle = transform.Find("HitPointCircle").gameObject;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (status.IsMovable) agent.destination = player.position; //プレイヤーを追跡
-        animator.SetFloat("MoveSpeed", agent.velocity.magnitude); //アニメーターに移動スピードを反映
+        if (status.IsMovable) status.Agent.destination = player.position; //プレイヤーを追跡
+        status.Animator.SetFloat("MoveSpeed", status.Agent.velocity.magnitude); //アニメーターに移動スピードを反映
         //if (JudgeGrounded()) agent.destination = player.position; //落下撃破ありの場合
     }
 
     public void Hit(Vector3 vector, float attack)
     {
         status.GoToDamageStateIfPossible(); //キャラの状態をDamageに遷移
-        animator.SetTrigger("Damage");
+        status.Animator.SetTrigger("Damage");
         transform.rotation = Quaternion.LookRotation(-vector.normalized);
         StartCoroutine(FreezeMotion(vector, attack));
     }
 
     private IEnumerator FreezeMotion(Vector3 vector, float attack)
     {
-        hitPointCircle.transform.Translate(vector * param.Weight * 0.25f, Space.World);
+        hitPointCircle.transform.Translate(vector * status.Param.Weight * 0.25f, Space.World);
         yield return new WaitForSeconds(0.03f);
-        hitPointCircle.transform.Translate(vector * param.Weight, Space.World);
+        hitPointCircle.transform.Translate(vector * status.Param.Weight, Space.World);
         yield return new WaitForSeconds(0.03f);
         hitPointCircle.transform.localPosition = new Vector3(0, 0.001f, 0);
         JudgeCollapsed(vector);
@@ -58,32 +61,32 @@ public class EnemyController : MobController
     //ノックバック処理
     public void Knockback(Vector3 vector)
     {
-        transform.Translate(vector * param.Weight, Space.World); //飛び道具の方向にノックバック
+        transform.Translate(vector * status.Param.Weight, Space.World); //飛び道具の方向にノックバック
     }
 
     //ダメージ処理
     protected override void Damage(float attack)
     {
-        param.HitPoint -= attack;
+        status.Damage(attack);
     }
 
     private void JudgeCollapsed(Vector3 vector)
     {
-        Vector3 avoidSpace = transform.forward * -0.1f * agent.radius;
+        Vector3 avoidSpace = transform.forward * -0.1f * status.Agent.radius;
         Ray[] rays = new Ray[5]
         {
-            new Ray(this.transform.position + transform.right * -agent.radius + avoidSpace, vector.normalized),
-            new Ray(this.transform.position + transform.right * -0.5f * agent.radius + transform.forward * -0.86f * agent.radius + avoidSpace, vector.normalized),
-            new Ray(this.transform.position + transform.forward * -agent.radius + avoidSpace, vector.normalized),
-            new Ray(this.transform.position + transform.right * 0.5f * agent.radius + transform.forward * -0.86f * agent.radius + avoidSpace, vector.normalized),
-            new Ray(this.transform.position + transform.right * agent.radius + avoidSpace, vector.normalized),
+            new Ray(this.transform.position + transform.right * -status.Agent.radius + avoidSpace, vector.normalized),
+            new Ray(this.transform.position + transform.right * -0.5f * status.Agent.radius + transform.forward * -0.86f * status.Agent.radius + avoidSpace, vector.normalized),
+            new Ray(this.transform.position + transform.forward * -status.Agent.radius + avoidSpace, vector.normalized),
+            new Ray(this.transform.position + transform.right * 0.5f * status.Agent.radius + transform.forward * -0.86f * status.Agent.radius + avoidSpace, vector.normalized),
+            new Ray(this.transform.position + transform.right * status.Agent.radius + avoidSpace, vector.normalized),
         };
 
         for (int i = 0; i < 5; i++)
         {
-            Debug.DrawRay(rays[i].origin, vector * param.Weight, Color.red);
+            Debug.DrawRay(rays[i].origin, vector * status.Param.Weight, Color.red);
             Debug.DrawRay(rays[i].origin, avoidSpace, Color.green);
-            if (Physics.Raycast(rays[i], out RaycastHit hit, (vector * param.Weight).magnitude - avoidSpace.magnitude, 1 << 7 | 1 << 8))
+            if (Physics.Raycast(rays[i], out RaycastHit hit, (vector * status.Param.Weight).magnitude - avoidSpace.magnitude, 1 << 7 | 1 << 8))
             {
                 if (hit.transform.gameObject.CompareTag("Obstacle"))
                 {
@@ -125,7 +128,7 @@ public class EnemyController : MobController
     //落下処理
     private void FallFromPlane()
     {
-        agent.enabled = false; //NavMeshAgentを解除
+        status.Agent.enabled = false; //NavMeshAgentを解除
         //Rigidbodyを有効化
         Rigidbody rigidbody = GetComponent<Rigidbody>();
         rigidbody.isKinematic = false;

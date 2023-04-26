@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
-public class MobStatus
+public class MobStatus : MonoBehaviour
 {
     protected enum StateEnum //キャラクターの状態
     {
@@ -11,12 +12,29 @@ public class MobStatus
         Groggy, //HitPointが0の時(とどめを刺される)
         Die //死亡時(どの状態にも移行しない)
     }
-
     protected StateEnum state = StateEnum.Normal; //初期値はNormal
-
     public bool IsMovable => (state == StateEnum.Normal); //状態がNormalであればtrueを返す
-
     public bool IsDamageble => (state == StateEnum.Damage);
+
+    //キャラクターの移動はNavMeshAgentで行う
+    public NavMeshAgent Agent
+    {
+        get => _agent;
+    }
+    private NavMeshAgent _agent;
+
+    //アニメーターを格納
+    public Animator Animator
+    {
+        get => _animator;
+    }
+    private Animator _animator;
+
+    protected virtual void Awake()
+    {
+        _agent = GetComponent<NavMeshAgent>(); //エージェントを取得
+        _animator = GetComponent<Animator>(); //アニメーターを取得
+    }
 
     public void GoToDamageStateIfPossible() //状態がDamageに遷移する
     {

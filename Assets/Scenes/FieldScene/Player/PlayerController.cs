@@ -4,13 +4,21 @@ using UnityEngine;
 
 public class PlayerController : MobController
 {
+    //ステータス
+    private PlayerStatus status;
     //バーチャルスティック
     private Joystick virtualStick;
+
+    void Awake()
+    {
+        status = GetComponent<PlayerStatus>();
+        virtualStick = GameObject.Find("Fixed Joystick").GetComponent<Joystick>();
+    }
 
     // Start is called before the first frame update
     void Start()
     {
-        virtualStick = GameObject.Find("Fixed Joystick").GetComponent<Joystick>();
+        
     }
 
     // Update is called once per frame
@@ -28,8 +36,8 @@ public class PlayerController : MobController
         moving.x = virtualStick.Horizontal; //横方向の移動入力を取得
         moving.z = virtualStick.Vertical; //縦方向の移動入力を取
 
-        moving.x = Input.GetAxis("ASHorizontal");
-        moving.z = Input.GetAxis("ASVertical");
+        //moving.x = Input.GetAxis("ASHorizontal");
+        //moving.z = Input.GetAxis("ASVertical");
 
         Move(moving); //入力を反映
     }
@@ -39,11 +47,11 @@ public class PlayerController : MobController
     {
         if (!status.IsMovable) return;
 
-        agent.Move(vector * _param.Speed * Time.deltaTime); //移動入力を更新
+        status.Agent.Move(vector * status.Param.Speed * Time.deltaTime); //移動入力を更新
 
         //キャラクターの向きを更新
         if (vector != Vector3.zero) transform.rotation = Quaternion.LookRotation(vector);
         //アニメーターに移動スピードを反映
-        animator.SetFloat("MoveSpeed", vector.magnitude);
+        status.Animator.SetFloat("MoveSpeed", vector.magnitude);
     }
 }

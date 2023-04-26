@@ -1,23 +1,25 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
 
-public class MobController : MonoBehaviour
+public class PlayerStatus : MobStatus
 {
+    //パラメーター
+    public MobParam Param
+    {
+        get => _param;
+    }
+    [SerializeField] private MobParam _param;
+
     // Start is called before the first frame update
     void Start()
     {
+        
     }
 
     // Update is called once per frame
     void Update()
     {
         
-    }
-
-    protected virtual void Damage(float attack)
-    {
-        Debug.Log("Damage");
     }
 }

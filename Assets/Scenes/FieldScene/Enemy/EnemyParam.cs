@@ -6,6 +6,10 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "EnemyParam", menuName = "Custom/EnemyParam")]
 public class EnemyParam : MobParam
 {
+    public float HitPointMax
+    {
+        get => _hitPointMax;
+    }
     [SerializeField] private float _hitPointMax;
 
     public float HitPoint //0‚É‚È‚é‚Æ‚Æ‚Ç‚ß‚ðŽh‚³‚ê‚é
@@ -25,4 +29,12 @@ public class EnemyParam : MobParam
         get => _weight;
     }
     [SerializeField] private float _weight = 1;
+
+    public EnemyParam(EnemyParam initialParam)
+    { 
+        _speed = initialParam.Speed;
+        _hitPointMax = initialParam.HitPointMax;
+        _hitPoint = initialParam.HitPoint;
+        _weight = initialParam.Weight;
+    }
 }

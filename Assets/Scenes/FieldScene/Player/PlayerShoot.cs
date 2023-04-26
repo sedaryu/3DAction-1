@@ -5,7 +5,11 @@ using UnityEngine;
 
 public class PlayerShoot : MonoBehaviour
 {
-    [SerializeField] private GunParam param;
+    public GunParam Param
+    {
+        get => _param;
+    }
+    [SerializeField] private GunParam _param;
 
     //捕捉した敵オブジェクトを格納
     List<EnemyController> lockOnEnemies = new List<EnemyController>();
@@ -21,7 +25,7 @@ public class PlayerShoot : MonoBehaviour
     {
         if (Input.GetButtonDown("Fire1") && lockOnEnemies.Count > 0)
         {
-            param.HittingEnemy.Invoke(this.transform, lockOnEnemies, param);
+            Param.HittingEnemy.Invoke(this.transform, lockOnEnemies, Param);
 
             //Instantiate(projectilePrefab, new Vector3(transform.position.x, 0.5f, transform.position.z), transform.rotation);
         }

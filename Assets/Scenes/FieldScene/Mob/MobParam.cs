@@ -10,5 +10,5 @@ public class MobParam : ScriptableObject
     {
         get => _speed;
     }
-    [SerializeField] private float _speed;
+    [SerializeField] protected float _speed;
 }
