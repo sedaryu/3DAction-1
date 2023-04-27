@@ -46,6 +46,25 @@ public class GunParam : ScriptableObject
     }
     [SerializeField] private float _knockback;
 
+    public int BulletMax //’e”
+    {
+        get => _bulletMax;
+    }
+    [SerializeField] private int _bulletMax;
+
+    public int Bullet //’e”
+    {
+        get => _bullet;
+        set
+        {
+            if (value <= 0) _bullet = 0;
+            else if (_bulletMax <= value) _bullet = _bulletMax;
+            else _bullet = value;
+        }
+    }
+    [SerializeField] private int _bullet;
+
+
     public HittingEvent HittingEnemy
     {
         get => _hittingEnemy;
@@ -54,4 +73,16 @@ public class GunParam : ScriptableObject
 
     [Serializable]
     public class HittingEvent : UnityEvent<Transform, List<EnemyController>, GunParam> {}
+
+    public GunParam(GunParam initialParam)
+    {
+        _type = initialParam._type;
+        _reach = initialParam._reach;
+        _range = initialParam._range;
+        _attack = initialParam._attack;
+        _knockback = initialParam._knockback;
+        _bulletMax = initialParam._bulletMax;
+        _bullet = initialParam._bullet;
+        _hittingEnemy = initialParam.HittingEnemy;
+    }
 }

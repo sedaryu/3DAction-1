@@ -8,11 +8,12 @@ public class MeshCreator : MonoBehaviour
 
     private void Awake()
     {
-        param = GetComponentInParent<PlayerShoot>().Param;
+        
     }
 
     private void Start()
     {
+        param = GetComponentInParent<PlayerShoot>().Param;
         CreateMeshCollider();
     }
 

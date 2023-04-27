@@ -15,6 +15,7 @@ public class MobStatus : MonoBehaviour
     protected StateEnum state = StateEnum.Normal; //初期値はNormal
     public bool IsMovable => (state == StateEnum.Normal); //状態がNormalであればtrueを返す
     public bool IsDamageble => (state == StateEnum.Damage);
+    public bool IsReloadable => (state == StateEnum.Normal); //状態がNormalであればtrueを返す
 
     //キャラクターの移動はNavMeshAgentで行う
     public NavMeshAgent Agent

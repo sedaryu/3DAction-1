@@ -5,11 +5,19 @@ using UnityEngine;
 public class PlayerStatus : MobStatus
 {
     //パラメーター
-    public MobParam Param
+    public PlayerParam Param
     {
         get => _param;
     }
-    [SerializeField] private MobParam _param;
+    private PlayerParam _param;
+
+    [SerializeField] private PlayerParam initialParam;
+
+    protected override void Awake()
+    {
+        base.Awake();
+        _param = new PlayerParam(initialParam);
+    }
 
     // Start is called before the first frame update
     void Start()

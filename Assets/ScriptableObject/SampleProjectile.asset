@@ -17,6 +17,8 @@ MonoBehaviour:
   _range: 5
   _attack: 0.5
   _knockback: 1
+  _bulletMax: 6
+  _bullet: 6
   _hittingEnemy:
     m_PersistentCalls:
       m_Calls:

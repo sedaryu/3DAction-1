@@ -6,6 +6,24 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "MobParam", menuName = "Custom/MobParam")]
 public class MobParam : ScriptableObject
 {
+    public float HitPointMax //HitPoint‚ÌÅ‘å’l
+    {
+        get => _hitPointMax;
+    }
+    [SerializeField] protected float _hitPointMax;
+
+    public float HitPoint //0‚É‚È‚é‚Æ‚Æ‚Ç‚ß‚ðŽh‚³‚ê‚é
+    {
+        get => _hitPoint;
+        set
+        {
+            if (value <= 0) _hitPoint = 0;
+            else if (_hitPointMax <= value) _hitPoint = _hitPointMax;
+            else _hitPoint = value;
+        }
+    }
+    [SerializeField] protected float _hitPoint;
+
     public float SpeedMax //Å‚‘¬“x
     {
         get => _speedMax;

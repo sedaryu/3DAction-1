@@ -60,7 +60,6 @@ public class EnemyController : MobController
 
     public IEnumerator ScratchHit(float attack)
     {
-        Debug.Log("Scratch");
         status.GoToDamageStateIfPossible();
         status.Animator.SetTrigger("Damage");
         yield return new WaitForSeconds(0.06f);
@@ -100,13 +99,11 @@ public class EnemyController : MobController
             {
                 if (hit.transform.gameObject.CompareTag("Obstacle"))
                 {
-                    Debug.Log($"ObstacleCollapsel!!! : {hit.transform.gameObject.name}");
                     Damage(attack * 2f);
                 }
 
                 if (hit.transform.gameObject.CompareTag("Enemy"))
                 {
-                    Debug.Log($"EnemyCollapse!!! : {hit.transform.gameObject.name}");
                     Damage(attack);
                     hit.transform.gameObject.GetComponent<EnemyController>().StartCoroutine(ScratchHit(attack));
                 }
