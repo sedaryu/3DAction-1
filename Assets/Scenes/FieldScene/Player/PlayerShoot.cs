@@ -16,8 +16,8 @@ public class PlayerShoot : MonoBehaviour
     //ステータス
     private PlayerStatus status;
 
-    //捕捉した敵オブジェクトを格納
-    List<EnemyController> lockOnEnemies = new List<EnemyController>();
+    //TargetingColliderで捕捉した敵オブジェクトを格納
+    List<EnemyDamage> lockOnEnemies = new List<EnemyDamage>();
 
     //リロード中かどうか
     private bool reloading;
@@ -28,36 +28,30 @@ public class PlayerShoot : MonoBehaviour
         status = GetComponent<PlayerStatus>();
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(Param.Bullet);
-
-        if (Input.GetButtonDown("Fire1") && lockOnEnemies.Count > 0)
+        //ボタン入力を感知し、攻撃を実行
+        if (Input.GetButtonDown("Fire1") && lockOnEnemies.Count > 0) //TargetingColliderで捕捉した敵がいない場合は攻撃を行わない
         {
-            RemoveDeadEnemyInLockOn();
-            if (Param.Bullet <= 0) { Debug.Log("Empty"); return; }
-            Param.HittingEnemy.Invoke(this.transform, lockOnEnemies, Param);
-            _param.Bullet--;
+            RemoveDeadEnemyInLockOn(); //死亡した敵が捕捉リストにいた場合、このメソッドでリストから削除
+            if (Param.Bullet <= 0) { Debug.Log("Empty"); return; } //残弾がない場合、攻撃できない
+            Param.HittingEnemy.Invoke(this.transform, lockOnEnemies, Param); //攻撃を実行
+            _param.Bullet--; //弾薬を消費
         }
 
-        if (Input.GetButtonDown("Reload") && !reloading)
+        //ボタン入力を感知し、リロードを実行
+        if (Input.GetButtonDown("Reload") && !reloading) //リロード中は行えない
         {
             reloading = true;
-            StartCoroutine(Reloading());
+            StartCoroutine(Reloading()); //リロード完了待機時間を開始
         }
     }
 
     private IEnumerator Reloading()
     { 
-        yield return new WaitForSeconds(status.Param.ReloadSpeed);
-        Param.Bullet += Param.BulletMax - Param.Bullet;
+        yield return new WaitForSeconds(status.Param.ReloadSpeed); //リロード完了までの待機時間はプレイヤーのパラメーターに依存
+        Param.Bullet += Param.BulletMax - Param.Bullet; //足りない分だけ装填される
         reloading = false;
         Debug.Log("Reloaded");
     }
@@ -67,7 +61,7 @@ public class PlayerShoot : MonoBehaviour
     {
         if (other.CompareTag("Enemy"))
         {
-            lockOnEnemies.Add(other.GetComponent<EnemyController>());
+            lockOnEnemies.Add(other.GetComponent<EnemyDamage>()); //敵の被ダメージを制御するクラスを取得
         }
     }
 
@@ -76,11 +70,11 @@ public class PlayerShoot : MonoBehaviour
     {
         if (other.CompareTag("Enemy"))
         {
-            lockOnEnemies.Remove(other.GetComponent<EnemyController>());
+            lockOnEnemies.Remove(other.GetComponent<EnemyDamage>()); //TargetingColliderの範囲から外れた場合、リストから除外
         }
     }
 
-    //死亡した敵をロックオンから除外
+    //死亡した敵をリストから除外
     private void RemoveDeadEnemyInLockOn()
     {
         lockOnEnemies.RemoveAll(x => x == null);

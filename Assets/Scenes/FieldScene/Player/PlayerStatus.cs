@@ -11,6 +11,7 @@ public class PlayerStatus : MobStatus
     }
     private PlayerParam _param;
 
+    //初期設定パラメーター
     [SerializeField] private PlayerParam initialParam;
 
     protected override void Awake()
@@ -19,15 +20,11 @@ public class PlayerStatus : MobStatus
         _param = new PlayerParam(initialParam);
     }
 
-    // Start is called before the first frame update
-    void Start()
+    //被ダメージの際のHitPointの減少を実行するメソッド
+    public override void Damage(float damage)
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        _param.HitPoint -= damage;
+        if (Param.HitPoint <= 0) GoToDieStateIfPossible(); //0以下ならば状態がDieに移行
+        Debug.Log(Param.HitPoint);
     }
 }

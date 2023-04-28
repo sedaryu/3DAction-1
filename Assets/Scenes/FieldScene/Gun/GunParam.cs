@@ -72,7 +72,7 @@ public class GunParam : ScriptableObject
     [SerializeField] private HittingEvent _hittingEnemy = new HittingEvent();
 
     [Serializable]
-    public class HittingEvent : UnityEvent<Transform, List<EnemyController>, GunParam> {}
+    public class HittingEvent : UnityEvent<Transform, List<EnemyDamage>, GunParam> {}
 
     public GunParam(GunParam initialParam)
     {

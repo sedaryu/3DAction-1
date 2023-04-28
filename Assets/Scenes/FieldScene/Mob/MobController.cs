@@ -15,9 +15,4 @@ public class MobController : MonoBehaviour
     {
         
     }
-
-    protected virtual void Damage(float attack)
-    {
-        Debug.Log("Damage");
-    }
 }

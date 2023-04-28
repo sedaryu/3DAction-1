@@ -17,6 +17,7 @@ public class MobParam : ScriptableObject
         get => _hitPoint;
         set
         {
+            //0ˆÈãHitPointMaxˆÈ‰º‚Ì”ÍˆÍ‚Éû‚Ü‚é‚æ‚¤§Œä
             if (value <= 0) _hitPoint = 0;
             else if (_hitPointMax <= value) _hitPoint = _hitPointMax;
             else _hitPoint = value;

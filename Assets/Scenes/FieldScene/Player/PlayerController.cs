@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,12 +14,6 @@ public class PlayerController : MobController
     {
         status = GetComponent<PlayerStatus>();
         virtualStick = GameObject.Find("Fixed Joystick").GetComponent<Joystick>();
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
     }
 
     // Update is called once per frame
@@ -45,10 +40,7 @@ public class PlayerController : MobController
     //キャラクターの移動を管理するメソッド
     protected void Move(Vector3 vector)
     {
-        if (!status.IsMovable) return;
-
         status.Agent.Move(vector * status.Param.SpeedMax * Time.deltaTime); //移動入力を更新
-        //Debug.Log((vector * status.Param.SpeedMax * Time.deltaTime).magnitude);
 
         //キャラクターの向きを更新
         if (vector != Vector3.zero) transform.rotation = Quaternion.LookRotation(vector);
