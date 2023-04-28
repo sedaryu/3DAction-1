@@ -1387,7 +1387,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7407754999687335081}
-  m_RootOrder: -1
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!64 &717045683897998993
 MeshCollider:
@@ -1397,17 +1397,9 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6897203889122529556}
   m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
   m_IsTrigger: 1
-  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
+  serializedVersion: 4
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
@@ -1705,6 +1697,7 @@ GameObject:
   - component: {fileID: 3901755319367530151}
   - component: {fileID: 8051213443771422604}
   - component: {fileID: 362515426466179250}
+  - component: {fileID: 4393828171295923296}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -1759,21 +1752,10 @@ Rigidbody:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7892119916735403539}
-  serializedVersion: 4
+  serializedVersion: 2
   m_Mass: 1
   m_Drag: 0
   m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
   m_UseGravity: 0
   m_IsKinematic: 1
   m_Interpolate: 0
@@ -1825,7 +1807,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e30d348ad3040a4fac7420ea86522d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initialParam: {fileID: 11400000, guid: 123761ae75250c6459f42c7f45014a74, type: 2}
 --- !u!114 &8051213443771422604
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1838,7 +1819,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbfc8ba14a19abe43bf1c53d998478e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initialParam: {fileID: 11400000, guid: 0e2e6ae40e8e56f4596006f3574bcb1b, type: 2}
+  initialPlayerParam: {fileID: 11400000, guid: 0e2e6ae40e8e56f4596006f3574bcb1b, type: 2}
+  initialGunParam: {fileID: 11400000, guid: 123761ae75250c6459f42c7f45014a74, type: 2}
 --- !u!114 &362515426466179250
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1849,6 +1831,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bcf7557a11413dd438e49fd428e30e84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &4393828171295923296
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7892119916735403539}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9edd3b01be4f9964d9a863fdd3baf7c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &7954235998624993380
@@ -2032,17 +2026,9 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8296485458954850808}
   m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
   m_IsTrigger: 0
-  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
+  serializedVersion: 4
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}

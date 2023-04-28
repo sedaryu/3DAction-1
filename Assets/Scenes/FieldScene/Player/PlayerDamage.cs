@@ -19,12 +19,6 @@ public class PlayerDamage : MonoBehaviour
         transparentColor = new Color32(initialColor.r, 0, 0, initialColor.a);
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
     public void EnemyAttackPlayer(Collider collision)
     {
         if (collision.CompareTag("Enemy"))
@@ -39,7 +33,6 @@ public class PlayerDamage : MonoBehaviour
     {
         status.GoToDamageStateIfPossible();
         skinRenderer.material.color = transparentColor;
-        Debug.Log(transparentColor);
         yield return new WaitForSeconds(2f);
         status.GoToNormalStateIfPossible();
         skinRenderer.material.color = initialColor;
