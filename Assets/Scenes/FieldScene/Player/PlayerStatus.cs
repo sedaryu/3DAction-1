@@ -21,11 +21,20 @@ public class PlayerStatus : MobStatus
     [SerializeField] private PlayerParam initialPlayerParam;
     [SerializeField] private GunParam initialGunParam;
 
+    public bool IsDamagable => (state == StateEnum.Normal); //状態がNormalであればtrueを返す
+    public bool IsCombating => (state == StateEnum.NoMoveInvincible); //状態がNoMoveInvincibleであればtrueを返す
+
     protected override void Awake()
     {
         base.Awake();
         _playerParam = new PlayerParam(initialPlayerParam);
         _gunParam = new GunParam(initialGunParam);
+    }
+
+    public void GoToNoMoveInvincibleStateIfPossible() //状態がNoMoveInvincibleに遷移する
+    {
+        if (state == StateEnum.Die || state == StateEnum.NoMoveInvincible) return;
+        state = StateEnum.NoMoveInvincible;
     }
 
     //被ダメージの際のHitPointの減少を実行するメソッド

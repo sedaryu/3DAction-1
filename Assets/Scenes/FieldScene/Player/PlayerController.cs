@@ -37,4 +37,11 @@ public class PlayerController : MobController
 
         return false;
     }
+
+    public bool InputCombating()
+    {
+        if (Input.GetButtonDown("Combat")) return true;
+
+        return false;
+    }
 }

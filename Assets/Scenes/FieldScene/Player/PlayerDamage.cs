@@ -24,14 +24,16 @@ public class PlayerDamage : MonoBehaviour
         if (collision.CompareTag("Enemy"))
         {
             if (!status.IsDamagable) return;
-            status.Damage(collision.gameObject.GetComponent<EnemyStatus>().Param.Attack);
+            EnemyStatus enemy = collision.gameObject.GetComponent<EnemyStatus>();
+            if (enemy.IsFinishable) return;
+            status.Damage(enemy.Param.Attack);
             StartCoroutine(InvincibleTime());
         }
     }
 
     private IEnumerator InvincibleTime()
     {
-        status.GoToDamageStateIfPossible();
+        status.GoToInvincibleStateIfPossible();
         skinRenderer.material.color = transparentColor;
         yield return new WaitForSeconds(2f);
         status.GoToNormalStateIfPossible();

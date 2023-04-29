@@ -11,16 +11,4 @@ public class MeshGetter : MonoBehaviour
         skinRenderer = transform.parent.Find("body").gameObject.GetComponent<SkinnedMeshRenderer>();
         GetComponent<MeshFilter>().sharedMesh = skinRenderer.sharedMesh;
     }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

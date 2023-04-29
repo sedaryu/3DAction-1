@@ -14,6 +14,8 @@ public class EnemyStatus : MobStatus
     //初期設定パラメーター
     [SerializeField] private EnemyParam initialParam;
 
+    public bool IsFinishable => (state == StateEnum.Die); //状態がDieであればtrueを返す
+
     protected override void Awake()
     {
         base.Awake();
@@ -29,7 +31,8 @@ public class EnemyStatus : MobStatus
     // Update is called once per frame
     void Update()
     {
-        RecoverDamage(); //HitPointの自動回復
+        //HitPointの自動回復
+        if (state == StateEnum.Normal) RecoverDamage();
     }
 
     //HitPointの自動回復を実行するメソッド

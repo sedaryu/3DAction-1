@@ -36,7 +36,7 @@ public class PlayerShoot : MonoBehaviour
         if (!input) return;
         if (lockOnEnemies.Count <= 0) return;
 
-        RemoveDeadEnemyInLockOn(); //死亡した敵が捕捉リストにいた場合、このメソッドでリストから削除
+        RemoveDestroyedEnemyInLockOn(); //破棄された敵が捕捉リストにいた場合、このメソッドでリストから削除
         if (status.GunParam.Bullet <= 0) { Debug.Log("Empty"); return; } //残弾がない場合、攻撃できない
         status.GunParam.HittingEnemy.Invoke(this.transform, lockOnEnemies, status.GunParam); //攻撃を実行
         status.SetBullet(-1); //弾薬を消費
@@ -61,8 +61,10 @@ public class PlayerShoot : MonoBehaviour
     //敵オブジェクトの捕捉
     public void EnemyInCollider(Collider other)
     {
+        Debug.Log("InCollider");
         if (other.CompareTag("Enemy"))
         {
+            if (other.GetComponent<EnemyDamage>() == null) return;
             lockOnEnemies.Add(other.GetComponent<EnemyDamage>()); //敵の被ダメージを制御するクラスを取得
         }
     }
@@ -76,8 +78,8 @@ public class PlayerShoot : MonoBehaviour
         }
     }
 
-    //死亡した敵をリストから除外
-    private void RemoveDeadEnemyInLockOn()
+    //破棄された敵をリストから除外
+    private void RemoveDestroyedEnemyInLockOn()
     {
         lockOnEnemies.RemoveAll(x => x == null);
     }

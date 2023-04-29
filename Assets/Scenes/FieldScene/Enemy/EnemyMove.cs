@@ -8,7 +8,7 @@ using UnityEngine.AI;
 using Quaternion = UnityEngine.Quaternion;
 using Vector3 = UnityEngine.Vector3;
 
-public class EnemyController : MobController
+public class EnemyMove : MonoBehaviour
 {
     //ステータス
     private EnemyStatus status;
@@ -24,7 +24,9 @@ public class EnemyController : MobController
     // Update is called once per frame
     void Update()
     {
-        if (status.IsMovable) status.Agent.destination = player.position; //プレイヤーを追跡
+        if (status.IsMovable && player != null) status.Agent.destination = player.position; //プレイヤーを追跡
+        else status.Agent.speed = 0;
+
         status.Animator.SetFloat("MoveSpeed", status.Agent.velocity.magnitude); //アニメーターに移動スピードを反映
     }
 }

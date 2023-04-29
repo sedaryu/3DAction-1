@@ -7,13 +7,9 @@ public class EnemyDamage : MonoBehaviour
     //ステータス
     private EnemyStatus status;
 
-    //HitPoint表示UI
-    private GameObject hitPointCircle;
-
     void Awake()
     {
         status = GetComponent<EnemyStatus>();
-        hitPointCircle = transform.Find("HitPointCircle").gameObject;
     }
 
     public void Hit(Vector3 vector, float attack)
@@ -21,13 +17,8 @@ public class EnemyDamage : MonoBehaviour
         transform.rotation = Quaternion.LookRotation(-vector.normalized);
         //StartCoroutine(HitMotion(vector, attack));
 
-        status.GoToDamageStateIfPossible(); //キャラの状態をDamageに遷移
+        status.GoToInvincibleStateIfPossible(); //キャラの状態をDamageに遷移
         status.Animator.SetTrigger("Damage"); //被ダメージの際のアニメーションを実行
-        //hitPointCircle.transform.Translate(vector * status.Param.Weight * 0.25f, Space.World);
-        //yield return new WaitForSeconds(0.06f);
-        //hitPointCircle.transform.Translate(vector * status.Param.Weight, Space.World);
-        //yield return new WaitForSeconds(0.03f);
-        //hitPointCircle.transform.localPosition = new Vector3(0, 0.001f, 0);
         JudgeCollapsed(vector, attack);
         Knockback(vector);
         status.Damage(attack);
@@ -36,7 +27,7 @@ public class EnemyDamage : MonoBehaviour
 
     private IEnumerator HitMotion(Vector3 vector, float attack)
     {
-        status.GoToDamageStateIfPossible(); //キャラの状態をDamageに遷移
+        status.GoToInvincibleStateIfPossible(); //キャラの状態をDamageに遷移
         status.Animator.SetTrigger("Damage"); //被ダメージの際のアニメーションを実行
         //hitPointCircle.transform.Translate(vector * status.Param.Weight * 0.25f, Space.World);
         yield return new WaitForSeconds(0.06f);

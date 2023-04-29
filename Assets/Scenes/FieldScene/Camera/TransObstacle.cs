@@ -20,6 +20,7 @@ public class TransObstacle : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (player == null) return;
         Vector3 directionToPlayer = player.position - transform.position;
         if (Physics.Raycast(transform.position, directionToPlayer, out RaycastHit hit, directionToPlayer.magnitude, 1 << 8))
         {

@@ -8,14 +8,13 @@ public class MobStatus : MonoBehaviour
     protected enum StateEnum //キャラクターの状態
     {
         Normal, //通常時(AttackやDieに移行可能)
-        Damage, //ダメージ時
-        Groggy, //HitPointが0の時(とどめを刺される)
+        Invincible, //無敵時
+        NoMoveInvincible, //移動不可無敵
         Die //死亡時(どの状態にも移行しない)
     }
     protected StateEnum state = StateEnum.Normal; //初期値はNormal
-    public bool IsMovable => (state == StateEnum.Normal); //状態がNormalであればtrueを返す
-    public bool IsDamagable => (state == StateEnum.Normal); //状態がNormalであればtrueを返す
 
+    public bool IsMovable => (state == StateEnum.Normal); //状態がNormalであればtrueを返す
 
     //キャラクターの移動はNavMeshAgentで行う
     public NavMeshAgent Agent
@@ -37,16 +36,15 @@ public class MobStatus : MonoBehaviour
         _animator = GetComponent<Animator>(); //アニメーターを取得
     }
 
-    public void GoToDamageStateIfPossible() //状態がDamageに遷移する
+    public void GoToInvincibleStateIfPossible() //状態がDamageに遷移する
     {
-        state = StateEnum.Damage;
+        state = StateEnum.Invincible;
     }
 
     public void GoToDieStateIfPossible() //状態がDieに遷移する
     {
         if (state == StateEnum.Die) return;
         state = StateEnum.Die;
-        Destroy(gameObject);
     }
 
     public void GoToNormalStateIfPossible() //状態がNormalに遷移する

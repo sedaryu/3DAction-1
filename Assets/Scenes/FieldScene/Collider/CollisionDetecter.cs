@@ -10,15 +10,6 @@ public class CollisionDetecter : MonoBehaviour
     [SerializeField] private TriggerEvent onTriggerStay = new TriggerEvent();
     [SerializeField] private TriggerEvent onTriggerExit = new TriggerEvent();
 
-    private MeshCollider meshCollider;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        meshCollider = GetComponent<MeshCollider>();
-        meshCollider.sharedMesh = GetComponent<MeshFilter>().sharedMesh;
-    }
-
     private void OnTriggerEnter(Collider other)
     {
         onTriggerEnter.Invoke(other);

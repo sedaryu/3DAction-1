@@ -7,12 +7,14 @@ public class HitPointCircleController : MonoBehaviour
     //パラメーター
     private EnemyStatus status;
     //Fill
-    private Transform fill;
+    private GameObject fill;
+
+    private bool groggy;
 
     void Awake()
     {
         status = GetComponentInParent<EnemyStatus>();
-        fill = transform.Find("HitPointCircleFill");
+        fill = transform.Find("HitPointCircleFill").gameObject;
     }
 
     // Start is called before the first frame update
@@ -24,10 +26,21 @@ public class HitPointCircleController : MonoBehaviour
     void Update()
     {
         FillControll();
+
+        if (status.IsFinishable && !groggy)
+        { 
+            groggy = true;
+            ChangeGroggyColor();
+        } 
     }
 
     private void FillControll()
     {
-        fill.localScale = new Vector2(1 - status.Param.HitPoint / status.Param.HitPointMax, 1 - status.Param.HitPoint / status.Param.HitPointMax);
+        fill.transform.localScale = new Vector2(1 - status.Param.HitPoint / status.Param.HitPointMax, 1 - status.Param.HitPoint / status.Param.HitPointMax);
+    }
+
+    private void ChangeGroggyColor()
+    {
+        fill.GetComponent<SpriteRenderer>().color = Color.cyan;
     }
 }
