@@ -48,7 +48,7 @@ public class PlayerCombat : MonoBehaviour
         RemoveDestroyedEnemy();
         colliders.ForEach(x => x.GetComponent<EnemyGroggy>().StopCoroutine("GroggyTime"));
         colliders.ForEach(x => StartCoroutine(x.GetComponentInChildren<CombatAttack>().PlayerCombatAttackEnemies()));
-        CombatTime();
+        StartCoroutine(CombatTime());
     }
 
     private IEnumerator CombatTime()
