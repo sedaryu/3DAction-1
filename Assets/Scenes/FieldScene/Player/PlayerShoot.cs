@@ -61,7 +61,6 @@ public class PlayerShoot : MonoBehaviour
     //敵オブジェクトの捕捉
     public void EnemyInCollider(Collider other)
     {
-        Debug.Log("InCollider");
         if (other.CompareTag("Enemy"))
         {
             if (other.GetComponent<EnemyDamage>() == null) return;

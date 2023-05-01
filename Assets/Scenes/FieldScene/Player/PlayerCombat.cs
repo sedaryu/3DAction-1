@@ -9,7 +9,8 @@ public class PlayerCombat : MonoBehaviour
     //コントローラー
     private PlayerController controller;
 
-    private List<GameObject> enemies = new List<GameObject>();
+    //取得したコリダー
+    private List<GameObject> colliders = new List<GameObject>();
 
     void Awake()
     {
@@ -22,44 +23,44 @@ public class PlayerCombat : MonoBehaviour
         Combating(controller.InputCombating());
     }
 
-    public void EnemyInCombatRange(Collider other)
+    public void PlayerInCombatRange(Collider other)
     {
         if (other.CompareTag("Combat"))
         {
             other.transform.localScale = new Vector3(4, 4, 4);
-            enemies.Add(other.transform.parent.gameObject);
+            colliders.Add(other.transform.parent.gameObject);
         }
     }
 
-    public void EnemyOutCombatRange(Collider other)
+    public void PlayerOutCombatRange(Collider other)
     {
         if (other.CompareTag("Combat"))
         {
             other.transform.localScale = new Vector3(2, 2, 2);
-            enemies.Remove(other.transform.parent.gameObject);
+            colliders.Remove(other.transform.parent.gameObject);
         }
     }
 
     private void Combating(bool input)
     {
         if (!input) return;
-        if (enemies.Count <= 0) return;
+        if (colliders.Count <= 0) return;
         RemoveDestroyedEnemy();
-        enemies.ForEach(x => x.GetComponent<EnemyGroggy>().StopCoroutine("GroggyTime"));
-        enemies.ForEach(x => StartCoroutine(CombatTime(x)));
+        colliders.ForEach(x => x.GetComponent<EnemyGroggy>().StopCoroutine("GroggyTime"));
+        colliders.ForEach(x => StartCoroutine(x.GetComponentInChildren<CombatAttack>().PlayerCombatAttackEnemies()));
+        CombatTime();
     }
 
-    private IEnumerator CombatTime(GameObject other)
+    private IEnumerator CombatTime()
     {
         status.GoToNoMoveInvincibleStateIfPossible();
         yield return new WaitForSeconds(1.25f);
-        Destroy(other);
         status.GoToNormalStateIfPossible();
     }
 
-    //破棄された敵をリストから除外
+    //破棄されたコリダーをリストから除外
     private void RemoveDestroyedEnemy()
     {
-        enemies.RemoveAll(x => x == null);
+        colliders.RemoveAll(x => x == null);
     }
 }

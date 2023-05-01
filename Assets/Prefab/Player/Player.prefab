@@ -1364,7 +1364,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 8450318298913539176}
         m_TargetAssemblyTypeName: PlayerCombat, Assembly-CSharp
-        m_MethodName: EnemyInCombatRange
+        m_MethodName: PlayerInCombatRange
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1382,7 +1382,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 8450318298913539176}
         m_TargetAssemblyTypeName: PlayerCombat, Assembly-CSharp
-        m_MethodName: EnemyOutCombatRange
+        m_MethodName: PlayerOutCombatRange
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
