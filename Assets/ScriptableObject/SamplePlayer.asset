@@ -16,4 +16,4 @@ MonoBehaviour:
   _hitPoint: 5
   _speedMax: 3
   _speedMin: 0
-  _reloadSpeed: 2
+  _reloadSpeed: 1.5

@@ -12,6 +12,8 @@ public class PlayerCombat : MonoBehaviour
     //取得したコリダー
     private List<GameObject> colliders = new List<GameObject>();
 
+    private bool combat;
+
     void Awake()
     {
         status = GetComponent<PlayerStatus>();
@@ -44,6 +46,8 @@ public class PlayerCombat : MonoBehaviour
     private void Combating(bool input)
     {
         if (!input) return;
+        if (combat) return;
+        combat = true;
         if (colliders.Count <= 0) return;
         RemoveDestroyedEnemy();
         colliders.ForEach(x => x.GetComponent<EnemyGroggy>().StopCoroutine("GroggyTime"));
@@ -53,9 +57,13 @@ public class PlayerCombat : MonoBehaviour
 
     private IEnumerator CombatTime()
     {
+        status.Animator.SetTrigger("StartCombat");
         status.GoToNoMoveInvincibleStateIfPossible();
-        yield return new WaitForSeconds(1.25f);
+        yield return new WaitForSeconds(1f);
+        status.Animator.SetTrigger("FinishCombat");
+        yield return new WaitForSeconds(0.25f);
         status.GoToNormalStateIfPossible();
+        combat = false;
     }
 
     //破棄されたコリダーをリストから除外

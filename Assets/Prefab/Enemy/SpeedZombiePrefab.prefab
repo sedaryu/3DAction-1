@@ -157,6 +157,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a14582bce51ccfc44a111b3753e11a9f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  combatEffect: {fileID: 7383460643436518565, guid: 03ca9e04a1dbafb46aeb6e15405fe2f5, type: 3}
 --- !u!54 &7096452205311509474
 Rigidbody:
   m_ObjectHideFlags: 0

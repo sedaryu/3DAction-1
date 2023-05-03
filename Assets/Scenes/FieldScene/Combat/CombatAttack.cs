@@ -7,6 +7,8 @@ public class CombatAttack : MonoBehaviour
 
     private List<EnemyDamage> enemies = new List<EnemyDamage>();
 
+    [SerializeField] private GameObject combatEffect;
+
     private bool combat;
 
     public IEnumerator PlayerCombatAttackEnemies()
@@ -16,6 +18,7 @@ public class CombatAttack : MonoBehaviour
             combat = true;
             yield return new WaitForSeconds(1.25f);
             RemoveDestroyedEnemy();
+            Instantiate(combatEffect, transform.position, Quaternion.identity);
             enemies.ForEach(x => x.Hit((x.transform.position - transform.position).normalized * 1.5f, 3f));
             Destroy(transform.parent.gameObject);
         }
