@@ -23,6 +23,10 @@ public class PlayerShoot : MonoBehaviour
     {
         status = GetComponent<PlayerStatus>();
         controller = GetComponent<PlayerController>();
+    }
+
+    void Start()
+    {
         particle = GetComponentInChildren<ParticleSystem>();
     }
 

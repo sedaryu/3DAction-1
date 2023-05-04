@@ -64,6 +64,11 @@ public class GunParam : ScriptableObject
     }
     [SerializeField] private int _bullet;
 
+    public GameObject GunPrefab //銃のオブジェクト
+    {
+        get => _gunPrefab;
+    }
+    [SerializeField] private GameObject _gunPrefab;
 
     public HittingEvent HittingEnemy
     {
@@ -83,6 +88,7 @@ public class GunParam : ScriptableObject
         _knockback = initialParam._knockback;
         _bulletMax = initialParam._bulletMax;
         _bullet = initialParam._bullet;
+        _gunPrefab = initialParam._gunPrefab;
         _hittingEnemy = initialParam.HittingEnemy;
     }
 }

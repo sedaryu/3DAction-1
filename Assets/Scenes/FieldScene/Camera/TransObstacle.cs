@@ -25,6 +25,7 @@ public class TransObstacle : MonoBehaviour
         if (Physics.Raycast(transform.position, directionToPlayer, out RaycastHit hit, directionToPlayer.magnitude, 1 << 8))
         {
             obstacle = hit.transform.gameObject.GetComponent<MakeTransparent>();
+            if (obstacle == null) return;
             obstacle.Transparent();
         }
         else

@@ -23,7 +23,7 @@ public class EnemyDamage : MonoBehaviour
         status.GoToInvincibleStateIfPossible(); //キャラの状態をDamageに遷移
         status.Animator.SetTrigger("Damage"); //被ダメージの際のアニメーションを実行
         JudgeCollapsed(vector, attack);
-        Instantiate(bloodEffect, transform.position, transform.rotation);
+        
         Knockback(vector);
         status.Damage(attack);
         status.GoToNormalStateIfPossible(); //キャラの状態をNormalに遷移

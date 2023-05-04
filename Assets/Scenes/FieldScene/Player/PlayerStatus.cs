@@ -29,6 +29,17 @@ public class PlayerStatus : MobStatus
         base.Awake();
         _playerParam = new PlayerParam(initialPlayerParam);
         _gunParam = new GunParam(initialGunParam);
+        SettingGunPrefab();
+    }
+
+    private void SettingGunPrefab()
+    {
+        GameObject gunPrefab = Instantiate(GunParam.GunPrefab);
+        string path = "Armature | Humanoid/Hips/Spine/Spine1/Spine2/RightShoulder/RightArm/RightForeArm/RightHand";
+        gunPrefab.transform.parent = GameObject.Find("Player").transform.Find(path);
+        gunPrefab.transform.localPosition = new Vector3(0, 0.25f, 0);
+        gunPrefab.transform.localRotation = Quaternion.Euler(-90, 180, -90);
+        gunPrefab.transform.localScale = new Vector3(3, 3, 3);
     }
 
     public void GoToNoMoveInvincibleStateIfPossible() //èÛë‘Ç™NoMoveInvincibleÇ…ëJà⁄Ç∑ÇÈ
