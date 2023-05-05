@@ -46,7 +46,7 @@ public class PlayerShoot : MonoBehaviour
 
         RemoveDestroyedEnemyInLockOn(); //破棄された敵が捕捉リストにいた場合、このメソッドでリストから削除
         if (status.GunParam.Bullet <= 0) { Debug.Log("Empty"); return; } //残弾がない場合、攻撃できない
-        status.GunParam.HittingEnemy.Invoke(this.transform, lockOnEnemies, status.GunParam); //攻撃を実行
+        status.GunParam.HittingEnemy.Invoke(this.transform, lockOnEnemies, status.GunParam, status.SmashParam); //攻撃を実行
         status.SetBullet(-1); //弾薬を消費
 
         particle.Play();

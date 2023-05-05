@@ -25,7 +25,7 @@ public class PlayerDamage : MonoBehaviour
         {
             if (!status.IsDamagable) return;
             EnemyStatus enemy = collision.gameObject.GetComponent<EnemyStatus>();
-            if (enemy.IsFinishable) return;
+            if (enemy.IsSmashable) return;
             status.Damage(enemy.Param.Attack);
             StartCoroutine(InvincibleTime());
         }

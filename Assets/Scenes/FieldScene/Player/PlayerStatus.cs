@@ -4,25 +4,33 @@ using UnityEngine;
 
 public class PlayerStatus : MobStatus
 {
-    //パラメーター
+    //プレイヤーパラメーター
     public PlayerParam PlayerParam
     {
         get => _playerParam;
     }
     private PlayerParam _playerParam;
 
+    //銃パラメーター
     public GunParam GunParam
     {
         get => _gunParam;
     }
     private GunParam _gunParam;
 
+    //スマッシュ技パラメーター
+    public SmashParam SmashParam
+    {
+        get => _smashParam;
+    }
+    [SerializeField] private SmashParam _smashParam;
+
     //初期設定パラメーター
     [SerializeField] private PlayerParam initialPlayerParam;
     [SerializeField] private GunParam initialGunParam;
 
     public bool IsDamagable => (state == StateEnum.Normal); //状態がNormalであればtrueを返す
-    public bool IsCombating => (state == StateEnum.NoMoveInvincible); //状態がNoMoveInvincibleであればtrueを返す
+    public bool IsSmashing => (state == StateEnum.NoMoveInvincible); //状態がNoMoveInvincibleであればtrueを返す
 
     protected override void Awake()
     {
@@ -49,10 +57,15 @@ public class PlayerStatus : MobStatus
     }
 
     //被ダメージの際のHitPointの減少を実行するメソッド
-    public override void Damage(float damage)
+    public override bool Damage(float damage)
     {
         _playerParam.HitPoint -= damage;
-        if (PlayerParam.HitPoint <= 0) GoToDieStateIfPossible(); //0以下ならば状態がDieに移行
+        if (PlayerParam.HitPoint <= 0)
+        {
+            GoToDieStateIfPossible(); //0以下ならば状態がDieに移行
+            return true;
+        }
+        return false;
     }
 
     //攻撃・リロードの際のBulletの増減を実行するメソッド

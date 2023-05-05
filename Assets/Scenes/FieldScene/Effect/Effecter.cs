@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
-public class Effecter : MonoBehaviour
+[CreateAssetMenu(fileName = "Effecter", menuName = "Custom/Effecter")]
+public class Effecter : ScriptableObject
 {
     [SerializeField] private List<Effect> effects = new List<Effect>();
 

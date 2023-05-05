@@ -14,7 +14,7 @@ public class EnemyStatus : MobStatus
     //初期設定パラメーター
     [SerializeField] private EnemyParam initialParam;
 
-    public bool IsFinishable => (state == StateEnum.Die); //状態がDieであればtrueを返す
+    public bool IsSmashable => (state == StateEnum.Die); //状態がDieであればtrueを返す
 
     protected override void Awake()
     {
@@ -42,9 +42,13 @@ public class EnemyStatus : MobStatus
     }
 
     //被ダメージの際のHitPointの減少を実行するメソッド
-    public override void Damage(float damage)
+    public override bool Damage(float damage)
     {
         _param.HitPoint -= damage;
-        if (Param.HitPoint <= 0) GoToDieStateIfPossible(); //0以下ならば状態がDieに移行
+        if (Param.HitPoint <= 0)
+        {
+            return true;
+        }
+        return false;
     }
 }

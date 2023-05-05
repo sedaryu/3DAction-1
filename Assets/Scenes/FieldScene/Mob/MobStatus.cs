@@ -16,6 +16,13 @@ public class MobStatus : MonoBehaviour
 
     public bool IsMovable => (state == StateEnum.Normal); //状態がNormalであればtrueを返す
 
+    //エフェクト
+    public Effecter Effecter
+    {
+        get => _effecter;
+    }
+    [SerializeField] private Effecter _effecter;
+
     //キャラクターの移動はNavMeshAgentで行う
     public NavMeshAgent Agent
     {
@@ -53,7 +60,8 @@ public class MobStatus : MonoBehaviour
         state = StateEnum.Normal;
     }
 
-    public virtual void Damage(float damage)
+    public virtual bool Damage(float damage)
     {
+        return false;
     }
 }

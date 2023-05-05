@@ -17,17 +17,17 @@ public class EnemyGroggy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (status.IsFinishable && !groggy)
-        {
-            groggy = true;
-            transform.Find("CombatCollider").gameObject.SetActive(true);
-            StartCoroutine("GroggyTime");
-        }
+        //if (status.IsSmashable && !groggy)
+        //{
+        //    groggy = true;
+        //    transform.Find("SmashCollider").gameObject.SetActive(true);
+        //    StartCoroutine("GroggyTime");
+        //}
     }
 
     private IEnumerator GroggyTime()
     {
-        yield return new WaitForSeconds(4f);
+        yield return new WaitForSeconds(6.5f);
         Destroy(gameObject);
     }
 }
