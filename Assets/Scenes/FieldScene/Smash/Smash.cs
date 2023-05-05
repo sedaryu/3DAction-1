@@ -6,17 +6,13 @@ public class Smash : MonoBehaviour
 {
     private List<EnemyDamage> enemies = new List<EnemyDamage>();
 
-    private Material material;
+    private MeshRenderer meshRenderer;
 
     private IEnumerator coroutine;
 
-    void Start()
-    { 
-        material = GetComponent<Material>();
-    }
-
     public void StartTimer(float time)
     {
+        meshRenderer = GetComponent<MeshRenderer>();
         coroutine = TimerToDestroy(time);
         StartCoroutine(coroutine);
     }
@@ -29,9 +25,9 @@ public class Smash : MonoBehaviour
         { 
             sum += Time.deltaTime;
             delta += Time.deltaTime;
-            if (delta >= 1)
+            if (delta >= time * 0.01f)
             {
-                material.color -= new Color32(0, 0, 0, 1);
+                meshRenderer.material.color -= new Color32(0, 0, 0, 1);
                 delta = 0;
             }
             yield return null;
