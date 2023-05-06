@@ -465,6 +465,7 @@ GameObject:
   - component: {fileID: 1725541066068554789}
   - component: {fileID: 2297265901156088900}
   - component: {fileID: 1859087710272979023}
+  - component: {fileID: 8682994719372606774}
   m_Layer: 7
   m_Name: SpeedZombiePrefab
   m_TagString: Enemy
@@ -595,6 +596,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c0de984eb6e52744cb62445697b332d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8682994719372606774
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5247070304351026479}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73acaba078d614548b73ff7a6d0780fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &5247087124427935579

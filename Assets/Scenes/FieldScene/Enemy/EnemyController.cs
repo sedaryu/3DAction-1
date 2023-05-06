@@ -24,7 +24,7 @@ public class EnemyController : MobController
     // Update is called once per frame
     void Update()
     {
-        if (status.IsMovable) status.Agent.destination = player.position; //プレイヤーを追跡
+        if (status.IsNormal) status.Agent.destination = player.position; //プレイヤーを追跡
         status.Animator.SetFloat("MoveSpeed", status.Agent.velocity.magnitude); //アニメーターに移動スピードを反映
     }
 }

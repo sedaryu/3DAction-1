@@ -24,7 +24,7 @@ public class EnemyMove : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (status.IsMovable && player != null) status.Agent.destination = player.position; //プレイヤーを追跡
+        if (status.IsNormal && player != null) status.Agent.destination = player.position; //プレイヤーを追跡
         else status.Agent.speed = 0;
 
         status.Animator.SetFloat("MoveSpeed", status.Agent.velocity.magnitude); //アニメーターに移動スピードを反映

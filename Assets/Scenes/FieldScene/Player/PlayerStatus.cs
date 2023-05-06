@@ -2,6 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <Summary>
+/// PlayerParam・GunParam・SmashParamを取得し格納する
+/// Paramの値を増減させる目的のクラス
+/// </Summary>
 public class PlayerStatus : MobStatus
 {
     //プレイヤーパラメーター
@@ -29,17 +33,18 @@ public class PlayerStatus : MobStatus
     [SerializeField] private PlayerParam initialPlayerParam;
     [SerializeField] private GunParam initialGunParam;
 
-    public bool IsDamagable => (state == StateEnum.Normal); //状態がNormalであればtrueを返す
-    public bool IsSmashing => (state == StateEnum.NoMoveInvincible); //状態がNoMoveInvincibleであればtrueを返す
-
     protected override void Awake()
     {
         base.Awake();
         _playerParam = new PlayerParam(initialPlayerParam);
         _gunParam = new GunParam(initialGunParam);
-        SettingGunPrefab();
+
+        SettingGunPrefab(); //銃のオブジェクトを生成し、位置を調整する
     }
 
+    /// <summary>
+    /// 銃のオブジェクトを生成し、位置を調整する目的のメソッド
+    /// </summary>
     private void SettingGunPrefab()
     {
         GameObject gunPrefab = Instantiate(GunParam.GunPrefab);
@@ -50,25 +55,22 @@ public class PlayerStatus : MobStatus
         gunPrefab.transform.localScale = new Vector3(3, 3, 3);
     }
 
-    public void GoToNoMoveInvincibleStateIfPossible() //状態がNoMoveInvincibleに遷移する
-    {
-        if (state == StateEnum.Die || state == StateEnum.NoMoveInvincible) return;
-        state = StateEnum.NoMoveInvincible;
-    }
-
-    //被ダメージの際のHitPointの減少を実行するメソッド
+    /// <summary>
+    /// 受けたダメージぶんHitPointを減少させる目的のメソッド
+    /// </summary>
+    /// <param name="damage">受けたダメージ量</param>
+    /// <returns>ダメージの結果HitPointが0以下になった(死亡したら)true、そうでなければfalseを返す</returns>
     public override bool Damage(float damage)
     {
         _playerParam.HitPoint -= damage;
-        if (PlayerParam.HitPoint <= 0)
-        {
-            GoToDieStateIfPossible(); //0以下ならば状態がDieに移行
-            return true;
-        }
+        if (PlayerParam.HitPoint <= 0) return true;
         return false;
     }
 
-    //攻撃・リロードの際のBulletの増減を実行するメソッド
+    /// <summary>
+    /// 攻撃・リロードの際のBulletの増減を管理する目的のメソッド
+    /// </summary>
+    /// <param name="bullet">消費また装填した弾薬の量</param>
     public void SetBullet(int bullet)
     { 
         _gunParam.Bullet += bullet;

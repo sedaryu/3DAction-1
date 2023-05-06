@@ -23,10 +23,10 @@ public class PlayerDamage : MonoBehaviour
     {
         if (collision.CompareTag("Enemy"))
         {
-            if (!status.IsDamagable) return;
+            if (!status.IsNormal) return;
             EnemyStatus enemy = collision.gameObject.GetComponent<EnemyStatus>();
             if (enemy.IsSmashable) return;
-            status.Damage(enemy.Param.Attack);
+            if (status.Damage(enemy.Param.Attack)) status.GoToDieStateIfPossible();
             StartCoroutine(InvincibleTime());
         }
     }

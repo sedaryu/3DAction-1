@@ -46,7 +46,7 @@ public class PlayerSmash : MonoBehaviour
     private void Smashing(bool input)
     {
         if (!input) return;
-        if (status.IsSmashing) return;
+        if (status.IsNoMoveInvincible) return;
         if (enemies.Count <= 0) return;
         if (RemoveDestroyedCollider()) return;
         enemies.ForEach(x => StartCoroutine(x.GetComponentInChildren<Smash>()

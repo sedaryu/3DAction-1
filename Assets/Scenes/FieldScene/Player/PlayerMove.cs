@@ -24,7 +24,7 @@ public class PlayerMove : MonoBehaviour
     //キャラクターの移動を管理するメソッド
     private void Move(Vector3 vector)
     {
-        if (status.IsSmashing) return;
+        if (status.IsNoMoveInvincible) return;
 
         status.Agent.Move(vector * status.PlayerParam.SpeedMax * Time.deltaTime); //移動入力を更新
 
