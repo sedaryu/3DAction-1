@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class Smash : MonoBehaviour
@@ -8,16 +10,16 @@ public class Smash : MonoBehaviour
 
     private MeshRenderer meshRenderer;
 
-    private IEnumerator coroutine;
+    private CancellationTokenSource cancel;
 
     public void StartTimer(float time)
     {
         meshRenderer = GetComponent<MeshRenderer>();
-        coroutine = TimerToDestroy(time);
-        StartCoroutine(coroutine);
+        cancel = new CancellationTokenSource();
+        TimerToDestroy(time, cancel.Token);
     }
 
-    public IEnumerator TimerToDestroy(float time)
+    public async Task TimerToDestroy(float time, CancellationToken cancel)
     {
         float sum = 0;
         float delta = 0;
@@ -30,15 +32,15 @@ public class Smash : MonoBehaviour
                 meshRenderer.material.color -= new Color32(0, 0, 0, 1);
                 delta = 0;
             }
-            yield return null;
+            await Task.Delay(20, cancel);
         }
         Destroy(transform.parent.gameObject);
     }
 
-    public IEnumerator PlayerCombatAttackEnemies(SmashParam smashParam, GameObject effect)
+    public async Task PlayerCombatAttackEnemies(SmashParam smashParam, GameObject effect)
     {
-        StopCoroutine(coroutine);
-        yield return new WaitForSeconds(smashParam.SmashTime);
+        cancel.Cancel();
+        await Task.Delay((int)(smashParam.SmashTime * 1000));
         RemoveDestroyedEnemy();
         Instantiate(effect, transform.position, Quaternion.identity);
         enemies.ForEach(x => x.Hit((x.transform.position - transform.position).normalized *

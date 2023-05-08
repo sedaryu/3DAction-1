@@ -2,13 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using System.Threading.Tasks;
 
-public class PlayerShoot : MonoBehaviour
+public class PlayerShoot
 {
     //ステータス
     private PlayerStatus status;
-    //コントローラー
-    private PlayerController controller;
 
     //lockOnEnemiesに捕捉した敵オブジェクトを格納
     List<EnemyDamage> lockOnEnemies = new List<EnemyDamage>();
@@ -16,45 +15,35 @@ public class PlayerShoot : MonoBehaviour
     //リロード中かどうか
     private bool reloading;
 
-    void Awake()
+    public PlayerShoot(PlayerStatus _status)
     {
-        status = GetComponent<PlayerStatus>();
-        controller = GetComponent<PlayerController>();
+        status = _status;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        //ボタン入力を感知し、攻撃を実行
-        Fire(controller.InputFiring());
-        //ボタン入力を感知し、リロードを実行
-        Reload(controller.InputReloading());
-    }
-
-    private void Fire(bool input)
+    public void Fire(bool input)
     {
         if (!input) return;
         if (lockOnEnemies.Count <= 0) return;
 
         RemoveDestroyedEnemyInLockOn(); //破棄された敵が捕捉リストにいた場合、このメソッドでリストから削除
         if (status.GunParam.Bullet <= 0) { Debug.Log("Empty"); return; } //残弾がない場合、攻撃できない
-        status.GunParam.HittingEnemy.Invoke(this.transform, lockOnEnemies, status.GunParam, status.SmashParam); //攻撃を実行
+        status.GunParam.HittingEnemy.Invoke(status.transform, lockOnEnemies, status.GunParam, status.SmashParam); //攻撃を実行
         status.SetBullet(-1); //弾薬を消費
         status.GunEffect.Play(); //エフェクトを再生
     }
 
-    private void Reload(bool input)
+    public void Reload(bool input)
     {
         if (!input) return;
         if (reloading) return;
 
         reloading = true;
-        StartCoroutine(ReloadTime()); //リロード完了待機時間を開始
+        ReloadTime(); //リロードを開始
     }
 
-    private IEnumerator ReloadTime()
-    { 
-        yield return new WaitForSeconds(status.PlayerParam.ReloadSpeed); //リロード完了までの待機時間はプレイヤーのパラメーターに依存
+    private async Task ReloadTime()
+    {
+        await Task.Delay((int)(status.PlayerParam.ReloadSpeed * 1000)); //リロード完了までの待機時間はプレイヤーのパラメーターに依存
         status.SetBullet(status.GunParam.BulletMax - status.GunParam.Bullet); //足りない分だけ装填される
         reloading = false;
     }

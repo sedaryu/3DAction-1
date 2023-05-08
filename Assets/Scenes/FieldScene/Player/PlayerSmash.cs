@@ -1,66 +1,56 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
-public class PlayerSmash : MonoBehaviour
+public class PlayerSmash
 {
     //ステータス
     private PlayerStatus status;
-    //コントローラー
-    private PlayerController controller;
 
     //取得したコリダー
     private List<GameObject> enemies = new List<GameObject>();
 
-    private bool smash;
-
-    void Awake()
+    public PlayerSmash(PlayerStatus _status)
     {
-        status = GetComponent<PlayerStatus>();
-        controller = GetComponent<PlayerController>();
+        status = _status;
     }
 
-    void Update()
+    public void PlayerInSmashRange(Collider other)
     {
-        Smashing(controller.InputCombating());
-    }
-
-    public void PlayerInCombatRange(Collider other)
-    {
-        if (other.CompareTag("Combat"))
+        if (other.CompareTag("Smash"))
         {
             other.transform.localScale = new Vector3(4, 4, 4);
             enemies.Add(other.transform.parent.gameObject);
         }
     }
 
-    public void PlayerOutCombatRange(Collider other)
+    public void PlayerOutSmashRange(Collider other)
     {
-        if (other.CompareTag("Combat"))
+        if (other.CompareTag("Smash"))
         {
             other.transform.localScale = new Vector3(2, 2, 2);
             enemies.Remove(other.transform.parent.gameObject);
         }
     }
 
-    private void Smashing(bool input)
+    public void Smash(bool input)
     {
         if (!input) return;
         if (status.IsNoMoveInvincible) return;
         if (enemies.Count <= 0) return;
         if (RemoveDestroyedCollider()) return;
-        enemies.ForEach(x => StartCoroutine(x.GetComponentInChildren<Smash>()
-               .PlayerCombatAttackEnemies(status.SmashParam, status.Effecter.GetEffectFromKey("Smash"))));
-        StartCoroutine(SmashTime());
+        enemies.ForEach(x => x.GetComponentInChildren<Smash>().PlayerCombatAttackEnemies(status.SmashParam, status.Effecter.GetEffectFromKey("Smash")));
+        SmashTime();
     }
 
-    private IEnumerator SmashTime()
+    private async Task SmashTime()
     {
         status.Animator.SetTrigger("StartSmash");
         status.GoToNoMoveInvincibleStateIfPossible();
-        yield return new WaitForSeconds(status.SmashParam.SmashTime * 0.8f);
+        await Task.Delay((int)(status.SmashParam.SmashTime * 800));
         status.Animator.SetTrigger("FinishSmash");
-        yield return new WaitForSeconds(status.SmashParam.SmashTime * 0.2f);
+        await Task.Delay((int)(status.SmashParam.SmashTime * 200));
         status.GoToNormalStateIfPossible();
     }
 

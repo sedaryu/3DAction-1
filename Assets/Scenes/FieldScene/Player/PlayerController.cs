@@ -38,9 +38,9 @@ public class PlayerController : MobController
         return false;
     }
 
-    public bool InputCombating()
+    public bool InputSmashing()
     {
-        if (Input.GetButtonDown("Combat")) return true;
+        if (Input.GetButtonDown("Smash")) return true;
 
         return false;
     }
