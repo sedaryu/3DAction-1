@@ -5,7 +5,7 @@ using UnityEngine.AI;
 
 /// <Summary>
 /// キャラの状態(state)を管理し、
-/// オブジェクトにアタッチされたEffecter・NavMeshAgent・Animatorを管理する目的のクラス
+/// オブジェクトにアタッチされたEffecter・NavMeshAgent・Animatorを取得し格納する目的のクラス
 /// </Summary>
 public class MobStatus : MonoBehaviour
 {
