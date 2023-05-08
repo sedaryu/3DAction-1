@@ -33,6 +33,13 @@ public class PlayerStatus : MobStatus
     [SerializeField] private PlayerParam initialPlayerParam;
     [SerializeField] private GunParam initialGunParam;
 
+    //銃のエフェクト
+    public ParticleSystem GunEffect
+    {
+        get => _gunEffect;
+    }
+    private ParticleSystem _gunEffect;
+
     protected override void Awake()
     {
         base.Awake();
@@ -53,6 +60,7 @@ public class PlayerStatus : MobStatus
         gunPrefab.transform.localPosition = new Vector3(0, 0.25f, 0);
         gunPrefab.transform.localRotation = Quaternion.Euler(-90, 180, -90);
         gunPrefab.transform.localScale = new Vector3(3, 3, 3);
+        _gunEffect = gunPrefab.transform.Find("ShotEffect").GetComponent<ParticleSystem>();
     }
 
     /// <summary>
