@@ -29,9 +29,15 @@ public class SmashParam : ScriptableObject
     }
     [SerializeField] private float _knockback;
 
-    public GameObject SmashCollider //コリダー
+    public GameObject SmashCollider //コリダーオブジェクト
     {
         get => _smashCollider;
     }
     [SerializeField] private GameObject _smashCollider;
+
+    public GameObject SmashEffect
+    {
+        get => _smashEffect;
+    }
+    [SerializeField] private GameObject _smashEffect;
 }

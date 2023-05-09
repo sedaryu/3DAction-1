@@ -57,7 +57,7 @@ public class PlayerSmash
         await Task.Delay((int)(status.SmashParam.SmashTime * 700));
         status.Animator.SetTrigger("FinishSmash");
         await Task.Delay((int)(status.SmashParam.SmashTime * 300));
-        effecter.InstanceEffect("Smash", position, rotation);
+        effecter.InstanceEffect(status.SmashParam.SmashEffect, position, rotation);
         status.GoToNormalStateIfPossible();
     }
 

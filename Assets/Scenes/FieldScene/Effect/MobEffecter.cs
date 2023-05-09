@@ -31,4 +31,9 @@ public class MobEffecter : MonoBehaviour
     {
         return Instantiate(effect, transform.position, transform.rotation);
     }
+
+    public GameObject InstanceEffect(GameObject effect, Vector3 position, Quaternion rotation)
+    {
+        return Instantiate(effect, position, rotation);
+    }
 }
