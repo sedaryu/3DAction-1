@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class Smash : MonoBehaviour
 {
-    private List<EnemyDamage> enemies = new List<EnemyDamage>();
+    private List<EnemyAct> enemies = new List<EnemyAct>();
 
     private MeshRenderer meshRenderer;
 
@@ -32,17 +32,16 @@ public class Smash : MonoBehaviour
                 meshRenderer.material.color -= new Color32(0, 0, 0, 1);
                 delta = 0;
             }
-            await Task.Delay(20, cancel);
+            await Task.Delay(10, cancel);
         }
         Destroy(transform.parent.gameObject);
     }
 
-    public async Task PlayerCombatAttackEnemies(SmashParam smashParam, GameObject effect)
+    public async Task PlayerSmashEnemies(SmashParam smashParam)
     {
         cancel.Cancel();
         await Task.Delay((int)(smashParam.SmashTime * 1000));
         RemoveDestroyedEnemy();
-        Instantiate(effect, transform.position, Quaternion.identity);
         enemies.ForEach(x => x.Hit((x.transform.position - transform.position).normalized *
                              smashParam.Knockback, smashParam.Attack, smashParam));
         Destroy(transform.parent.gameObject);
@@ -52,7 +51,7 @@ public class Smash : MonoBehaviour
     {
         if (other.CompareTag("Enemy"))
         {
-            enemies.Add(other.gameObject.GetComponent<EnemyDamage>());
+            enemies.Add(other.gameObject.GetComponent<EnemyAct>());
         }
     }
 
@@ -60,7 +59,7 @@ public class Smash : MonoBehaviour
     {
         if (other.CompareTag("Enemy"))
         {
-            enemies.Remove(other.gameObject.GetComponent<EnemyDamage>());
+            enemies.Remove(other.gameObject.GetComponent<EnemyAct>());
         }
     }
 

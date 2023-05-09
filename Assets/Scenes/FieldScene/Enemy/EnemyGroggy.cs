@@ -1,33 +1,26 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static Effecter;
 
-public class EnemyGroggy : MonoBehaviour
+public class EnemyGroggy
 {
     //ステータス
     private EnemyStatus status;
+    //エフェクター
+    private MobEffecter effecter;
 
-    private bool groggy;
-
-    void Awake()
-    {
-        status = GetComponent<EnemyStatus>();
+    public EnemyGroggy(EnemyStatus _status, MobEffecter _effecter)
+    { 
+        status = _status;
+        effecter = _effecter;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void Groggy(SmashParam smash)
     {
-        //if (status.IsSmashable && !groggy)
-        //{
-        //    groggy = true;
-        //    transform.Find("SmashCollider").gameObject.SetActive(true);
-        //    StartCoroutine("GroggyTime");
-        //}
-    }
-
-    private IEnumerator GroggyTime()
-    {
-        yield return new WaitForSeconds(6.5f);
-        Destroy(gameObject);
+        status.GoToDieStateIfPossible(); //0以下ならば状態がDieに移行
+        GameObject smashCollider = effecter.InstanceEffect(smash.SmashCollider); //SmashColliderを生成
+        smashCollider.transform.parent = status.transform; //子オブジェクト化
+        smashCollider.GetComponent<Smash>().StartTimer(smash.DestroyTime);
     }
 }

@@ -7,13 +7,16 @@ public class PlayerSmash
 {
     //ステータス
     private PlayerStatus status;
+    //エフェクター
+    private MobEffecter effecter;
 
-    //取得したコリダー
-    private List<GameObject> enemies = new List<GameObject>();
+    //取得したコリダーオブジェクト
+    private List<GameObject> colliders = new List<GameObject>();
 
-    public PlayerSmash(PlayerStatus _status)
+    public PlayerSmash(PlayerStatus _status, MobEffecter _effecter)
     {
         status = _status;
+        effecter = _effecter;
     }
 
     public void PlayerInSmashRange(Collider other)
@@ -21,7 +24,7 @@ public class PlayerSmash
         if (other.CompareTag("Smash"))
         {
             other.transform.localScale = new Vector3(4, 4, 4);
-            enemies.Add(other.transform.parent.gameObject);
+            colliders.Add(other.transform.parent.gameObject);
         }
     }
 
@@ -30,7 +33,7 @@ public class PlayerSmash
         if (other.CompareTag("Smash"))
         {
             other.transform.localScale = new Vector3(2, 2, 2);
-            enemies.Remove(other.transform.parent.gameObject);
+            colliders.Remove(other.transform.parent.gameObject);
         }
     }
 
@@ -38,27 +41,31 @@ public class PlayerSmash
     {
         if (!input) return;
         if (status.IsNoMoveInvincible) return;
-        if (enemies.Count <= 0) return;
+        if (colliders.Count <= 0) return;
         if (RemoveDestroyedCollider()) return;
-        enemies.ForEach(x => x.GetComponentInChildren<Smash>().PlayerCombatAttackEnemies(status.SmashParam, status.Effecter.GetEffectFromKey("Smash")));
-        SmashTime();
+        foreach (GameObject x in colliders) 
+        { 
+            x.GetComponentInChildren<Smash>().PlayerSmashEnemies(status.SmashParam);
+            SmashTime(x.transform.position, x.transform.rotation);
+        }
     }
 
-    private async Task SmashTime()
+    private async Task SmashTime(Vector3 position, Quaternion rotation)
     {
         status.Animator.SetTrigger("StartSmash");
         status.GoToNoMoveInvincibleStateIfPossible();
-        await Task.Delay((int)(status.SmashParam.SmashTime * 800));
+        await Task.Delay((int)(status.SmashParam.SmashTime * 700));
         status.Animator.SetTrigger("FinishSmash");
-        await Task.Delay((int)(status.SmashParam.SmashTime * 200));
+        await Task.Delay((int)(status.SmashParam.SmashTime * 300));
+        effecter.InstanceEffect("Smash", position, rotation);
         status.GoToNormalStateIfPossible();
     }
 
     //破棄されたコリダーをリストから除外
     private bool RemoveDestroyedCollider()
     {
-        enemies.RemoveAll(x => x == null);
-        if (enemies.Count == 0) return true;
+        colliders.RemoveAll(x => x == null);
+        if (colliders.Count == 0) return true;
         return false;
     }
 }

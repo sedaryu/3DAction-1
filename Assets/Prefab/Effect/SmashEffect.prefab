@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7383460643421155073}
   - component: {fileID: 7383460643421117233}
   m_Layer: 0
-  m_Name: CombatEffect
+  m_Name: SmashEffect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

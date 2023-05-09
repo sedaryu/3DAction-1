@@ -10,7 +10,7 @@ public class PlayerShoot
     private PlayerStatus status;
 
     //lockOnEnemiesに捕捉した敵オブジェクトを格納
-    List<EnemyDamage> lockOnEnemies = new List<EnemyDamage>();
+    List<EnemyAct> lockOnEnemies = new List<EnemyAct>();
 
     //リロード中かどうか
     private bool reloading;
@@ -53,8 +53,8 @@ public class PlayerShoot
     {
         if (other.CompareTag("Enemy"))
         {
-            if (other.GetComponent<EnemyDamage>() == null) return;
-            lockOnEnemies.Add(other.GetComponent<EnemyDamage>()); //敵の被ダメージを制御するクラスを取得
+            if (other.GetComponent<EnemyAct>() == null) return;
+            lockOnEnemies.Add(other.GetComponent<EnemyAct>()); //敵の被ダメージを制御するクラスを取得
         }
     }
 
@@ -63,7 +63,7 @@ public class PlayerShoot
     {
         if (other.CompareTag("Enemy"))
         {
-            lockOnEnemies.Remove(other.GetComponent<EnemyDamage>()); //TargetingColliderの範囲から外れた場合、リストから除外
+            lockOnEnemies.Remove(other.GetComponent<EnemyAct>()); //TargetingColliderの範囲から外れた場合、リストから除外
         }
     }
 

@@ -5,7 +5,7 @@ using UnityEngine.AI;
 
 /// <Summary>
 /// キャラの状態(state)を管理し、
-/// オブジェクトにアタッチされたEffecter・NavMeshAgent・Animatorを取得し格納する目的のクラス
+/// オブジェクトにアタッチされたNavMeshAgent・Animatorを取得し格納する目的のクラス
 /// </Summary>
 public class MobStatus : MonoBehaviour
 {
@@ -22,13 +22,6 @@ public class MobStatus : MonoBehaviour
     public bool IsInvincible => (state == StateEnum.Invincible); //状態がInvincibleであればtrueを返す
     public bool IsNoMoveInvincible => (state == StateEnum.NoMoveInvincible); //状態がNoMoveInvincibleであればtrueを返す
     public bool IsDie => (state == StateEnum.Die); //状態がNoMoveInvincibleであればtrueを返す
-
-    //エフェクト
-    public Effecter Effecter
-    {
-        get => _effecter;
-    }
-    [SerializeField] private Effecter _effecter;
 
     //キャラクターの移動はNavMeshAgentで行う
     public NavMeshAgent Agent

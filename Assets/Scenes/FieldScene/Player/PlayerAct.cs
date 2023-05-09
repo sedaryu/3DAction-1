@@ -8,6 +8,8 @@ public class PlayerAct : MonoBehaviour
 {
     //ステータス
     private PlayerStatus status;
+    //エフェクター
+    private MobEffecter effecter;
     //コントローラー
     private PlayerController controller;
 
@@ -24,6 +26,7 @@ public class PlayerAct : MonoBehaviour
     void Awake()
     {
         status = GetComponent<PlayerStatus>();
+        effecter = GetComponent<MobEffecter>();
         controller = GetComponent<PlayerController>();
         targetCollisionDetecter = transform.Find("TargetCollider").GetComponent<CollisionDetecter>(); ;
         bodyCollisionDetecter = transform.Find("BodyCollider").GetComponent<CollisionDetecter>();
@@ -38,7 +41,7 @@ public class PlayerAct : MonoBehaviour
         playerDamage = new PlayerDamage(status);
         bodyCollisionDetecter.onTriggerEnter += playerDamage.EnemyAttackPlayer;
         //スマッシュ
-        playerSmash = new PlayerSmash(status);
+        playerSmash = new PlayerSmash(status, effecter);
         bodyCollisionDetecter.onTriggerEnter += playerSmash.PlayerInSmashRange;
         bodyCollisionDetecter.onTriggerExit += playerSmash.PlayerOutSmashRange;
     }

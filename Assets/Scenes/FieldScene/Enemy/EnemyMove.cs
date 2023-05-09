@@ -8,21 +8,20 @@ using UnityEngine.AI;
 using Quaternion = UnityEngine.Quaternion;
 using Vector3 = UnityEngine.Vector3;
 
-public class EnemyMove : MonoBehaviour
+public class EnemyMove 
 {
     //ステータス
     private EnemyStatus status;
     //追跡するプレイヤー
     private Transform player;
 
-    void Awake()
+    public EnemyMove(EnemyStatus _status)
     {
-        status = GetComponent<EnemyStatus>();
+        status = _status;
         player = GameObject.Find("Player").GetComponent<Transform>(); //プレイヤーの位置を取得
     }
 
-    // Update is called once per frame
-    void Update()
+    public void Move()
     {
         if (status.IsNormal && player != null) status.Agent.destination = player.position; //プレイヤーを追跡
         else status.Agent.speed = 0;

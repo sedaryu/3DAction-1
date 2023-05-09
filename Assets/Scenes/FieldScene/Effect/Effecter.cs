@@ -6,19 +6,11 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Effecter", menuName = "Custom/Effecter")]
 public class Effecter : ScriptableObject
 {
-    [SerializeField] private List<Effect> effects = new List<Effect>();
-
-    public GameObject GetEffectFromKey(string key)
+    public List<Effect> Effects
     {
-        foreach (Effect x in effects)
-        {
-            if (x.key == key)
-            {
-                return x.value;
-            }
-        }
-        return null;
+        get => effects;
     }
+    [SerializeField] private List<Effect> effects = new List<Effect>();
 
     [System.Serializable]
     public class Effect
