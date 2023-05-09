@@ -21,6 +21,6 @@ public class EnemyGroggy
         status.GoToDieStateIfPossible(); //0以下ならば状態がDieに移行
         GameObject smashCollider = effecter.InstanceEffect(smash.SmashCollider); //SmashColliderを生成
         smashCollider.transform.parent = status.transform; //子オブジェクト化
-        smashCollider.GetComponent<Smash>().StartTimer(smash.DestroyTime);
+        smashCollider.GetComponent<SmashCollider>().StartTimer(smash.DestroyTime);
     }
 }

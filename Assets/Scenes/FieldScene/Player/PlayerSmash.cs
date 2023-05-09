@@ -44,9 +44,9 @@ public class PlayerSmash
         if (colliders.Count <= 0) return;
         if (RemoveDestroyedCollider()) return;
         foreach (GameObject x in colliders) 
-        { 
-            x.GetComponentInChildren<Smash>().PlayerSmashEnemies(status.SmashParam);
-            SmashTime(x.transform.position, x.transform.rotation);
+        {
+            Task _0 = x.GetComponentInChildren<SmashCollider>().PlayerSmashEnemies(status.SmashParam);
+            Task _1 = SmashTime(x.transform.position, x.transform.rotation);
         }
     }
 

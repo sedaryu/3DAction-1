@@ -38,7 +38,7 @@ public class PlayerShoot
         if (reloading) return;
 
         reloading = true;
-        ReloadTime(); //リロードを開始
+        Task _ = ReloadTime(); //リロードを開始
     }
 
     private async Task ReloadTime()

@@ -2,24 +2,25 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Unity.VisualScripting;
 using UnityEngine;
 
-public class Smash : MonoBehaviour
+public class SmashCollider : MonoBehaviour
 {
     private List<EnemyAct> enemies = new List<EnemyAct>();
 
     private MeshRenderer meshRenderer;
 
-    private CancellationTokenSource cancel;
+    private IEnumerator coroutine;
 
     public void StartTimer(float time)
     {
         meshRenderer = GetComponent<MeshRenderer>();
-        cancel = new CancellationTokenSource();
-        TimerToDestroy(time, cancel.Token);
+        coroutine = TimerToDestroy(time);
+        StartCoroutine(coroutine);
     }
 
-    public async Task TimerToDestroy(float time, CancellationToken cancel)
+    public IEnumerator TimerToDestroy(float time)
     {
         float sum = 0;
         float delta = 0;
@@ -32,14 +33,14 @@ public class Smash : MonoBehaviour
                 meshRenderer.material.color -= new Color32(0, 0, 0, 1);
                 delta = 0;
             }
-            await Task.Delay(10, cancel);
+            yield return null;
         }
         Destroy(transform.parent.gameObject);
     }
 
     public async Task PlayerSmashEnemies(SmashParam smashParam)
     {
-        cancel.Cancel();
+        StopCoroutine(coroutine);
         await Task.Delay((int)(smashParam.SmashTime * 1000));
         RemoveDestroyedEnemy();
         enemies.ForEach(x => x.Hit((x.transform.position - transform.position).normalized *
@@ -47,7 +48,7 @@ public class Smash : MonoBehaviour
         Destroy(transform.parent.gameObject);
     }
 
-    public void EnemyInCombatRange(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Enemy"))
         {
@@ -55,7 +56,7 @@ public class Smash : MonoBehaviour
         }
     }
 
-    public void EnemyOutCombatRange(Collider other)
+    private void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Enemy"))
         {
