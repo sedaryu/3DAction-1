@@ -3,6 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <Summary>
+/// プレイヤーの入力を処理するクラス
+/// </Summary>
 public class PlayerController : MobController
 {
     //バーチャルスティック
@@ -24,6 +27,7 @@ public class PlayerController : MobController
         return moving; //入力を反映
     }
 
+    //射撃に関する入力を受け付けるメソッド
     public bool InputFiring()
     {
         if (Input.GetButtonDown("Fire1")) return true;
@@ -31,6 +35,7 @@ public class PlayerController : MobController
         return false;
     }
 
+    //リロードに関する入力を受け付けるメソッド
     public bool InputReloading()
     {
         if (Input.GetButtonDown("Reload")) return true;
@@ -38,6 +43,7 @@ public class PlayerController : MobController
         return false;
     }
 
+    //スマッシュ攻撃に関する入力を受け付けるメソッド
     public bool InputSmashing()
     {
         if (Input.GetButtonDown("Smash")) return true;

@@ -29,13 +29,25 @@ public class SmashParam : ScriptableObject
     }
     [SerializeField] private float _knockback;
 
+    public float RangeMin
+    {
+        get => _rangeMin;
+    }
+    [SerializeField] private float _rangeMin;
+
+    public float RangeMax
+    {
+        get => _rangeMax;
+    }
+    [SerializeField] private float _rangeMax;
+
     public GameObject SmashCollider //コリダーオブジェクト
     {
         get => _smashCollider;
     }
     [SerializeField] private GameObject _smashCollider;
 
-    public GameObject SmashEffect
+    public GameObject SmashEffect //スマッシュ攻撃時のエフェクト
     {
         get => _smashEffect;
     }

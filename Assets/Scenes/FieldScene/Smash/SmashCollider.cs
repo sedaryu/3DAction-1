@@ -13,8 +13,9 @@ public class SmashCollider : MonoBehaviour
 
     private IEnumerator coroutine;
 
-    public void StartTimer(float time)
+    public void StartTimer(float time, float range)
     {
+        transform.localScale = Vector3.one * range;
         meshRenderer = GetComponent<MeshRenderer>();
         coroutine = TimerToDestroy(time);
         StartCoroutine(coroutine);

@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
+/// <Summary>
+/// プレイヤーのスマッシュ攻撃を処理するクラス
+/// </Summary>
 public class PlayerSmash
 {
     //ステータス
@@ -19,37 +22,57 @@ public class PlayerSmash
         effecter = _effecter;
     }
 
+    /// <summary>
+    /// スマッシュコリダーに接触した際、そのコリダーのサイズを拡大し、
+    /// そのコリダーをcollidersに追加する
+    /// </summary>
+    /// <param name="other">接触したコリダー</param>
     public void PlayerInSmashRange(Collider other)
     {
         if (other.CompareTag("Smash"))
         {
-            other.transform.localScale = new Vector3(4, 4, 4);
-            colliders.Add(other.transform.parent.gameObject);
+            other.transform.localScale = Vector3.one * status.SmashParam.RangeMax; //コリダーを拡大
+            colliders.Add(other.transform.parent.gameObject); //追加
         }
     }
 
+    /// <summary>
+    /// スマッシュコリダーから離れた際、そのコリダーのサイズを元に戻し、
+    /// そのコリダーをcollidersから除外する
+    /// </summary>
+    /// <param name="other">離れたコリダー</param>
     public void PlayerOutSmashRange(Collider other)
     {
         if (other.CompareTag("Smash"))
         {
-            other.transform.localScale = new Vector3(2, 2, 2);
-            colliders.Remove(other.transform.parent.gameObject);
+            other.transform.localScale = Vector3.one * status.SmashParam.RangeMin; //コリダーのサイズを元に戻す
+            colliders.Remove(other.transform.parent.gameObject); //除外
         }
     }
 
+    /// <summary>
+    /// スマッシュ攻撃を実行するためのメソッド
+    /// </summary>
+    /// <param name="input">入力された場合はtrue</param>
     public void Smash(bool input)
     {
         if (!input) return;
-        if (status.IsNoMoveInvincible) return;
-        if (colliders.Count <= 0) return;
-        if (RemoveDestroyedCollider()) return;
+        if (status.IsNoMoveInvincible) return; //移動不可無敵の際は実行できない
+        if (colliders.Count <= 0) return; //collidersに何も含まれていない場合は実行できない
+        if (RemoveDestroyedCollider()) return; //破棄されたコリダーを除外
         foreach (GameObject x in colliders) 
         {
-            Task _0 = x.GetComponentInChildren<SmashCollider>().PlayerSmashEnemies(status.SmashParam);
-            Task _1 = SmashTime(x.transform.position, x.transform.rotation);
+            Task _0 = x.GetComponentInChildren<SmashCollider>().PlayerSmashEnemies(status.SmashParam); //コリダー内の敵全てにスマッシュ攻撃
+            Task _1 = SmashTime(x.transform.position, x.transform.rotation); //
         }
     }
 
+    /// <summary>
+    /// スマッシュ攻撃の際のプレイヤーのstate遷移、
+    /// アニメーション実行、エフェクト生成を行うメソッド
+    /// </summary>
+    /// <param name="position">エフェクトを生成する場所</param>
+    /// <param name="rotation">エフェクトの角度</param>
     private async Task SmashTime(Vector3 position, Quaternion rotation)
     {
         status.Animator.SetTrigger("StartSmash");

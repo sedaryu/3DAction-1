@@ -71,7 +71,7 @@ public class PlayerStatus : MobStatus
     public override bool Damage(float damage)
     {
         _playerParam.HitPoint -= damage;
-        if (PlayerParam.HitPoint <= 0) return true;
+        if (PlayerParam.HitPoint <= 0) Destroy(gameObject);
         return false;
     }
 

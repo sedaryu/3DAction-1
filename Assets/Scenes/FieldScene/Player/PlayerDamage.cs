@@ -28,7 +28,7 @@ public class PlayerDamage
             EnemyStatus enemy = collision.gameObject.GetComponent<EnemyStatus>();
             if (enemy.IsSmashable) return;
             if (status.Damage(enemy.Param.Attack)) status.GoToDieStateIfPossible();
-            InvincibleTime();
+            Task _ = InvincibleTime();
         }
     }
 
