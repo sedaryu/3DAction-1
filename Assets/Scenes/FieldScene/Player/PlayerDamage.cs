@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Threading.Tasks;
 
+/// <summary>
+/// プレイヤーがダメージを受けた際の処理を実行する目的のクラス
+/// </summary>
 public class PlayerDamage
 {
     //ステータス
@@ -16,7 +19,7 @@ public class PlayerDamage
     {
         status = _status;
         skinRenderer = _status.transform.Find("body").GetComponent<SkinnedMeshRenderer>();
-        initialColor = skinRenderer.material.color;
+        initialColor = skinRenderer.sharedMaterial.color;
         transparentColor = new Color32(initialColor.r, 0, 0, initialColor.a);
     }
 
@@ -35,9 +38,9 @@ public class PlayerDamage
     private async Task InvincibleTime()
     {
         status.GoToInvincibleStateIfPossible();
-        skinRenderer.material.color = transparentColor;
+        skinRenderer.sharedMaterial.color = transparentColor;
         await Task.Delay(2000);
         status.GoToNormalStateIfPossible();
-        skinRenderer.material.color = initialColor;
+        skinRenderer.sharedMaterial.color = initialColor;
     }
 }

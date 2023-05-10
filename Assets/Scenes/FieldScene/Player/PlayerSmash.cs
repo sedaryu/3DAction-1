@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -77,9 +78,11 @@ public class PlayerSmash
     {
         status.Animator.SetTrigger("StartSmash");
         status.GoToNoMoveInvincibleStateIfPossible();
-        await Task.Delay((int)(status.SmashParam.SmashTime * 700));
+        await Task.Delay(TimeSpan.FromSeconds(status.SmashParam.SmashTime * 0.7f));
+        //await Task.Delay((int)(status.SmashParam.SmashTime * 700));
         status.Animator.SetTrigger("FinishSmash");
-        await Task.Delay((int)(status.SmashParam.SmashTime * 300));
+        await Task.Delay(TimeSpan.FromSeconds(status.SmashParam.SmashTime * 0.3f));
+        //await Task.Delay((int)(status.SmashParam.SmashTime * 300));
         effecter.InstanceEffect(status.SmashParam.SmashEffect, position, rotation);
         status.GoToNormalStateIfPossible();
     }

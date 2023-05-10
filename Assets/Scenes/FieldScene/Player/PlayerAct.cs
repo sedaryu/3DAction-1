@@ -19,22 +19,28 @@ public class PlayerAct : MonoBehaviour
     private PlayerDamage playerDamage;
     private PlayerSmash playerSmash;
 
-    //イベント
+    //コリダーイベント
     private CollisionDetecter targetCollisionDetecter;
     private CollisionDetecter bodyCollisionDetecter;
+    //UIイベント
+    public Action<string> onFiring;
+    public Action<string> onReloading;
+    public Action<string> onSmashing;
 
     void Awake()
     {
         status = GetComponent<PlayerStatus>();
         effecter = GetComponent<MobEffecter>();
         controller = GetComponent<PlayerController>();
-        targetCollisionDetecter = transform.Find("TargetCollider").GetComponent<CollisionDetecter>(); ;
+        targetCollisionDetecter = transform.Find("TargetCollider").GetComponent<CollisionDetecter>();
         bodyCollisionDetecter = transform.Find("BodyCollider").GetComponent<CollisionDetecter>();
 
         //移動
         playerMove = new PlayerMove(status);
         //射撃
         playerShoot = new PlayerShoot(status);
+        playerShoot.AddTrigger("OnFiring", onFiring);
+        playerShoot.AddTrigger("OnReloading", onReloading);
         targetCollisionDetecter.onTriggerEnter += playerShoot.EnemyInCollider;
         targetCollisionDetecter.onTriggerExit += playerShoot.EnemyOutCollider;
         //ダメージ
@@ -49,7 +55,7 @@ public class PlayerAct : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        onFiring.Invoke(status.GunParam.Bullet.ToString());
     }
 
     // Update is called once per frame

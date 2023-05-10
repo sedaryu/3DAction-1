@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using System.Threading.Tasks;
+using System;
 
-public class PlayerShoot
+public class PlayerShoot : Act
 {
     //ステータス
     private PlayerStatus status;
@@ -26,9 +27,10 @@ public class PlayerShoot
         if (lockOnEnemies.Count <= 0) return;
 
         RemoveDestroyedEnemyInLockOn(); //破棄された敵が捕捉リストにいた場合、このメソッドでリストから削除
-        if (status.GunParam.Bullet <= 0) { Debug.Log("Empty"); return; } //残弾がない場合、攻撃できない
+        if (status.GunParam.Bullet <= 0) return; //残弾がない場合、攻撃できない
         status.GunParam.HittingEnemy.Invoke(status.transform, lockOnEnemies, status.GunParam, status.SmashParam); //攻撃を実行
         status.SetBullet(-1); //弾薬を消費
+        OnTrigger("OnFiring", status.GunParam.Bullet.ToString()); //UIを更新
         status.GunEffect.Play(); //エフェクトを再生
     }
 
@@ -37,14 +39,15 @@ public class PlayerShoot
         if (!input) return;
         if (reloading) return;
 
-        reloading = true;
         Task _ = ReloadTime(); //リロードを開始
     }
 
     private async Task ReloadTime()
     {
-        await Task.Delay((int)(status.PlayerParam.ReloadSpeed * 1000)); //リロード完了までの待機時間はプレイヤーのパラメーターに依存
+        reloading = true;
+        await Task.Delay(TimeSpan.FromSeconds(status.PlayerParam.ReloadSpeed)); //リロード完了までの待機時間はプレイヤーのパラメーターに依存
         status.SetBullet(status.GunParam.BulletMax - status.GunParam.Bullet); //足りない分だけ装填される
+        OnTrigger("OnReloading", status.GunParam.Bullet.ToString()); //UIを更新
         reloading = false;
     }
 
