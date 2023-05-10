@@ -6,9 +6,9 @@ using UnityEngine.Events;
 
 public class CollisionDetecter : MonoBehaviour
 {
-    public Action<Collider> onTriggerEnter;
-    public Action<Collider> onTriggerStay;
-    public Action<Collider> onTriggerExit;
+    public event Action<Collider> onTriggerEnter;
+    public event Action<Collider> onTriggerStay;
+    public event Action<Collider> onTriggerExit;
 
     private void OnTriggerEnter(Collider other)
     {

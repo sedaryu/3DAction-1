@@ -55,7 +55,7 @@ public class PlayerAct : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        onFiring.Invoke(status.GunParam.Bullet.ToString());
+        onFiring?.Invoke(status.GunParam.Bullet.ToString());
     }
 
     // Update is called once per frame
