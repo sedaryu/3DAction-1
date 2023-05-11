@@ -7,31 +7,25 @@ using System;
 
 public class PlayerShoot : Act
 {
-    //ステータス
-    private PlayerStatus status;
-
-    //lockOnEnemiesに捕捉した敵オブジェクトを格納
-    List<EnemyAct> lockOnEnemies = new List<EnemyAct>();
+    //敵への攻撃処理(銃ごとに変わる)
+    public event Func<Vector3, List<EnemyReferenced>, float, float, Transform> hittingEnemy;
+    //攻撃時のプレイヤーの振り向き
+    public event Action<Transform> lookAt;
 
     //リロード中かどうか
     private bool reloading;
 
-    public PlayerShoot(PlayerStatus _status)
+    public void Fire(Vector3 position, List<EnemyReferenced> enemies, int bullet, float knockback, float attack)
     {
-        status = _status;
-    }
+        if (enemies.Count <= 0) return;
 
-    public void Fire(bool input)
-    {
-        if (!input) return;
-        if (lockOnEnemies.Count <= 0) return;
-
-        RemoveDestroyedEnemyInLockOn(); //破棄された敵が捕捉リストにいた場合、このメソッドでリストから削除
-        if (status.GunParam.Bullet <= 0) return; //残弾がない場合、攻撃できない
-        status.GunParam.HittingEnemy.Invoke(status.transform, lockOnEnemies, status.GunParam, status.SmashParam); //攻撃を実行
-        status.SetBullet(-1); //弾薬を消費
-        OnTrigger("OnFiring", status.GunParam.Bullet.ToString()); //UIを更新
-        status.GunEffect.Play(); //エフェクトを再生
+        //RemoveDestroyedEnemyInLockOn(); //破棄された敵が捕捉リストにいた場合、このメソッドでリストから削除
+        if (bullet <= 0) return; //残弾がない場合、攻撃できない
+        Transform enemy = hittingEnemy.Invoke(position, enemies, knockback, attack); //攻撃を実行
+        lookAt.Invoke(enemy); //攻撃した敵の方向を振り向く
+        OnTrigger("SetBullet", -1); //弾薬を消費
+        OnTrigger("UpdateBulletUI", (bullet - 1).ToString()); //UIを更新
+        OnTrigger("GunEffectPlay"); //エフェクトを再生
     }
 
     public void Reload(bool input)
@@ -47,32 +41,7 @@ public class PlayerShoot : Act
         reloading = true;
         await Task.Delay(TimeSpan.FromSeconds(status.PlayerParam.ReloadSpeed)); //リロード完了までの待機時間はプレイヤーのパラメーターに依存
         status.SetBullet(status.GunParam.BulletMax - status.GunParam.Bullet); //足りない分だけ装填される
-        OnTrigger("OnReloading", status.GunParam.Bullet.ToString()); //UIを更新
+        OnTrigger("UpdateBulletUI", status.GunParam.Bullet.ToString()); //UIを更新
         reloading = false;
-    }
-
-    //敵オブジェクトの捕捉
-    public void EnemyInCollider(Collider other)
-    {
-        if (other.CompareTag("Enemy"))
-        {
-            if (other.GetComponent<EnemyAct>() == null) return;
-            lockOnEnemies.Add(other.GetComponent<EnemyAct>()); //敵の被ダメージを制御するクラスを取得
-        }
-    }
-
-    //敵オブジェクトの捕捉解除
-    public void EnemyOutCollider(Collider other)
-    {
-        if (other.CompareTag("Enemy"))
-        {
-            lockOnEnemies.Remove(other.GetComponent<EnemyAct>()); //TargetingColliderの範囲から外れた場合、リストから除外
-        }
-    }
-
-    //破棄された敵をリストから除外
-    private void RemoveDestroyedEnemyInLockOn()
-    {
-        lockOnEnemies.RemoveAll(x => x == null);
     }
 }

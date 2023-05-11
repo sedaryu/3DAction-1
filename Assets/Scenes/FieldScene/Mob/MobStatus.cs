@@ -67,8 +67,7 @@ public class MobStatus : MonoBehaviour
         state = StateEnum.Normal;
     }
 
-    public virtual bool Damage(float damage)
+    public virtual void Damage(float damage)
     {
-        return false;
     }
 }

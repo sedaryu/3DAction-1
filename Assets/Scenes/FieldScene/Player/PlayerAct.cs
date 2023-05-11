@@ -10,6 +10,8 @@ public class PlayerAct : MonoBehaviour
     private PlayerStatus status;
     //エフェクター
     private MobEffecter effecter;
+    //ターゲット
+    private PlayerTarget target;
     //コントローラー
     private PlayerController controller;
 
@@ -23,24 +25,26 @@ public class PlayerAct : MonoBehaviour
     private CollisionDetecter targetCollisionDetecter;
     private CollisionDetecter bodyCollisionDetecter;
     //UIイベント
-    public Action<string> onFiring;
-    public Action<string> onReloading;
-    public Action<string> onSmashing;
+    private BulletUIController bulletUIController;
 
     void Awake()
     {
         status = GetComponent<PlayerStatus>();
         effecter = GetComponent<MobEffecter>();
+        target = GetComponent<PlayerTarget>();
         controller = GetComponent<PlayerController>();
         targetCollisionDetecter = transform.Find("TargetCollider").GetComponent<CollisionDetecter>();
         bodyCollisionDetecter = transform.Find("BodyCollider").GetComponent<CollisionDetecter>();
+        GameObject canvas = GameObject.Find("Canvas");
+        bulletUIController = canvas.transform.Find("BulletUI").GetComponent<BulletUIController>();
 
         //移動
         playerMove = new PlayerMove(status);
         //射撃
-        playerShoot = new PlayerShoot(status);
-        playerShoot.AddTrigger("OnFiring", onFiring);
-        playerShoot.AddTrigger("OnReloading", onReloading);
+        playerShoot = new PlayerShoot();
+        playerShoot.AddTrigger("SetBullet", status.SetBullet);
+        playerShoot.AddTrigger("UpdateBulletUI", bulletUIController.UpdateBulletUI);
+        playerShoot.AddTrigger("GunEffectPlay", status.GunEffect.Play);
         targetCollisionDetecter.onTriggerEnter += playerShoot.EnemyInCollider;
         targetCollisionDetecter.onTriggerExit += playerShoot.EnemyOutCollider;
         //ダメージ
@@ -55,7 +59,7 @@ public class PlayerAct : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        onFiring?.Invoke(status.GunParam.Bullet.ToString());
+        bulletUIController.UpdateBulletUI(status.GunParam.Bullet.ToString());
     }
 
     // Update is called once per frame

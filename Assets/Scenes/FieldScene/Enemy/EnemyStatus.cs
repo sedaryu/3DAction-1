@@ -42,13 +42,12 @@ public class EnemyStatus : MobStatus
     }
 
     //被ダメージの際のHitPointの減少を実行するメソッド
-    public override bool Damage(float damage)
+    public override void Damage(float damage)
     {
         _param.HitPoint -= damage;
         if (Param.HitPoint <= 0)
         {
-            return true;
+            GoToDieStateIfPossible();
         }
-        return false;
     }
 }

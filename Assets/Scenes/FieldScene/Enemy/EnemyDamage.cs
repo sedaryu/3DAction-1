@@ -26,7 +26,7 @@ public class EnemyDamage
     /// <param name="vector">攻撃がヒットした際のノックバック方向と距離</param>
     /// <param name="attack">攻撃がヒットした際受けるダメージ量</param>
     /// <returns>攻撃の結果HitPointが0以下になった場合、trueを返す、それ以外はfalse</returns>
-    public bool Hit(Vector3 vector, float attack)
+    public void Hit(Vector3 vector, float attack)
     {
         status.transform.rotation = Quaternion.LookRotation(-vector.normalized); //プレイヤーの方向を向く
 
@@ -34,8 +34,7 @@ public class EnemyDamage
         JudgeObstacle(vector, attack); //衝突判定を実行
         effecter.InstanceEffect("Hit"); //エフェクトを生成
         Knockback(vector); //ノックバックを実行
-        if (!status.IsSmashable && status.Damage(attack)) return true; //攻撃の結果HitPointが0になった際trueを返す
-        return false;
+        status.Damage(attack); //HitPointを減少させる
     }
 
     /// <summary>

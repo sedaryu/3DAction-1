@@ -8,6 +8,8 @@ public class EnemyAct : MonoBehaviour
     private EnemyStatus status;
     //エフェクター
     private MobEffecter effecter;
+    //レファレンシッド
+    private EnemyReferenced referenced;
 
     //アクト
     private EnemyMove enemyMove;
@@ -18,6 +20,7 @@ public class EnemyAct : MonoBehaviour
     {
         status = GetComponent<EnemyStatus>();
         effecter = GetComponent<MobEffecter>();
+        referenced = GetComponent<EnemyReferenced>();
 
         //移動
         enemyMove = new EnemyMove(status);
@@ -25,6 +28,9 @@ public class EnemyAct : MonoBehaviour
         enemyDamage = new EnemyDamage(status, effecter);
         //グロッキー
         enemyGroggy = new EnemyGroggy(status, effecter);
+
+        //外部から発生されるメソッドを設定
+        referenced.onTriggerAttacked += enemyDamage.Hit;
     }
 
     // Start is called before the first frame update
@@ -38,10 +44,5 @@ public class EnemyAct : MonoBehaviour
     {
         //移動してプレイヤーを追跡する
         enemyMove.Move();
-    }
-
-    public void Hit(Vector3 vector, float attack, SmashParam smash)
-    {
-        if (enemyDamage.Hit(vector, attack)) enemyGroggy.Groggy(smash);
     }
 }
