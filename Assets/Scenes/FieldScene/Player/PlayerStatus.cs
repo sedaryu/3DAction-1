@@ -40,6 +40,8 @@ public class PlayerStatus : MobStatus
     }
     private ParticleSystem _gunEffect;
 
+    public void GunEffectPlay() { GunEffect.Play(); }
+
     protected override void Awake()
     {
         base.Awake();
@@ -68,19 +70,18 @@ public class PlayerStatus : MobStatus
     /// </summary>
     /// <param name="damage">受けたダメージ量</param>
     /// <returns>ダメージの結果HitPointが0以下になった(死亡したら)true、そうでなければfalseを返す</returns>
-    public override bool Damage(float damage)
+    public override void Damage(float damage)
     {
         _playerParam.HitPoint -= damage;
         if (PlayerParam.HitPoint <= 0) Destroy(gameObject);
-        return false;
     }
 
     /// <summary>
     /// 攻撃・リロードの際のBulletの増減を管理する目的のメソッド
     /// </summary>
     /// <param name="bullet">消費また装填した弾薬の量</param>
-    public void SetBullet(int bullet)
+    public void SetBullet(float bullet)
     { 
-        _gunParam.Bullet += bullet;
+        _gunParam.Bullet += (int)bullet;
     }
 }

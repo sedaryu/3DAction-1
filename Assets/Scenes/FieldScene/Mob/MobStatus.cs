@@ -70,4 +70,6 @@ public class MobStatus : MonoBehaviour
     public virtual void Damage(float damage)
     {
     }
+
+    public bool IsNormalMethod() { if (state == StateEnum.Normal) { return true; } else { return false; } }
 }

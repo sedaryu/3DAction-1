@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -70,14 +71,7 @@ public class GunParam : ScriptableObject
     }
     [SerializeField] private GameObject _gunPrefab;
 
-    public HittingEvent HittingEnemy
-    {
-        get => _hittingEnemy;
-    }
-    [SerializeField] private HittingEvent _hittingEnemy = new HittingEvent();
-
-    [Serializable]
-    public class HittingEvent : UnityEvent<Transform, List<EnemyAct>, GunParam, SmashParam> {}
+    public Func<Vector3, List<EnemyReferenced>, float, float, Transform> hittingEnemy;
 
     public GunParam(GunParam initialParam)
     {
@@ -89,6 +83,11 @@ public class GunParam : ScriptableObject
         _bulletMax = initialParam._bulletMax;
         _bullet = initialParam._bullet;
         _gunPrefab = initialParam._gunPrefab;
-        _hittingEnemy = initialParam.HittingEnemy;
+        SettingHittingEnemy(_type);
+    }
+
+    private void SettingHittingEnemy(GunType type)
+    {
+        if (type == GunType.Pistol) hittingEnemy += new HittingEnemy().PistolHittingEnemy;
     }
 }

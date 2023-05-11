@@ -8,12 +8,16 @@ public class PlayerAct : MonoBehaviour
 {
     //ステータス
     private PlayerStatus status;
+    //トランスフォーム
+    private new PlayerTransform transform;
     //エフェクター
     private MobEffecter effecter;
     //ターゲット
     private PlayerTarget target;
     //コントローラー
     private PlayerController controller;
+    //レファレンシッド
+    private PlayerReferenced referenced;
 
     //アクト
     private PlayerMove playerMove;
@@ -30,26 +34,36 @@ public class PlayerAct : MonoBehaviour
     void Awake()
     {
         status = GetComponent<PlayerStatus>();
+        transform = GetComponent<PlayerTransform>();
         effecter = GetComponent<MobEffecter>();
         target = GetComponent<PlayerTarget>();
         controller = GetComponent<PlayerController>();
-        targetCollisionDetecter = transform.Find("TargetCollider").GetComponent<CollisionDetecter>();
-        bodyCollisionDetecter = transform.Find("BodyCollider").GetComponent<CollisionDetecter>();
+        referenced = GetComponent<PlayerReferenced>();
+
+        targetCollisionDetecter = gameObject.transform.Find("TargetCollider").GetComponent<CollisionDetecter>();
+        targetCollisionDetecter.onTriggerEnter += target.EnemyEnterTarget;
+        targetCollisionDetecter.onTriggerExit += target.EnemyExitTarget;
+        bodyCollisionDetecter = gameObject.transform.Find("BodyCollider").GetComponent<CollisionDetecter>();
         GameObject canvas = GameObject.Find("Canvas");
         bulletUIController = canvas.transform.Find("BulletUI").GetComponent<BulletUIController>();
 
         //移動
-        playerMove = new PlayerMove(status);
+        playerMove = new PlayerMove();
+        playerMove.agentMove += transform.Agent.Move;
+        playerMove.animatorSetFloat += status.Animator.SetFloat;
+        playerMove.updateLookRotation += transform.UpdateRotation;
         //射撃
         playerShoot = new PlayerShoot();
+        playerShoot.hittingEnemy += status.GunParam.hittingEnemy;
+        playerShoot.lookAt += transform.transform.LookAt;
         playerShoot.AddTrigger("SetBullet", status.SetBullet);
         playerShoot.AddTrigger("UpdateBulletUI", bulletUIController.UpdateBulletUI);
-        playerShoot.AddTrigger("GunEffectPlay", status.GunEffect.Play);
-        targetCollisionDetecter.onTriggerEnter += playerShoot.EnemyInCollider;
-        targetCollisionDetecter.onTriggerExit += playerShoot.EnemyOutCollider;
+        playerShoot.AddTrigger("GunEffectPlay", status.GunEffectPlay);
         //ダメージ
-        playerDamage = new PlayerDamage(status);
-        bodyCollisionDetecter.onTriggerEnter += playerDamage.EnemyAttackPlayer;
+        playerDamage = new PlayerDamage();
+        playerDamage.isNormal += status.IsNormalMethod;
+        playerDamage.AddTrigger("Damage", status.Damage);
+        referenced.onTriggerAttacked += playerDamage.Damage;
         //スマッシュ
         playerSmash = new PlayerSmash(status, effecter);
         bodyCollisionDetecter.onTriggerEnter += playerSmash.PlayerInSmashRange;
@@ -66,11 +80,22 @@ public class PlayerAct : MonoBehaviour
     void Update()
     {
         //スティック入力を感知し、移動を実行
-        playerMove.Move(controller.InputMoving());
+        if (controller.InputMoving() != Vector3.zero)
+        {
+            playerMove.Move(status.IsNoMoveInvincible, controller.InputMoving(), status.PlayerParam.SpeedMax);
+        }
         //ボタン入力を感知し、攻撃を実行
-        playerShoot.Fire(controller.InputFiring());
+        if (controller.InputFiring())
+        {
+            playerShoot.Fire(transform.transform.position, target.targetingEnemies, 
+                             status.GunParam.Bullet, status.GunParam.Knockback, status.GunParam.Attack);
+        }
         //ボタン入力を感知し、リロードを実行
-        playerShoot.Reload(controller.InputReloading());
+        if (controller.InputReloading())
+        { 
+            playerShoot.Reload(status.PlayerParam.ReloadSpeed, status.GunParam.BulletMax, status.GunParam.Bullet);
+        }
+            
         //ボタン入力を感知し、スマッシュ攻撃を実行
         playerSmash.Smash(controller.InputSmashing());
     }

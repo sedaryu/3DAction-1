@@ -2,37 +2,32 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Threading.Tasks;
+using System;
 
 /// <summary>
 /// プレイヤーがダメージを受けた際の処理を実行する目的のクラス
 /// </summary>
-public class PlayerDamage
+public class PlayerDamage : Act
 {
-    //ステータス
-    private PlayerStatus status;
+    public event Func<bool> isNormal;
+
     //色
     private SkinnedMeshRenderer skinRenderer;
     private Color32 initialColor;
     private Color32 transparentColor;
 
-    public PlayerDamage(PlayerStatus _status)
+    public PlayerDamage()
     {
-        status = _status;
         skinRenderer = _status.transform.Find("body").GetComponent<SkinnedMeshRenderer>();
         initialColor = skinRenderer.sharedMaterial.color;
         transparentColor = new Color32(initialColor.r, 0, 0, initialColor.a);
     }
 
-    public void EnemyAttackPlayer(Collider collision)
+    public void Damage(float damage)
     {
-        if (collision.CompareTag("Enemy"))
-        {
-            if (!status.IsNormal) return;
-            EnemyStatus enemy = collision.gameObject.GetComponent<EnemyStatus>();
-            if (enemy.IsSmashable) return;
-            if (status.Damage(enemy.Param.Attack)) status.GoToDieStateIfPossible();
-            Task _ = InvincibleTime();
-        }
+        if (!isNormal.Invoke()) return;
+        OnTrigger("Damage", damage);
+        Task _ = InvincibleTime();
     }
 
     private async Task InvincibleTime()

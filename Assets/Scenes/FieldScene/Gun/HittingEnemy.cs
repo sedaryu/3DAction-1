@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class HittingEnemy : MonoBehaviour
+public class HittingEnemy
 {
     public Transform PistolHittingEnemy(Vector3 position, List<EnemyReferenced> enemies, float knockback, float attack)
     {

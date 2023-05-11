@@ -28,20 +28,19 @@ public class PlayerShoot : Act
         OnTrigger("GunEffectPlay"); //エフェクトを再生
     }
 
-    public void Reload(bool input)
+    public void Reload(float reloadSpeed, int bulletMax, int bullet)
     {
-        if (!input) return;
         if (reloading) return;
 
-        Task _ = ReloadTime(); //リロードを開始
+        Task _ = ReloadTime(reloadSpeed, bulletMax, bullet); //リロードを開始
     }
 
-    private async Task ReloadTime()
+    private async Task ReloadTime(float reloadSpeed, int bulletMax, int bullet)
     {
         reloading = true;
-        await Task.Delay(TimeSpan.FromSeconds(status.PlayerParam.ReloadSpeed)); //リロード完了までの待機時間はプレイヤーのパラメーターに依存
-        status.SetBullet(status.GunParam.BulletMax - status.GunParam.Bullet); //足りない分だけ装填される
-        OnTrigger("UpdateBulletUI", status.GunParam.Bullet.ToString()); //UIを更新
+        await Task.Delay(TimeSpan.FromSeconds(reloadSpeed)); //リロード完了までの待機時間はプレイヤーのパラメーターに依存
+        OnTrigger("SetBullet", bulletMax - bullet); //足りない分だけ装填される
+        OnTrigger("UpdateBulletUI", bulletMax.ToString()); //UIを更新
         reloading = false;
     }
 }
