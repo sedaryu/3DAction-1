@@ -3,21 +3,27 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerMove : Act
+
+public class PlayerMove
 {
-    public Action<Vector3> agentMove;
-    public Action<string, float> animatorSetFloat;
-    public Action<Quaternion> updateLookRotation;
+    //private PlayerStatus status;
+    //private PlayerMover mover;
+    //private PlayerAnimator animator;
+    //private PlayerController controller;
 
-    public void Move(bool noMove, Vector3 vector, float speed)
+    //public PlayerMove(PlayerStatus _status, PlayerMover _mover, PlayerAnimator _animator, PlayerController _controller)
+    //{ 
+    //    status = _status;
+    //    mover = _mover;
+    //    animator = _animator;
+    //    controller = _controller;
+    //}
+
+    public void Move(PlayerStatus status, IMover mover, IAnimator animator, IController controller)
     {
-        if (noMove) return;
+        if (status.IsNoMoveInvincible) return;
 
-        //移動入力を更新
-        agentMove.Invoke(vector * speed * Time.deltaTime);
-        //アニメーターに移動スピードを反映
-        animatorSetFloat.Invoke("MoveSpeed", vector.magnitude);
-        //キャラクターの向きを更新
-        if (vector != Vector3.zero) updateLookRotation.Invoke(Quaternion.LookRotation(vector));
+        float speed = mover.Move(controller.InputMoving(), status.PlayerParam.SpeedMax);
+        animator.SetValue("MoveSpeed", speed);
     }
 }

@@ -6,7 +6,7 @@ using UnityEngine;
 /// <Summary>
 /// プレイヤーの入力を処理するクラス
 /// </Summary>
-public class PlayerController : MobController
+public class PlayerController : MonoBehaviour, IController
 {
     //バーチャルスティック
     private Joystick virtualStick;
