@@ -40,8 +40,6 @@ public class PlayerStatus : MobStatus
     }
     private ParticleSystem _gunEffect;
 
-    public void GunEffectPlay() { GunEffect.Play(); }
-
     protected override void Awake()
     {
         base.Awake();
