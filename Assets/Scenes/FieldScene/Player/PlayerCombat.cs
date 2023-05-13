@@ -5,9 +5,9 @@ using UnityEngine;
 public class PlayerCombat : MonoBehaviour
 {
     //ステータス
-    private PlayerStatus status;
+    private PlayerParameter status;
     //コントローラー
-    private PlayerController controller;
+    private KeyMouseController controller;
 
     //取得したコリダー
     private List<GameObject> colliders = new List<GameObject>();
@@ -16,8 +16,8 @@ public class PlayerCombat : MonoBehaviour
 
     void Awake()
     {
-        status = GetComponent<PlayerStatus>();
-        controller = GetComponent<PlayerController>();
+        status = GetComponent<PlayerParameter>();
+        controller = GetComponent<KeyMouseController>();
     }
 
     void Update()

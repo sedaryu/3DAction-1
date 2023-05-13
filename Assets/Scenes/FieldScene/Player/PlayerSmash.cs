@@ -10,14 +10,14 @@ using UnityEngine;
 public class PlayerSmash
 {
     //ステータス
-    private PlayerStatus status;
+    private PlayerParameter status;
     //エフェクター
     private MobEffecter effecter;
 
     //取得したコリダーオブジェクト
     private List<GameObject> colliders = new List<GameObject>();
 
-    public PlayerSmash(PlayerStatus _status, MobEffecter _effecter)
+    public PlayerSmash(PlayerParameter _status, MobEffecter _effecter)
     {
         status = _status;
         effecter = _effecter;
@@ -63,7 +63,7 @@ public class PlayerSmash
         if (RemoveDestroyedCollider()) return; //破棄されたコリダーを除外
         foreach (GameObject x in colliders) 
         {
-            Task _0 = x.GetComponentInChildren<SmashCollider>().PlayerSmashEnemies(status.SmashParam); //コリダー内の敵全てにスマッシュ攻撃
+            Task _0 = x.GetComponentInChildren<SmashAct>().PlayerSmashEnemies(status.SmashParam); //コリダー内の敵全てにスマッシュ攻撃
             Task _1 = SmashTime(x.transform.position, x.transform.rotation); //
         }
     }

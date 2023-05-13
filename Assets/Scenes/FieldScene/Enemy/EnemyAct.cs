@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyAct : MonoBehaviour, ITargetable, IAttackable
+public class EnemyAct : MonoBehaviour, ITargetable, IGrogable, IAttackable
 {
     //ステータス
     private EnemyStatus status;
@@ -59,6 +59,11 @@ public class EnemyAct : MonoBehaviour, ITargetable, IAttackable
             effecter.InstanceEffect("ObstacleHit"); //エフェクトも発生させる
         }
         knockbacker.Knockback(vector * status.EnemyParam.Weight); //ノックバック
+    }
+
+    public void Grog(SmashAct smash)
+    { 
+        Instantiate(smash, transform);
     }
 
     public void Attack()

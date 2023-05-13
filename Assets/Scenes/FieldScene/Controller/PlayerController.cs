@@ -6,7 +6,7 @@ using UnityEngine;
 /// <Summary>
 /// プレイヤーの入力を処理するクラス
 /// </Summary>
-public class PlayerController : MonoBehaviour, IController
+public class KeyMouseController : Controller
 {
     //バーチャルスティック
     private Joystick virtualStick;
@@ -16,38 +16,41 @@ public class PlayerController : MonoBehaviour, IController
         virtualStick = GameObject.Find("Fixed Joystick").GetComponent<Joystick>();
     }
 
+    void Update()
+    {
+        InputMoving();
+        InputFiring();
+        InputReloading();
+        InputSmashing();
+    }
+
     //移動に関する入力を受け付けるメソッド
-    public Vector3 InputMoving()
+    public override void InputMoving()
     {
         Vector3 moving = new Vector3(0, 0, 0);
 
         //ヴァーチャルスティック入力
         moving.x = virtualStick.Horizontal; //横方向の移動入力を取得
-        moving.z = virtualStick.Vertical; //縦方向の移動入力を取
-        return moving; //入力を反映
+        moving.z = virtualStick.Vertical; //縦方向の移動入力を取得
+
+        if (moving != Vector3.zero) onMoving.Invoke(moving);
     }
 
     //射撃に関する入力を受け付けるメソッド
-    public bool InputFiring()
+    public override void InputFiring()
     {
-        if (Input.GetButtonDown("Fire1")) return true;
-
-        return false;
+        if (Input.GetButtonDown("Fire1")) onFiring.Invoke();
     }
 
     //リロードに関する入力を受け付けるメソッド
-    public bool InputReloading()
+    public override void InputReloading()
     {
-        if (Input.GetButtonDown("Reload")) return true;
-
-        return false;
+        if (Input.GetButtonDown("Reload")) onReloading.Invoke();
     }
 
     //スマッシュ攻撃に関する入力を受け付けるメソッド
-    public bool InputSmashing()
+    public override void InputSmashing()
     {
-        if (Input.GetButtonDown("Smash")) return true;
-
-        return false;
+        if (Input.GetButtonDown("Smash")) onSmashing.Invoke();
     }
 }

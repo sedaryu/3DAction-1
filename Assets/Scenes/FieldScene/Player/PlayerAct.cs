@@ -6,35 +6,43 @@ using UnityEngine.Events;
 
 public class PlayerAct : MonoBehaviour
 {
-    //ステータス
-    private PlayerStatus status;
+    //パラメーター
+    private PlayerParameter parameter;
+    //ステーター
+    private PlayerStater stater;
     //ムーバー
     private PlayerMover mover;
     //エフェクター
     private MobEffecter effecter;
     //シューター
     private PlayerShooter shooter;
-    //コントローラー
-    private IController controller;
 
     //アクト
     private PlayerSt playerShoot;
     private PlayerD playerDamage;
     private PlayerSmash playerSmash;
 
-    //コリダーイベント
+    //コントローラー
+    private Controller controller;
+    //コリダー
     private CollisionDetecter targetCollisionDetecter;
     private CollisionDetecter bodyCollisionDetecter;
-    //UIイベント
+    //UI
     private BulletUIController bulletUIController;
 
     void Awake()
     {
-        status = GetComponent<PlayerStatus>();
+        parameter = GetComponent<PlayerParameter>();
+        stater = GetComponent<PlayerStater>();
         mover = GetComponent<PlayerMover>();
         effecter = GetComponent<MobEffecter>();
         shooter = GetComponent<PlayerShooter>();
-        controller = GetComponent<IController>();
+
+        controller = GetComponent<Controller>();
+        controller.onMoving += OrderOutputMoving;
+        controller.onFiring += OrderOutputFiring;
+        controller.onReloading += OrderOutputReloading;
+        //controller.onSmashing += OrderOutputSmashing;
 
         targetCollisionDetecter = gameObject.transform.Find("TargetCollider").GetComponent<CollisionDetecter>();
         targetCollisionDetecter.onTriggerEnter += shooter.EnemyEnterTarget;
@@ -46,11 +54,8 @@ public class PlayerAct : MonoBehaviour
         GameObject canvas = GameObject.Find("Canvas");
         bulletUIController = canvas.transform.Find("BulletUI").GetComponent<BulletUIController>();
 
-        //ダメージ
-        playerDamage = new PlayerD();
-        playerDamage.AddTrigger("Damage", status.Damage);
         //スマッシュ
-        playerSmash = new PlayerSmash(status, effecter);
+        playerSmash = new PlayerSmash(parameter, effecter);
         bodyCollisionDetecter.onTriggerEnter += playerSmash.PlayerInSmashRange;
         bodyCollisionDetecter.onTriggerExit += playerSmash.PlayerOutSmashRange;
     }
@@ -58,59 +63,38 @@ public class PlayerAct : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        bulletUIController.UpdateBulletUI(status.GunParam.Bullet.ToString());
+        bulletUIController.UpdateBulletUI(parameter.GunParam.Bullet.ToString());
     }
 
-    // Update is called once per frame
-    void Update()
+    //移動に関する各メソッドを実行
+    private void OrderOutputMoving(Vector3 vector)
     {
-        //スティック入力を感知し、プレイヤーが移動可能な状態ならば、移動に関する各メソッドを実行
-        if (controller.InputMoving() != Vector3.zero && status.IsMobable)
-        {
-            OrderOutputMoving();
-        }
-        //ボタン入力を感知し、攻撃を実行
-        if (controller.InputFiring() && status.IsShootable)
-        {
-            OrderOutputFiring();
-        }
-        //ボタン入力を感知し、リロードを実行
-        if (controller.InputReloading() && status.IsShootable)
-        {
-            StartCoroutine(OrderOutputReloading());
-        }
-            
-        //ボタン入力を感知し、スマッシュ攻撃を実行
-        playerSmash.Smash(controller.InputSmashing());
-    }
-
-    //プレイヤーが移動可能な状態ならば、移動に関する各メソッドを実行
-    private void OrderOutputMoving()
-    {
-        mover.Move(controller.InputMoving(), status.PlayerParam.SpeedMax);
+        if (!stater.State["Movable"]) return;
+        mover.Move(vector, parameter.PlayerParam.SpeedMax);
     }
 
     private void OrderOutputFiring()
     {
-        shooter.Fire(status.GunParam.Bullet, status.GunParam.Knockback, status.GunParam.Attack, status.GunEffect);
-        status.SetBullet(-1);
+        if (!stater.State["Shootable"]) return;
+        shooter.Fire(parameter.GunParam.Bullet, parameter.GunParam.Knockback, parameter.GunParam.Attack, parameter.GunEffect);
+        parameter.SetBullet(-1);
         //UI更新
     }
 
-    private IEnumerator OrderOutputReloading()
+    private void OrderOutputReloading()
     {
-        status.IsShootable = false;
-        yield return new WaitForSeconds(status.PlayerParam.ReloadSpeed);
-        status.SetBullet(status.GunParam.BulletMax - status.GunParam.Bullet);
+        if (!stater.State["Shootable"]) return;
+        StartCoroutine(stater.WaitForStatusTransition("Shootable", parameter.PlayerParam.ReloadSpeed));
+        parameter.SetBullet(parameter.GunParam.BulletMax - parameter.GunParam.Bullet);
         //UI更新
-        status.isShootable = true;
     }
 
     private void OrderOutputDamaging(Collider other)
     {
-        if (!status.IsDamageable) return;
-        if (!other.TryGetComponent<IAttackable>(out IAttackable target)) return;
-        status.isDamageable = false;
-        StartCoroutine();
+        if (!stater.State["Damageable"]) return;
+        if (!other.TryGetComponent<IAttackable>(out IAttackable enemy)) return;
+        StartCoroutine(stater.WaitForStatusTransition("Damageable", 2));
+        parameter.Damage(enemy.Damage);
+        enemy.Attack();
     }
 }

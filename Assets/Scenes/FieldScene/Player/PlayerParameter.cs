@@ -7,22 +7,8 @@ using UnityEngine;
 /// PlayerParam・GunParam・SmashParamを取得し格納する
 /// Paramの値を増減させる目的のクラス
 /// </Summary>
-public class PlayerStatus : MonoBehaviour
+public class PlayerParameter : MonoBehaviour
 {
-    //状態
-    //public Dictionary<string, bool> Staus { get; private set; } = new Dictionary<string, bool>() 
-    //{ { "IsMovable", true }, { "IsShootable", true }, { "IsDamageable", true } };
-    public bool IsMobable { get; private set; } = true;
-    public bool IsShootable { get; private set; } = true;
-    public bool IsDamageable { get; private set; } = true;
-
-    public IEnumerator WaitForStatusTransition(bool state, float time)
-    {
-        state = false;
-        yield return new WaitForSeconds(time);
-        state = true;
-    }
-
     //プレイヤーパラメーター
     public PlayerParam PlayerParam
     {
@@ -86,6 +72,8 @@ public class PlayerStatus : MonoBehaviour
     {
         _playerParam.HitPoint -= damage;
         if (PlayerParam.HitPoint <= 0) Destroy(gameObject);
+
+        Instantiate(SmashParam.SmashCollider);
     }
 
     /// <summary>

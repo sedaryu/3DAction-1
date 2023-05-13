@@ -39,13 +39,13 @@ public class Smash : MonoBehaviour
 
     public async Task PlayerCombatAttackEnemies(SmashParam smashParam, GameObject effect)
     {
-        cancel.Cancel();
-        await Task.Delay((int)(smashParam.SmashTime * 1000));
-        RemoveDestroyedEnemy();
-        Instantiate(effect, transform.position, Quaternion.identity);
-        enemies.ForEach(x => x.Hit((x.transform.position - transform.position).normalized *
-                             smashParam.Knockback, smashParam.Attack, smashParam));
-        Destroy(transform.parent.gameObject);
+        //cancel.Cancel();
+        //await Task.Delay((int)(smashParam.SmashTime * 1000));
+        //RemoveDestroyedEnemy();
+        //Instantiate(effect, transform.position, Quaternion.identity);
+        //enemies.ForEach(x => x.Hit((x.transform.position - transform.position).normalized *
+        //                     smashParam.Knockback, smashParam.Attack, smashParam));
+        //Destroy(transform.parent.gameObject);
     }
 
     public void EnemyInCombatRange(Collider other)

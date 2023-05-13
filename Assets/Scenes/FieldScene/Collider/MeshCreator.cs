@@ -6,7 +6,7 @@ public class MeshCreator : MonoBehaviour
 {
     private void Start()
     {
-        GunParam param = GetComponentInParent<PlayerStatus>().GunParam;
+        GunParam param = GetComponentInParent<PlayerParameter>().GunParam;
         CreateMeshCollider(param.Range, param.Reach);
     }
 

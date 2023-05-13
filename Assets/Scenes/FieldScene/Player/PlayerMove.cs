@@ -19,7 +19,7 @@ public class PlayerMove
     //    controller = _controller;
     //}
 
-    public void Move(PlayerStatus status, IMover mover, IAnimator animator, IController controller)
+    public void Move(PlayerParameter status, IMover mover, IAnimator animator, Controller controller)
     {
         if (status.IsNoMoveInvincible) return;
 
