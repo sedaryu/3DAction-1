@@ -5,7 +5,7 @@ using UnityEngine;
 public class EnemyStatus : MobStatus
 {
     //パラメーター
-    public EnemyParam Param
+    public EnemyParam EnemyParam
     {
         get => _param;
     }
@@ -25,7 +25,7 @@ public class EnemyStatus : MobStatus
     // Start is called before the first frame update
     void Start()
     {
-        Agent.speed = Random.Range(Param.SpeedMin, Param.SpeedMax); //パラメーターからスピードを取得
+        Agent.speed = Random.Range(EnemyParam.SpeedMin, EnemyParam.SpeedMax); //パラメーターからスピードを取得
     }
 
     // Update is called once per frame
@@ -38,14 +38,15 @@ public class EnemyStatus : MobStatus
     //HitPointの自動回復を実行するメソッド
     public void RecoverDamage()
     {
-        _param.HitPoint += Param.Recover * Time.deltaTime;
+        _param.HitPoint += EnemyParam.Recover * Time.deltaTime;
     }
 
     //被ダメージの際のHitPointの減少を実行するメソッド
     public override void Damage(float damage)
     {
         _param.HitPoint -= damage;
-        if (Param.HitPoint <= 0)
+        Animator.SetTrigger("Damage"); //被ダメージの際のアニメーションを実行
+        if (EnemyParam.HitPoint <= 0)
         {
             GoToDieStateIfPossible();
         }

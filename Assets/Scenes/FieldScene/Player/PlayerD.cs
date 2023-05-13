@@ -7,7 +7,7 @@ using System;
 /// <summary>
 /// プレイヤーがダメージを受けた際の処理を実行する目的のクラス
 /// </summary>
-public class PlayerDamage : Act
+public class PlayerD : Act
 {
     public event Func<bool> isNormal;
 
@@ -16,7 +16,7 @@ public class PlayerDamage : Act
     private Color32 initialColor;
     private Color32 transparentColor;
 
-    public PlayerDamage()
+    public PlayerD()
     {
         skinRenderer = _status.transform.Find("body").GetComponent<SkinnedMeshRenderer>();
         initialColor = skinRenderer.sharedMaterial.color;

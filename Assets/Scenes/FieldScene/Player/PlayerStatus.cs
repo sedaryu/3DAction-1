@@ -1,13 +1,28 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 /// <Summary>
 /// PlayerParam・GunParam・SmashParamを取得し格納する
 /// Paramの値を増減させる目的のクラス
 /// </Summary>
-public class PlayerStatus : MobStatus
+public class PlayerStatus : MonoBehaviour
 {
+    //状態
+    //public Dictionary<string, bool> Staus { get; private set; } = new Dictionary<string, bool>() 
+    //{ { "IsMovable", true }, { "IsShootable", true }, { "IsDamageable", true } };
+    public bool IsMobable { get; private set; } = true;
+    public bool IsShootable { get; private set; } = true;
+    public bool IsDamageable { get; private set; } = true;
+
+    public IEnumerator WaitForStatusTransition(bool state, float time)
+    {
+        state = false;
+        yield return new WaitForSeconds(time);
+        state = true;
+    }
+
     //プレイヤーパラメーター
     public PlayerParam PlayerParam
     {
@@ -40,9 +55,8 @@ public class PlayerStatus : MobStatus
     }
     private ParticleSystem _gunEffect;
 
-    protected override void Awake()
+    protected void Awake()
     {
-        base.Awake();
         _playerParam = new PlayerParam(initialPlayerParam);
         _gunParam = new GunParam(initialGunParam);
 
@@ -68,7 +82,7 @@ public class PlayerStatus : MobStatus
     /// </summary>
     /// <param name="damage">受けたダメージ量</param>
     /// <returns>ダメージの結果HitPointが0以下になった(死亡したら)true、そうでなければfalseを返す</returns>
-    public override void Damage(float damage)
+    public void Damage(float damage)
     {
         _playerParam.HitPoint -= damage;
         if (PlayerParam.HitPoint <= 0) Destroy(gameObject);

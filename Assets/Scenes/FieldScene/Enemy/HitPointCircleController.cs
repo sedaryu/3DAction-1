@@ -36,7 +36,7 @@ public class HitPointCircleController : MonoBehaviour
 
     private void FillControll()
     {
-        fill.transform.localScale = new Vector2(1 - status.Param.HitPoint / status.Param.HitPointMax, 1 - status.Param.HitPoint / status.Param.HitPointMax);
+        fill.transform.localScale = new Vector2(1 - status.EnemyParam.HitPoint / status.EnemyParam.HitPointMax, 1 - status.EnemyParam.HitPoint / status.EnemyParam.HitPointMax);
     }
 
     private void ChangeGroggyColor()

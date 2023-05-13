@@ -1,14 +1,11 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
-using UnityEngine.UIElements;
 
-public abstract class PlayerShoot : MonoBehaviour
+public abstract class PlayerShooter : MonoBehaviour
 {
-    //targetingEnemiesに捕捉した敵のEnemyReferencedを格納
-    public List<EnemyReferenced> targetingEnemies = new List<EnemyReferenced>();
+    //targetingEnemiesに捕捉した敵のITargetableを格納
+    public List<ITargetable> targetingEnemies = new List<ITargetable>();
 
     public void Fire(int bullet, float knockback, float attack, ParticleSystem gunEffect)
     {
@@ -21,25 +18,20 @@ public abstract class PlayerShoot : MonoBehaviour
         gunEffect.Play(); //エフェクトを再生
     }
 
-    public abstract Transform HittingEnemy(Vector3 position, List<EnemyReferenced> targets, float knockback, float attack);
+    public abstract Transform HittingEnemy(Vector3 position, List<ITargetable> targets, float knockback, float attack);
 
     //敵の捕捉
     public void EnemyEnterTarget(Collider other)
     {
-        if (other.CompareTag("Enemy"))
-        {
-            if (other.GetComponent<EnemyAct>() == null) return;
-            targetingEnemies.Add(other.GetComponent<EnemyReferenced>()); //敵のEnemyReferencedクラスを取得
-        }
+        if (!other.TryGetComponent<ITargetable>(out ITargetable target)) return;
+        targetingEnemies.Add(target); //敵のITargetableクラスを取得
     }
 
     //敵の捕捉解除
     public void EnemyExitTarget(Collider other)
     {
-        if (other.CompareTag("Enemy"))
-        {
-            targetingEnemies.Remove(other.GetComponent<EnemyReferenced>()); //Colliderの範囲から外れた場合、リストから除外
-        }
+        if (!other.TryGetComponent<ITargetable>(out ITargetable target)) return;
+        targetingEnemies.Remove(target); //Colliderの範囲から外れた場合、リストから除外
     }
 
     //破棄された敵をリストから除外

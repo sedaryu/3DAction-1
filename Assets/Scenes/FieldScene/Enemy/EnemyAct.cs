@@ -2,14 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyAct : MonoBehaviour
+public class EnemyAct : MonoBehaviour, ITargetable, IAttackable
 {
     //ステータス
     private EnemyStatus status;
     //エフェクター
     private MobEffecter effecter;
-    //レファレンシッド
-    private EnemyReferenced referenced;
+    //ノックバッカー
+    private EnemyKnockbacker knockbacker;
+
+    //ITargetable
+    public Transform Transform { get => transform; }
+    //IAttackable
+    public float Damage { get => status.EnemyParam.Attack; }
 
     //アクト
     private EnemyMove enemyMove;
@@ -20,7 +25,7 @@ public class EnemyAct : MonoBehaviour
     {
         status = GetComponent<EnemyStatus>();
         effecter = GetComponent<MobEffecter>();
-        referenced = GetComponent<EnemyReferenced>();
+        knockbacker = GetComponent<EnemyKnockbacker>();
 
         //移動
         enemyMove = new EnemyMove(status);
@@ -28,9 +33,6 @@ public class EnemyAct : MonoBehaviour
         enemyDamage = new EnemyDamage(status, effecter);
         //グロッキー
         enemyGroggy = new EnemyGroggy(status, effecter);
-
-        //外部から発生されるメソッドを設定
-        referenced.onTriggerAttacked += enemyDamage.Hit;
     }
 
     // Start is called before the first frame update
@@ -44,5 +46,23 @@ public class EnemyAct : MonoBehaviour
     {
         //移動してプレイヤーを追跡する
         enemyMove.Move();
+    }
+
+    public void Hit(Vector3 vector, float attack)
+    {
+        status.Damage(attack); //HitPointを減少させアニメーションを再生
+        effecter.InstanceEffect("Hit"); //エフェクトを生成
+        int hit = knockbacker.JudgeObstacle(transform, status.Agent.radius, vector * status.EnemyParam.Weight);
+        for (int i = 0; i < hit; i++)
+        {
+            status.Damage(attack * 2f); //Hitした攻撃の二倍のダメージを追加で与える
+            effecter.InstanceEffect("ObstacleHit"); //エフェクトも発生させる
+        }
+        knockbacker.Knockback(vector * status.EnemyParam.Weight); //ノックバック
+    }
+
+    public void Attack()
+    { 
+        //アニメーションを再生
     }
 }

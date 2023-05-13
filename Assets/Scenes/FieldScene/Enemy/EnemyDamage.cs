@@ -43,7 +43,7 @@ public class EnemyDamage
     /// <param name="vector">攻撃がヒットした際ノックバックする方向と距離</param>
     public void Knockback(Vector3 vector)
     {
-        status.transform.Translate(vector * status.Param.Weight, Space.World); //飛び道具の方向にノックバック
+        status.transform.Translate(vector * status.EnemyParam.Weight, Space.World); //飛び道具の方向にノックバック
     }
 
     /// <summary>
@@ -67,9 +67,9 @@ public class EnemyDamage
 
         for (int i = 0; i < 5; i++)
         {
-            Debug.DrawRay(rays[i].origin, vector * status.Param.Weight, Color.red);
+            Debug.DrawRay(rays[i].origin, vector * status.EnemyParam.Weight, Color.red);
             Debug.DrawRay(rays[i].origin, avoidSpace, Color.green);
-            if (Physics.Raycast(rays[i], out RaycastHit hit, (vector * status.Param.Weight).magnitude - avoidSpace.magnitude, 1 << 8))
+            if (Physics.Raycast(rays[i], out RaycastHit hit, (vector * status.EnemyParam.Weight).magnitude - avoidSpace.magnitude, 1 << 8))
             {
                 if (hit.transform.gameObject.CompareTag("Obstacle"))
                 {

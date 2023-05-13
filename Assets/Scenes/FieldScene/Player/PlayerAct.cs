@@ -12,16 +12,14 @@ public class PlayerAct : MonoBehaviour
     private PlayerMover mover;
     //エフェクター
     private MobEffecter effecter;
-    //ターゲット
-    private PlayerShoot shoot;
+    //シューター
+    private PlayerShooter shooter;
     //コントローラー
     private IController controller;
-    //レファレンシッド
-    private PlayerReferenced referenced;
 
     //アクト
     private PlayerSt playerShoot;
-    private PlayerDamage playerDamage;
+    private PlayerD playerDamage;
     private PlayerSmash playerSmash;
 
     //コリダーイベント
@@ -35,22 +33,22 @@ public class PlayerAct : MonoBehaviour
         status = GetComponent<PlayerStatus>();
         mover = GetComponent<PlayerMover>();
         effecter = GetComponent<MobEffecter>();
-        shoot = GetComponent<PlayerShoot>();
+        shooter = GetComponent<PlayerShooter>();
         controller = GetComponent<IController>();
-        referenced = GetComponent<PlayerReferenced>();
 
         targetCollisionDetecter = gameObject.transform.Find("TargetCollider").GetComponent<CollisionDetecter>();
-        targetCollisionDetecter.onTriggerEnter += shoot.EnemyEnterTarget;
-        targetCollisionDetecter.onTriggerExit += shoot.EnemyExitTarget;
+        targetCollisionDetecter.onTriggerEnter += shooter.EnemyEnterTarget;
+        targetCollisionDetecter.onTriggerExit += shooter.EnemyExitTarget;
         bodyCollisionDetecter = gameObject.transform.Find("BodyCollider").GetComponent<CollisionDetecter>();
+        bodyCollisionDetecter.onTriggerEnter += OrderOutputDamaging;
+
+
         GameObject canvas = GameObject.Find("Canvas");
         bulletUIController = canvas.transform.Find("BulletUI").GetComponent<BulletUIController>();
 
         //ダメージ
-        playerDamage = new PlayerDamage();
-        playerDamage.isNormal += status.IsNormalMethod;
+        playerDamage = new PlayerD();
         playerDamage.AddTrigger("Damage", status.Damage);
-        referenced.onTriggerAttacked += playerDamage.Damage;
         //スマッシュ
         playerSmash = new PlayerSmash(status, effecter);
         bodyCollisionDetecter.onTriggerEnter += playerSmash.PlayerInSmashRange;
@@ -67,19 +65,19 @@ public class PlayerAct : MonoBehaviour
     void Update()
     {
         //スティック入力を感知し、プレイヤーが移動可能な状態ならば、移動に関する各メソッドを実行
-        if (controller.InputMoving() != Vector3.zero)
+        if (controller.InputMoving() != Vector3.zero && status.IsMobable)
         {
             OrderOutputMoving();
         }
         //ボタン入力を感知し、攻撃を実行
-        if (controller.InputFiring())
+        if (controller.InputFiring() && status.IsShootable)
         {
             OrderOutputFiring();
         }
         //ボタン入力を感知し、リロードを実行
-        if (controller.InputReloading())
-        { 
-            playerShoot.Reload(status.PlayerParam.ReloadSpeed, status.GunParam.BulletMax, status.GunParam.Bullet);
+        if (controller.InputReloading() && status.IsShootable)
+        {
+            StartCoroutine(OrderOutputReloading());
         }
             
         //ボタン入力を感知し、スマッシュ攻撃を実行
@@ -89,15 +87,30 @@ public class PlayerAct : MonoBehaviour
     //プレイヤーが移動可能な状態ならば、移動に関する各メソッドを実行
     private void OrderOutputMoving()
     {
-        if (status.IsNoMoveInvincible) return;
-
         mover.Move(controller.InputMoving(), status.PlayerParam.SpeedMax);
     }
 
     private void OrderOutputFiring()
     {
-        shoot.Fire(status.GunParam.Bullet, status.GunParam.Knockback, status.GunParam.Attack, status.GunEffect);
+        shooter.Fire(status.GunParam.Bullet, status.GunParam.Knockback, status.GunParam.Attack, status.GunEffect);
         status.SetBullet(-1);
         //UI更新
+    }
+
+    private IEnumerator OrderOutputReloading()
+    {
+        status.IsShootable = false;
+        yield return new WaitForSeconds(status.PlayerParam.ReloadSpeed);
+        status.SetBullet(status.GunParam.BulletMax - status.GunParam.Bullet);
+        //UI更新
+        status.isShootable = true;
+    }
+
+    private void OrderOutputDamaging(Collider other)
+    {
+        if (!status.IsDamageable) return;
+        if (!other.TryGetComponent<IAttackable>(out IAttackable target)) return;
+        status.isDamageable = false;
+        StartCoroutine();
     }
 }
