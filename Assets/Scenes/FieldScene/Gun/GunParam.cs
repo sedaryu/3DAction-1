@@ -71,8 +71,6 @@ public class GunParam : ScriptableObject
     }
     [SerializeField] private GameObject _gunPrefab;
 
-    public Func<Vector3, List<EnemyReferenced>, float, float, Transform> hittingEnemy;
-
     public GunParam(GunParam initialParam)
     {
         _type = initialParam._type;
@@ -83,11 +81,5 @@ public class GunParam : ScriptableObject
         _bulletMax = initialParam._bulletMax;
         _bullet = initialParam._bullet;
         _gunPrefab = initialParam._gunPrefab;
-        SettingHittingEnemy(_type);
-    }
-
-    private void SettingHittingEnemy(GunType type)
-    {
-        if (type == GunType.Pistol) hittingEnemy += new HittingEnemy().PistolHittingEnemy;
     }
 }

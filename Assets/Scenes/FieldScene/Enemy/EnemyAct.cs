@@ -4,17 +4,19 @@ using UnityEngine;
 
 public class EnemyAct : MonoBehaviour, ITargetable, IGrogable, IAttackable
 {
-    //ステータス
-    private EnemyStatus status;
+    //パラメーター
+    private EnemyParameter parameter;
+    //ステーター
+    private EnemyStater stater;
     //エフェクター
     private MobEffecter effecter;
     //ノックバッカー
     private EnemyKnockbacker knockbacker;
 
-    //ITargetable
-    public Transform Transform { get => transform; }
+    //IGrogable
+    public bool Groggy { get => stater.State["Grogable"]; }
     //IAttackable
-    public float Damage { get => status.EnemyParam.Attack; }
+    public float Damage { get => parameter.EnemyParam.Attack; }
 
     //アクト
     private EnemyMove enemyMove;
@@ -23,16 +25,17 @@ public class EnemyAct : MonoBehaviour, ITargetable, IGrogable, IAttackable
 
     void Awake()
     {
-        status = GetComponent<EnemyStatus>();
+        parameter = GetComponent<EnemyParameter>();
+        stater = GetComponent<EnemyStater>();
         effecter = GetComponent<MobEffecter>();
         knockbacker = GetComponent<EnemyKnockbacker>();
 
         //移動
-        enemyMove = new EnemyMove(status);
+        enemyMove = new EnemyMove(parameter);
         //ダメージ
-        enemyDamage = new EnemyDamage(status, effecter);
+        enemyDamage = new EnemyDamage(parameter, effecter);
         //グロッキー
-        enemyGroggy = new EnemyGroggy(status, effecter);
+        enemyGroggy = new EnemyGroggy(parameter, effecter);
     }
 
     // Start is called before the first frame update
@@ -50,20 +53,26 @@ public class EnemyAct : MonoBehaviour, ITargetable, IGrogable, IAttackable
 
     public void Hit(Vector3 vector, float attack)
     {
-        status.Damage(attack); //HitPointを減少させアニメーションを再生
+        if (stater.State["Grogable"]) return;
+
+        parameter.Damage(attack); //HitPointを減少させアニメーションを再生
         effecter.InstanceEffect("Hit"); //エフェクトを生成
-        int hit = knockbacker.JudgeObstacle(transform, status.Agent.radius, vector * status.EnemyParam.Weight);
+        int hit = knockbacker.JudgeObstacle(transform, parameter.Agent.radius, vector * parameter.EnemyParam.Weight);
         for (int i = 0; i < hit; i++)
         {
-            status.Damage(attack * 2f); //Hitした攻撃の二倍のダメージを追加で与える
+            parameter.Damage(attack * 2f); //Hitした攻撃の二倍のダメージを追加で与える
             effecter.InstanceEffect("ObstacleHit"); //エフェクトも発生させる
         }
-        knockbacker.Knockback(vector * status.EnemyParam.Weight); //ノックバック
+        knockbacker.Knockback(vector * parameter.EnemyParam.Weight); //ノックバック
+        if (parameter.EnemyParam.HitPoint <= 0) stater.TransferState("Grogable", true);
     }
 
     public void Grog(SmashAct smash)
-    { 
-        Instantiate(smash, transform);
+    {
+        if (stater.State["Smashable"]) return;
+
+        Instantiate(smash, transform).transform.parent = transform;
+        stater.TransferState("Smashable", true);
     }
 
     public void Attack()

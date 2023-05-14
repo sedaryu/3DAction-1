@@ -11,11 +11,11 @@ using Vector3 = UnityEngine.Vector3;
 public class EnemyMove 
 {
     //ステータス
-    private EnemyStatus status;
+    private EnemyParameter status;
     //追跡するプレイヤー
     private Transform player;
 
-    public EnemyMove(EnemyStatus _status)
+    public EnemyMove(EnemyParameter _status)
     {
         status = _status;
         player = GameObject.Find("Player").GetComponent<Transform>(); //プレイヤーの位置を取得

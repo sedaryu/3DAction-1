@@ -5,7 +5,7 @@ using UnityEngine;
 public class HitPointCircleController : MonoBehaviour
 {
     //パラメーター
-    private EnemyStatus status;
+    private EnemyParameter status;
     //Fill
     private GameObject fill;
 
@@ -13,7 +13,7 @@ public class HitPointCircleController : MonoBehaviour
 
     void Awake()
     {
-        status = GetComponentInParent<EnemyStatus>();
+        status = GetComponentInParent<EnemyParameter>();
         fill = transform.Find("HitPointCircleFill").gameObject;
     }
 

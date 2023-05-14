@@ -6,11 +6,11 @@ using static Effecter;
 public class EnemyGroggy
 {
     //ステータス
-    private EnemyStatus status;
+    private EnemyParameter status;
     //エフェクター
     private MobEffecter effecter;
 
-    public EnemyGroggy(EnemyStatus _status, MobEffecter _effecter)
+    public EnemyGroggy(EnemyParameter _status, MobEffecter _effecter)
     { 
         status = _status;
         effecter = _effecter;

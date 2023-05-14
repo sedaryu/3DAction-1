@@ -9,11 +9,11 @@ using UnityEngine;
 public class EnemyDamage
 {
     //ステータス
-    private EnemyStatus status;
+    private EnemyParameter status;
     //エフェクター
     private MobEffecter effecter;
 
-    public EnemyDamage(EnemyStatus _status, MobEffecter _effecter)
+    public EnemyDamage(EnemyParameter _status, MobEffecter _effecter)
     { 
         status = _status;
         effecter = _effecter;

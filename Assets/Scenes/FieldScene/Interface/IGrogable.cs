@@ -4,5 +4,7 @@ using UnityEngine;
 
 public interface IGrogable
 {
-    public void Grog();
+    public bool Groggy { get; }
+
+    public void Grog(SmashAct smash);
 }

@@ -72,8 +72,6 @@ public class PlayerParameter : MonoBehaviour
     {
         _playerParam.HitPoint -= damage;
         if (PlayerParam.HitPoint <= 0) Destroy(gameObject);
-
-        Instantiate(SmashParam.SmashCollider);
     }
 
     /// <summary>

@@ -16,11 +16,10 @@ public class PlayerAct : MonoBehaviour
     private MobEffecter effecter;
     //シューター
     private PlayerShooter shooter;
-
-    //アクト
-    private PlayerSt playerShoot;
-    private PlayerD playerDamage;
-    private PlayerSmash playerSmash;
+    //ダメージャー
+    private PlayerDamager damager;
+    //スマッシャー
+    private PlayerSmasher smasher;
 
     //コントローラー
     private Controller controller;
@@ -37,6 +36,8 @@ public class PlayerAct : MonoBehaviour
         mover = GetComponent<PlayerMover>();
         effecter = GetComponent<MobEffecter>();
         shooter = GetComponent<PlayerShooter>();
+        damager = GetComponent<PlayerDamager>();
+        smasher = GetComponent<PlayerSmasher>();
 
         controller = GetComponent<Controller>();
         controller.onMoving += OrderOutputMoving;
@@ -53,11 +54,6 @@ public class PlayerAct : MonoBehaviour
 
         GameObject canvas = GameObject.Find("Canvas");
         bulletUIController = canvas.transform.Find("BulletUI").GetComponent<BulletUIController>();
-
-        //スマッシュ
-        playerSmash = new PlayerSmash(parameter, effecter);
-        bodyCollisionDetecter.onTriggerEnter += playerSmash.PlayerInSmashRange;
-        bodyCollisionDetecter.onTriggerExit += playerSmash.PlayerOutSmashRange;
     }
 
     // Start is called before the first frame update
@@ -76,9 +72,12 @@ public class PlayerAct : MonoBehaviour
     private void OrderOutputFiring()
     {
         if (!stater.State["Shootable"]) return;
-        shooter.Fire(parameter.GunParam.Bullet, parameter.GunParam.Knockback, parameter.GunParam.Attack, parameter.GunEffect);
+        List<Collider> colliders = shooter.Fire(parameter.GunParam.Bullet, parameter.GunParam.Knockback, 
+                                                parameter.GunParam.Attack, parameter.GunEffect);
         parameter.SetBullet(-1);
         //UI更新
+        if (colliders == null) return;
+        smasher.MakeGroggy(colliders, parameter.SmashParam.SmashCollider);
     }
 
     private void OrderOutputReloading()
@@ -92,9 +91,8 @@ public class PlayerAct : MonoBehaviour
     private void OrderOutputDamaging(Collider other)
     {
         if (!stater.State["Damageable"]) return;
-        if (!other.TryGetComponent<IAttackable>(out IAttackable enemy)) return;
         StartCoroutine(stater.WaitForStatusTransition("Damageable", 2));
-        parameter.Damage(enemy.Damage);
-        enemy.Attack();
+        parameter.Damage(damager.Damage(other));
+        StartCoroutine(damager.WaitForRendererColorTransition(2));
     }
 }
