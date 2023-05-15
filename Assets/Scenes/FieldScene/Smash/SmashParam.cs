@@ -41,11 +41,11 @@ public class SmashParam : ScriptableObject
     }
     [SerializeField] private float _rangeMax;
 
-    public SmashAct SmashCollider //コリダーオブジェクト
+    public Smasher SmashCollider //コリダーオブジェクト
     {
         get => _smashCollider;
     }
-    [SerializeField] private SmashAct _smashCollider;
+    [SerializeField] private Smasher _smashCollider;
 
     public GameObject SmashEffect //スマッシュ攻撃時のエフェクト
     {

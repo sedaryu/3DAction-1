@@ -8,7 +8,7 @@ public class PlayerStater : MonoBehaviour
     public Dictionary<string, bool> State { get => state; }
 
     private Dictionary<string, bool> state = new Dictionary<string, bool>()
-    { { "Movable", true }, { "Shootable", true }, { "Damageable", true } };
+    { { "Movable", true }, { "Shootable", true }, { "Damageable", true }, { "Smashable", false } };
 
     public IEnumerator WaitForStatusTransition(string key, float time)
     {

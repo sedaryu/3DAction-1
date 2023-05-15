@@ -4,7 +4,5 @@ using UnityEngine;
 
 public interface IAttackable
 {
-    public float Damage { get; }
-
-    public void Attack();
+    public float Attack();
 }

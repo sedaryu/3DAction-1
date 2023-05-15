@@ -6,5 +6,5 @@ public interface IGrogable
 {
     public bool Groggy { get; }
 
-    public void Grog(SmashAct smash);
+    public void Grog(Smasher smash, float time);
 }

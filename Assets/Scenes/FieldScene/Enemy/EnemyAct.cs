@@ -8,6 +8,8 @@ public class EnemyAct : MonoBehaviour, ITargetable, IGrogable, IAttackable
     private EnemyParameter parameter;
     //ステーター
     private EnemyStater stater;
+    //エネミームーバー
+    private EnemyMover mover;
     //エフェクター
     private MobEffecter effecter;
     //ノックバッカー
@@ -16,39 +18,27 @@ public class EnemyAct : MonoBehaviour, ITargetable, IGrogable, IAttackable
     //IGrogable
     public bool Groggy { get => stater.State["Grogable"]; }
     //IAttackable
-    public float Damage { get => parameter.EnemyParam.Attack; }
+    //public float Damage { get => stater.State["Attackable"] ? parameter.EnemyParam.Attack : 0; }
 
-    //アクト
-    private EnemyMove enemyMove;
-    private EnemyDamage enemyDamage;
-    private EnemyGroggy enemyGroggy;
+    //デスティネーター
+    private EnemyDestinater destinater;
 
     void Awake()
     {
         parameter = GetComponent<EnemyParameter>();
         stater = GetComponent<EnemyStater>();
+        mover = GetComponent<EnemyMover>();
         effecter = GetComponent<MobEffecter>();
         knockbacker = GetComponent<EnemyKnockbacker>();
 
-        //移動
-        enemyMove = new EnemyMove(parameter);
-        //ダメージ
-        enemyDamage = new EnemyDamage(parameter, effecter);
-        //グロッキー
-        enemyGroggy = new EnemyGroggy(parameter, effecter);
+        destinater = GetComponent<EnemyDestinater>();
+        destinater.onMoving += OrderOutputMoving;
     }
 
-    // Start is called before the first frame update
-    void Start()
+    private void OrderOutputMoving(Vector3 vector)
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        //移動してプレイヤーを追跡する
-        enemyMove.Move();
+        if (!stater.State["Movable"]) return;
+        mover.Move(vector, parameter.EnemyParam.SpeedMax);
     }
 
     public void Hit(Vector3 vector, float attack)
@@ -57,26 +47,34 @@ public class EnemyAct : MonoBehaviour, ITargetable, IGrogable, IAttackable
 
         parameter.Damage(attack); //HitPointを減少させアニメーションを再生
         effecter.InstanceEffect("Hit"); //エフェクトを生成
-        int hit = knockbacker.JudgeObstacle(transform, parameter.Agent.radius, vector * parameter.EnemyParam.Weight);
+        int hit = knockbacker.JudgeObstacle(transform, mover.Radius, vector * parameter.EnemyParam.Weight);
         for (int i = 0; i < hit; i++)
         {
             parameter.Damage(attack * 2f); //Hitした攻撃の二倍のダメージを追加で与える
             effecter.InstanceEffect("ObstacleHit"); //エフェクトも発生させる
         }
         knockbacker.Knockback(vector * parameter.EnemyParam.Weight); //ノックバック
-        if (parameter.EnemyParam.HitPoint <= 0) stater.TransferState("Grogable", true);
+
+        if (parameter.EnemyParam.HitPoint <= 0)
+        {
+            stater.TransferState("Grogable", true);
+            stater.TransferState("Movable", false);
+            stater.TransferState("Attackable", false);
+        }
     }
 
-    public void Grog(SmashAct smash)
+    public void Grog(Smasher smash, float time)
     {
         if (stater.State["Smashable"]) return;
 
         Instantiate(smash, transform).transform.parent = transform;
+        smash.StartTimer(time);
         stater.TransferState("Smashable", true);
     }
 
-    public void Attack()
-    { 
-        //アニメーションを再生
+    public float Attack()
+    {
+        if (stater.State["Attackable"]) return 0;
+        return parameter.EnemyParam.Attack;
     }
 }

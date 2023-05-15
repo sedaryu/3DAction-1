@@ -16,14 +16,16 @@ public class PlayerDamager : MonoBehaviour
         noDamageColor = new Color32(initialColor.r, 0, 0, initialColor.a);
     }
 
-    public float Damage(Collider other)
+    public float Damage(Collider other, float time)
     {
         if (!other.TryGetComponent<IAttackable>(out IAttackable enemy)) return 0;
-        enemy.Attack();
-        return enemy.Damage;
+        float damage = enemy.Attack();
+        if (damage == 0) return 0;
+        StartCoroutine(WaitForRendererColorTransition(time));
+        return damage;
     }
 
-    public IEnumerator WaitForRendererColorTransition(float time)
+    private IEnumerator WaitForRendererColorTransition(float time)
     {
         skinRenderer.sharedMaterial.color = noDamageColor;
         yield return new WaitForSeconds(time);

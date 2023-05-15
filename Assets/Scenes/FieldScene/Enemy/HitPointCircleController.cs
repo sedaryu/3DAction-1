@@ -26,12 +26,6 @@ public class HitPointCircleController : MonoBehaviour
     void Update()
     {
         FillControll();
-
-        if (status.IsSmashable && !groggy)
-        { 
-            groggy = true;
-            ChangeGroggyColor();
-        } 
     }
 
     private void FillControll()

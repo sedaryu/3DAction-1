@@ -38,12 +38,13 @@ public class PlayerAct : MonoBehaviour
         shooter = GetComponent<PlayerShooter>();
         damager = GetComponent<PlayerDamager>();
         smasher = GetComponent<PlayerSmasher>();
+        smasher.SetSmasher(parameter.SmashParam.SmashCollider, parameter.SmashParam.DestroyTime);
 
         controller = GetComponent<Controller>();
         controller.onMoving += OrderOutputMoving;
         controller.onFiring += OrderOutputFiring;
         controller.onReloading += OrderOutputReloading;
-        //controller.onSmashing += OrderOutputSmashing;
+        controller.onSmashing += OrderOutputSmashing;
 
         targetCollisionDetecter = gameObject.transform.Find("TargetCollider").GetComponent<CollisionDetecter>();
         targetCollisionDetecter.onTriggerEnter += shooter.EnemyEnterTarget;
@@ -77,7 +78,7 @@ public class PlayerAct : MonoBehaviour
         parameter.SetBullet(-1);
         //UI更新
         if (colliders == null) return;
-        smasher.MakeGroggy(colliders, parameter.SmashParam.SmashCollider);
+        smasher.MakeGroggy(colliders);
     }
 
     private void OrderOutputReloading()
@@ -88,11 +89,25 @@ public class PlayerAct : MonoBehaviour
         //UI更新
     }
 
+    private void OrderOutputSmashing()
+    {
+        if (!stater.State["Smashable"]) return;
+        StartCoroutine(stater.WaitForStatusTransition("Smashable", parameter.SmashParam.SmashTime));
+        smasher.Smash(parameter.SmashParam.SmashTime, parameter.SmashParam.Knockback, parameter.SmashParam.Attack);
+    }
+
     private void OrderOutputDamaging(Collider other)
     {
         if (!stater.State["Damageable"]) return;
+        float damage = damager.Damage(other, 2);
+        if (damage == 0) return;
+        parameter.Damage(damage);
         StartCoroutine(stater.WaitForStatusTransition("Damageable", 2));
-        parameter.Damage(damager.Damage(other));
-        StartCoroutine(damager.WaitForRendererColorTransition(2));
+    }
+
+    private void OrderOutputAllowingSmash(Collider other) //stay?
+    {
+        if (!other.TryGetComponent<Smasher>(out Smasher smash)) return;
+
     }
 }

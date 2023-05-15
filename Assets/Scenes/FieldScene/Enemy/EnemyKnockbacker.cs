@@ -5,9 +5,18 @@ using static Effecter;
 
 public class EnemyKnockbacker : MonoBehaviour
 {
+    private Animator animator;
+
+    void Awake()
+    {
+        animator = GetComponent<Animator>();
+    }
+
+
     public void Knockback(Vector3 vector)
     {
         transform.Translate(vector, Space.World); //飛び道具の方向にノックバック
+        animator.SetTrigger("Damage"); //被ダメージの際のアニメーションを実行
     }
 
     /// <summary>
