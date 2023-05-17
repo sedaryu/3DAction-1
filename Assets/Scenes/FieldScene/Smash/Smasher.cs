@@ -48,7 +48,7 @@ public class Smasher : MonoBehaviour
     {
         RemoveDestroyedEnemy();
         //Instantiate(effect, transform.position, Quaternion.identity);
-        targetingEnemies.ForEach(x => x.GetComponent<ITargetable>().Hit((transform.position - x.transform.position).normalized * knockback, attack));
+        targetingEnemies.ForEach(x => x.GetComponent<ITargetable>().Hit((x.transform.position - transform.position).normalized * knockback, attack));
         Destroy(transform.parent.gameObject, 0.02f);
         return targetingEnemies.Where(x => x.TryGetComponent<IGrogable>(out IGrogable grog) == true && grog.Groggy == true).ToList();
     }

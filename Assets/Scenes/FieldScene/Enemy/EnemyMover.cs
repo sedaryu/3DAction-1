@@ -20,9 +20,9 @@ public class EnemyMover : MonoBehaviour
 
     public void Move(Vector3 vector, float speed)
     {
+        animator.SetFloat("MoveSpeed", speed * Time.deltaTime);
+
         agent.destination = vector;
         agent.speed = speed;
-
-        animator.SetFloat("MoveSpeed", speed * Time.deltaTime);
     }
 }

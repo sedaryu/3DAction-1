@@ -51,16 +51,19 @@ public class PlayerAct : MonoBehaviour
         targetCollisionDetecter.onTriggerExit += shooter.EnemyExitTarget;
         bodyCollisionDetecter = gameObject.transform.Find("BodyCollider").GetComponent<CollisionDetecter>();
         bodyCollisionDetecter.onTriggerEnter += OrderOutputDamaging;
-
+        bodyCollisionDetecter.onTriggerEnter += smasher.PlayerEnetrCollider;
+        bodyCollisionDetecter.onTriggerStay += OrderOutputAllowingSmash;
+        bodyCollisionDetecter.onTriggerExit += OrderOutputNotAllowingSmash;
+        bodyCollisionDetecter.onTriggerExit += smasher.PlayerExitCollider;
 
         GameObject canvas = GameObject.Find("Canvas");
-        bulletUIController = canvas.transform.Find("BulletUI").GetComponent<BulletUIController>();
+        //bulletUIController = canvas.transform.Find("BulletUI").GetComponent<BulletUIController>();
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        bulletUIController.UpdateBulletUI(parameter.GunParam.Bullet.ToString());
+        //bulletUIController.UpdateBulletUI(parameter.GunParam.Bullet.ToString());
     }
 
     //移動に関する各メソッドを実行
@@ -93,7 +96,7 @@ public class PlayerAct : MonoBehaviour
     {
         if (!stater.State["Smashable"]) return;
         StartCoroutine(stater.WaitForStatusTransition("Smashable", parameter.SmashParam.SmashTime));
-        smasher.Smash(parameter.SmashParam.SmashTime, parameter.SmashParam.Knockback, parameter.SmashParam.Attack);
+        smasher.Smash(parameter.SmashParam.SmashTime, parameter.SmashParam.Knockback, parameter.SmashParam.Attack, parameter.SmashParam.SmashEffect);
     }
 
     private void OrderOutputDamaging(Collider other)
@@ -105,9 +108,15 @@ public class PlayerAct : MonoBehaviour
         StartCoroutine(stater.WaitForStatusTransition("Damageable", 2));
     }
 
-    private void OrderOutputAllowingSmash(Collider other) //stay?
+    private void OrderOutputAllowingSmash(Collider other)
     {
         if (!other.TryGetComponent<Smasher>(out Smasher smash)) return;
+        stater.TransferState("Smashable", true);
+    }
 
+    private void OrderOutputNotAllowingSmash(Collider other)
+    {
+        if (!other.TryGetComponent<Smasher>(out Smasher smash)) return;
+        stater.TransferState("Smashable", false);
     }
 }

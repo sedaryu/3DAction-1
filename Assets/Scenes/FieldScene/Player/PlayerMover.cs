@@ -18,9 +18,10 @@ public class PlayerMover : MonoBehaviour
 
     public void Move(Vector3 vector, float speed)
     {
+        animator.SetFloat("MoveSpeed", (vector * speed * Time.deltaTime).magnitude);
+
+        if (vector == Vector3.zero) return;
         agent.Move(vector * speed * Time.deltaTime);
         transform.rotation = Quaternion.LookRotation(vector);
-
-        animator.SetFloat("MoveSpeed", speed * Time.deltaTime);
     }
 }

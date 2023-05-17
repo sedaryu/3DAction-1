@@ -14,11 +14,11 @@ public class EnemyAct : MonoBehaviour, ITargetable, IGrogable, IAttackable
     private MobEffecter effecter;
     //ノックバッカー
     private EnemyKnockbacker knockbacker;
+    //アニメーター
+    private EnemyAnimator animator;
 
     //IGrogable
     public bool Groggy { get => stater.State["Grogable"]; }
-    //IAttackable
-    //public float Damage { get => stater.State["Attackable"] ? parameter.EnemyParam.Attack : 0; }
 
     //デスティネーター
     private EnemyDestinater destinater;
@@ -30,6 +30,7 @@ public class EnemyAct : MonoBehaviour, ITargetable, IGrogable, IAttackable
         mover = GetComponent<EnemyMover>();
         effecter = GetComponent<MobEffecter>();
         knockbacker = GetComponent<EnemyKnockbacker>();
+        animator = GetComponent<EnemyAnimator>();
 
         destinater = GetComponent<EnemyDestinater>();
         destinater.onMoving += OrderOutputMoving;
@@ -37,8 +38,8 @@ public class EnemyAct : MonoBehaviour, ITargetable, IGrogable, IAttackable
 
     private void OrderOutputMoving(Vector3 vector)
     {
-        if (!stater.State["Movable"]) return;
-        mover.Move(vector, parameter.EnemyParam.SpeedMax);
+        if (!stater.State["Movable"]) mover.Move(vector, 0);
+        else mover.Move(vector, parameter.EnemyParam.SpeedMax);
     }
 
     public void Hit(Vector3 vector, float attack)
@@ -55,6 +56,8 @@ public class EnemyAct : MonoBehaviour, ITargetable, IGrogable, IAttackable
         }
         knockbacker.Knockback(vector * parameter.EnemyParam.Weight); //ノックバック
 
+        animator.SetTrriger("Damage");
+
         if (parameter.EnemyParam.HitPoint <= 0)
         {
             stater.TransferState("Grogable", true);
@@ -66,15 +69,16 @@ public class EnemyAct : MonoBehaviour, ITargetable, IGrogable, IAttackable
     public void Grog(Smasher smash, float time)
     {
         if (stater.State["Smashable"]) return;
-
-        Instantiate(smash, transform).transform.parent = transform;
-        smash.StartTimer(time);
+        stater.TransferState("Grogable", false);
         stater.TransferState("Smashable", true);
+
+        Smasher smasherObject = Instantiate(smash, transform);
+        smasherObject.StartTimer(time);
     }
 
     public float Attack()
     {
-        if (stater.State["Attackable"]) return 0;
+        if (!stater.State["Attackable"]) return 0;
         return parameter.EnemyParam.Attack;
     }
 }

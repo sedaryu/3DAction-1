@@ -10,6 +10,11 @@ public class PlayerStater : MonoBehaviour
     private Dictionary<string, bool> state = new Dictionary<string, bool>()
     { { "Movable", true }, { "Shootable", true }, { "Damageable", true }, { "Smashable", false } };
 
+    public void TransferState(string key, bool param)
+    {
+        state[key] = param;
+    }
+
     public IEnumerator WaitForStatusTransition(string key, float time)
     {
         state[key] = false;

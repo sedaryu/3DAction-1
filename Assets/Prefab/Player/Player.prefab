@@ -300,9 +300,14 @@ GameObject:
   - component: {fileID: 6011833598187126630}
   - component: {fileID: 4398706678146001465}
   - component: {fileID: 4398706678146001464}
-  - component: {fileID: 934628925888986681}
-  - component: {fileID: 1321941640710965118}
   - component: {fileID: 2298086399548340771}
+  - component: {fileID: 934628925888986681}
+  - component: {fileID: 7608165040133167950}
+  - component: {fileID: 1967782885122094231}
+  - component: {fileID: 1321941640710965118}
+  - component: {fileID: 6625443855248120285}
+  - component: {fileID: 980266463048390372}
+  - component: {fileID: 1525285337052430886}
   - component: {fileID: 4398706678146001463}
   - component: {fileID: 54502022077722969}
   m_Layer: 0
@@ -401,6 +406,18 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 1
   m_ObstacleAvoidanceType: 1
+--- !u!114 &2298086399548340771
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1064448984379965350}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe76f7647a29ca140a5d452cde1f6f80, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &934628925888986681
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -416,6 +433,30 @@ MonoBehaviour:
   _smashParam: {fileID: 11400000, guid: dd85e198f1f485c4bb96d11485e2f35a, type: 2}
   initialPlayerParam: {fileID: 11400000, guid: 0e2e6ae40e8e56f4596006f3574bcb1b, type: 2}
   initialGunParam: {fileID: 11400000, guid: 123761ae75250c6459f42c7f45014a74, type: 2}
+--- !u!114 &7608165040133167950
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1064448984379965350}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7416fa928bb964146a18dc7e6fb585f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1967782885122094231
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1064448984379965350}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 852e57db7d07f1e4ba0a0b6bb65993f7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &1321941640710965118
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -429,7 +470,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _effecter: {fileID: 11400000, guid: d7818a8c0d5d90742997949014cfb65d, type: 2}
---- !u!114 &2298086399548340771
+--- !u!114 &6625443855248120285
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -438,9 +479,34 @@ MonoBehaviour:
   m_GameObject: {fileID: 1064448984379965350}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe76f7647a29ca140a5d452cde1f6f80, type: 3}
+  m_Script: {fileID: 11500000, guid: 4bf0f69ecf181294b95e07ef149bf8c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &980266463048390372
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1064448984379965350}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b44f41b39230524c9fe00a20972ed1a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1525285337052430886
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1064448984379965350}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf2315b637ed5b0419eba3ea456e7477, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  smashers: []
 --- !u!114 &4398706678146001463
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -33,7 +33,7 @@ public class KeyMouseController : Controller
         moving.x = virtualStick.Horizontal; //横方向の移動入力を取得
         moving.z = virtualStick.Vertical; //縦方向の移動入力を取得
 
-        if (moving != Vector3.zero) onMoving.Invoke(moving);
+        onMoving.Invoke(moving);
     }
 
     //射撃に関する入力を受け付けるメソッド

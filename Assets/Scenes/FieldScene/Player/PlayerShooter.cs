@@ -7,7 +7,7 @@ using UnityEngine.UIElements;
 public abstract class PlayerShooter : MonoBehaviour
 {
     //targetingEnemiesに捕捉した敵のColliderを格納
-    public List<Collider> targetingEnemies = new List<Collider>();
+    private List<Collider> targetingEnemies = new List<Collider>();
 
     public List<Collider> Fire(int bullet, float knockback, float attack, ParticleSystem gunEffect)
     {
@@ -16,7 +16,7 @@ public abstract class PlayerShooter : MonoBehaviour
         RemoveDestroyedEnemyInLockOn(); //破棄された敵が捕捉リストにいた場合、このメソッドでリストから削除
         if (bullet <= 0) return null; //残弾がない場合、攻撃できない
         List<Collider> enemies = HittingEnemy(targetingEnemies); //攻撃を実行
-        List<Vector3> enemyVectors = enemies.Select(x => (transform.position - x.transform.position).normalized).ToList();
+        List<Vector3> enemyVectors = enemies.Select(x => (x.transform.position - transform.position).normalized).ToList();
         for (int i = 0; i < enemies.Count; i++)
         {
             enemies[i].GetComponent<ITargetable>().Hit(enemyVectors[i] * knockback, attack); //ITargetableのHitメソッドに値を渡し実行
@@ -24,6 +24,7 @@ public abstract class PlayerShooter : MonoBehaviour
         LookAt(enemies[0].transform); //攻撃した敵の方向を振り向く
         gunEffect.Play(); //エフェクトを再生
         return enemies.Where(x => x.TryGetComponent<IGrogable>(out IGrogable grog) == true && grog.Groggy == true).ToList();
+        
     }
 
     public abstract List<Collider> HittingEnemy(List<Collider> targets);

@@ -18,5 +18,5 @@ MonoBehaviour:
   _knockback: 1.5
   _rangeMin: 2
   _rangeMax: 4
-  _smashCollider: {fileID: 3192501021958491446, guid: b9fb99f7f7afef342b6291f6b4c0bdd5, type: 3}
+  _smashCollider: {fileID: 2112802496966990078, guid: b9fb99f7f7afef342b6291f6b4c0bdd5, type: 3}
   _smashEffect: {fileID: 7383460643436518565, guid: 03ca9e04a1dbafb46aeb6e15405fe2f5, type: 3}
