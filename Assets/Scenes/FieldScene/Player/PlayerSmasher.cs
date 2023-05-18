@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerSmasher : MonoBehaviour
@@ -8,6 +9,8 @@ public class PlayerSmasher : MonoBehaviour
 
     private Smasher smasher;
     private float time;
+
+    private bool isSmashing = false;
 
     //SmashColliderの範囲内に入ったらコリダーを格納
     public List<Smasher> smashers = new List<Smasher>();
@@ -34,7 +37,8 @@ public class PlayerSmasher : MonoBehaviour
 
     public void Smash(float smashTime, float knockback, float attack, GameObject smashEffect)
     {
-        RemoveColliderInSmashers();
+        if (isSmashing) return;
+        isSmashing = true;
         smashers.ForEach(x => x.StopTimer());
         StartCoroutine(SmashTime(smashTime, knockback, attack, smashEffect));
     }
@@ -45,6 +49,8 @@ public class PlayerSmasher : MonoBehaviour
         yield return new WaitForSeconds(time * 0.8f);
         animator.SetTrigger("FinishSmash");
         yield return new WaitForSeconds(time * 0.2f);
+        isSmashing = false;
+        if (RemoveColliderInSmashers()) yield break;
         foreach (Smasher x in smashers) 
         {
             Instantiate(smashEffect, x.transform.position, x.transform.rotation);
@@ -70,8 +76,10 @@ public class PlayerSmasher : MonoBehaviour
     }
 
     //破棄されたコリダーをリストから除外
-    private void RemoveColliderInSmashers()
+    public bool RemoveColliderInSmashers()
     {
         smashers.RemoveAll(x => x == null);
+        if(smashers.Count > 0) return false;
+        return true;
     }
 }

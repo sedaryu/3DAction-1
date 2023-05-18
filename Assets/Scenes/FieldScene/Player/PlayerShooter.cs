@@ -6,6 +6,8 @@ using UnityEngine.UIElements;
 
 public abstract class PlayerShooter : MonoBehaviour
 {
+    public bool IsTarget => targetingEnemies.Count > 0;
+
     //targetingEnemies‚É•ß‘¨‚µ‚½“G‚ÌCollider‚ðŠi”[
     private List<Collider> targetingEnemies = new List<Collider>();
 

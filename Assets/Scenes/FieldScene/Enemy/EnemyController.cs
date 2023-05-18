@@ -13,12 +13,24 @@ using Vector3 = UnityEngine.Vector3;
 
 public class EnemyController : MonoBehaviour, ITargetable, IGrogable, IAttackable
 {
+    public UnityAction onHealing;
+
     public UnityAction<Vector3, float> onHitting;
 
     public event Func<bool> isGroggy;
     public UnityAction<Smasher, float> onGrogging;
 
     public event Func<float> onAttacking;
+
+    void Update()
+    {
+        Heal();
+    }
+
+    public void Heal()
+    { 
+        onHealing.Invoke();
+    }
 
     public void Hit(Vector3 vector, float attack)
     {

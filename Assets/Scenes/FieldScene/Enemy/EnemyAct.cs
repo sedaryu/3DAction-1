@@ -32,6 +32,7 @@ public class EnemyAct : MonoBehaviour
         animator = GetComponent<EnemyAnimator>();
 
         controller = GetComponent<EnemyController>();
+        controller.onHealing += OrderOutputHealing;
         controller.onHitting += OrderOutputHitting;
         controller.isGroggy += IsGroggy;
         controller.onGrogging += OrderOutputGrogging;
@@ -45,6 +46,12 @@ public class EnemyAct : MonoBehaviour
     {
         if (!stater.State["Movable"]) mover.Move(vector, 0);
         else mover.Move(vector, parameter.EnemyParam.SpeedMax);
+    }
+
+    private void OrderOutputHealing()
+    {
+        if (stater.State["Smashable"]) return;
+        parameter.Heal();
     }
 
     public void OrderOutputHitting(Vector3 vector, float attack)

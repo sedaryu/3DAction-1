@@ -20,7 +20,7 @@ public class EnemyParameter : MonoBehaviour
     }
 
     //HitPointの自動回復を実行するメソッド
-    public void RecoverDamage()
+    public void Heal()
     {
         _param.HitPoint += EnemyParam.Recover * Time.deltaTime;
     }

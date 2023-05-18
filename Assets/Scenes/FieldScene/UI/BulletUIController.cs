@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class BulletUIController : MonoBehaviour
+public class BulletUIController : MonoBehaviour, IBulletUI
 {
     //テキストUI
     private Text bulletText;
@@ -15,8 +15,13 @@ public class BulletUIController : MonoBehaviour
         magazinText = transform.Find("Magazin").GetComponent<Text>();
     }
 
-    public void UpdateBulletUI(string bullet)
+    public void UpdateMagazinTextUI(string text)
     {
-        magazinText.text = bullet;
+        magazinText.text = text;
+    }
+
+    public void UpdateBulletTextUI(string text)
+    {
+        bulletText.text = text;
     }
 }

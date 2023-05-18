@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -27,7 +28,8 @@ public class PlayerAct : MonoBehaviour
     private CollisionDetecter targetCollisionDetecter;
     private CollisionDetecter bodyCollisionDetecter;
     //UI
-    private BulletUIController bulletUIController;
+    private List<IBulletUI> bulletUIs;
+    private List<ILifeUI> lifeUIs;
 
     void Awake()
     {
@@ -57,13 +59,16 @@ public class PlayerAct : MonoBehaviour
         bodyCollisionDetecter.onTriggerExit += smasher.PlayerExitCollider;
 
         GameObject canvas = GameObject.Find("Canvas");
-        //bulletUIController = canvas.transform.Find("BulletUI").GetComponent<BulletUIController>();
+        bulletUIs = canvas.GetComponentsInChildren<IBulletUI>().ToList();
+        lifeUIs = canvas.GetComponentsInChildren<ILifeUI>().ToList();
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        //bulletUIController.UpdateBulletUI(parameter.GunParam.Bullet.ToString());
+        bulletUIs.ForEach(x => x.UpdateMagazinTextUI(parameter.GunParam.Bullet.ToString()));
+        lifeUIs.ForEach(x => x.UpdateLifeTextUI(parameter.PlayerParam.HitPoint.ToString()));
+        lifeUIs.ForEach(x => x.UpdateLifeMaxTextUI(parameter.PlayerParam.HitPointMax.ToString()));
     }
 
     //移動に関する各メソッドを実行
@@ -76,10 +81,11 @@ public class PlayerAct : MonoBehaviour
     private void OrderOutputFiring()
     {
         if (!stater.State["Shootable"]) return;
+        if (!shooter.IsTarget) return;
         List<Collider> colliders = shooter.Fire(parameter.GunParam.Bullet, parameter.GunParam.Knockback, 
                                                 parameter.GunParam.Attack, parameter.GunEffect);
         parameter.SetBullet(-1);
-        //UI更新
+        bulletUIs.ForEach(x => x.UpdateMagazinTextUI(parameter.GunParam.Bullet.ToString()));
         if (colliders == null) return;
         smasher.MakeGroggy(colliders);
     }
@@ -89,13 +95,16 @@ public class PlayerAct : MonoBehaviour
         if (!stater.State["Shootable"]) return;
         StartCoroutine(stater.WaitForStatusTransition("Shootable", parameter.PlayerParam.ReloadSpeed));
         parameter.SetBullet(parameter.GunParam.BulletMax - parameter.GunParam.Bullet);
-        //UI更新
+        bulletUIs.ForEach(x => x.UpdateMagazinTextUI(parameter.GunParam.Bullet.ToString()));
     }
 
     private void OrderOutputSmashing()
     {
         if (!stater.State["Smashable"]) return;
-        StartCoroutine(stater.WaitForStatusTransition("Smashable", parameter.SmashParam.SmashTime));
+        stater.TransferState("Smashable", false);
+        if (smasher.RemoveColliderInSmashers()) return;
+        StartCoroutine(stater.WaitForStatusTransition("Damageable", parameter.SmashParam.SmashTime));
+        StartCoroutine(stater.WaitForStatusTransition("Movable", parameter.SmashParam.SmashTime));
         smasher.Smash(parameter.SmashParam.SmashTime, parameter.SmashParam.Knockback, parameter.SmashParam.Attack, parameter.SmashParam.SmashEffect);
     }
 
@@ -105,6 +114,7 @@ public class PlayerAct : MonoBehaviour
         float damage = damager.Damage(other, 2);
         if (damage == 0) return;
         parameter.Damage(damage);
+        lifeUIs.ForEach(x => x.UpdateLifeTextUI(parameter.PlayerParam.HitPoint.ToString()));
         StartCoroutine(stater.WaitForStatusTransition("Damageable", 2));
     }
 
