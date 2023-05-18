@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyAct : MonoBehaviour, ITargetable, IGrogable, IAttackable
+public class EnemyAct : MonoBehaviour
 {
     //パラメーター
     private EnemyParameter parameter;
@@ -17,9 +17,8 @@ public class EnemyAct : MonoBehaviour, ITargetable, IGrogable, IAttackable
     //アニメーター
     private EnemyAnimator animator;
 
-    //IGrogable
-    public bool Groggy { get => stater.State["Grogable"]; }
-
+    //コントローラー
+    private EnemyController controller;
     //デスティネーター
     private EnemyDestinater destinater;
 
@@ -32,6 +31,12 @@ public class EnemyAct : MonoBehaviour, ITargetable, IGrogable, IAttackable
         knockbacker = GetComponent<EnemyKnockbacker>();
         animator = GetComponent<EnemyAnimator>();
 
+        controller = GetComponent<EnemyController>();
+        controller.onHitting += OrderOutputHitting;
+        controller.isGroggy += IsGroggy;
+        controller.onGrogging += OrderOutputGrogging;
+        controller.onAttacking += OrderOutputAttacking;
+
         destinater = GetComponent<EnemyDestinater>();
         destinater.onMoving += OrderOutputMoving;
     }
@@ -42,7 +47,7 @@ public class EnemyAct : MonoBehaviour, ITargetable, IGrogable, IAttackable
         else mover.Move(vector, parameter.EnemyParam.SpeedMax);
     }
 
-    public void Hit(Vector3 vector, float attack)
+    public void OrderOutputHitting(Vector3 vector, float attack)
     {
         if (stater.State["Grogable"]) return;
 
@@ -66,7 +71,12 @@ public class EnemyAct : MonoBehaviour, ITargetable, IGrogable, IAttackable
         }
     }
 
-    public void Grog(Smasher smash, float time)
+    public bool IsGroggy()
+    {
+        return stater.State["Grogable"];
+    }
+
+    public void OrderOutputGrogging(Smasher smash, float time)
     {
         if (stater.State["Smashable"]) return;
         stater.TransferState("Grogable", false);
@@ -76,7 +86,7 @@ public class EnemyAct : MonoBehaviour, ITargetable, IGrogable, IAttackable
         smasherObject.StartTimer(time);
     }
 
-    public float Attack()
+    public float OrderOutputAttacking()
     {
         if (!stater.State["Attackable"]) return 0;
         return parameter.EnemyParam.Attack;

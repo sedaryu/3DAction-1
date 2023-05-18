@@ -468,6 +468,7 @@ GameObject:
   - component: {fileID: 6182917810512606351}
   - component: {fileID: 7462991041348060719}
   - component: {fileID: 3681297528920599397}
+  - component: {fileID: 744400442024830225}
   - component: {fileID: 6099969264874449946}
   m_Layer: 7
   m_Name: ZombiePrefab
@@ -644,6 +645,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7e91c16db54866242a80ec0258a3ef0d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &744400442024830225
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5247070304351026479}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 077b9d79bd8931747af97da5a47f084c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &6099969264874449946
