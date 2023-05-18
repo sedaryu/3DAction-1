@@ -15,7 +15,7 @@ public abstract class PlayerShooter : MonoBehaviour
     {
         if (targetingEnemies.Count <= 0) return null;
 
-        RemoveDestroyedEnemyInLockOn(); //破棄された敵が捕捉リストにいた場合、このメソッドでリストから削除
+        if (RemoveDestroyedEnemyInLockOn()) return null; //破棄された敵が捕捉リストにいた場合、このメソッドでリストから削除
         if (bullet <= 0) return null; //残弾がない場合、攻撃できない
         List<Collider> enemies = HittingEnemy(targetingEnemies); //攻撃を実行
         List<Vector3> enemyVectors = enemies.Select(x => (x.transform.position - transform.position).normalized).ToList();
@@ -48,8 +48,10 @@ public abstract class PlayerShooter : MonoBehaviour
     }
 
     //破棄された敵をリストから除外
-    private void RemoveDestroyedEnemyInLockOn()
+    private bool RemoveDestroyedEnemyInLockOn()
     {
         targetingEnemies.RemoveAll(x => x == null);
+        if (targetingEnemies.Count <= 0) return true;
+        return false;
     }
 }
