@@ -32,24 +32,24 @@ public class ScoreController : MonoBehaviour
 
     private void Awake()
     {
-        scoreUIs = GameObject.Find("Canvas").GetComponentsInChildren<IScoreUI>().ToList();
+        scoreUIs = GameObject.Find("Canvas")?.GetComponentsInChildren<IScoreUI>().ToList();
     }
 
     private void Start()
     {
-        scoreUIs.ForEach(x => x.UpdateScoreTextUI(Score.ToString()));
-        scoreUIs.ForEach(x => x.UpdateRushTimeTextUI(RushTime.ToString()));
-        scoreUIs.ForEach(x => x.UpdateComboTextUI(Combo.ToString()));
+        scoreUIs?.ForEach(x => x.UpdateScoreTextUI(Score.ToString()));
+        scoreUIs?.ForEach(x => x.UpdateRushTimeTextUI(RushTime.ToString()));
+        scoreUIs?.ForEach(x => x.UpdateComboTextUI(Combo.ToString()));
     }
 
     private void Update()
     {
         RushTime -= Time.deltaTime;
-        scoreUIs.ForEach(x => x.UpdateRushTimeTextUI(RushTime.ToString()));
+        scoreUIs?.ForEach(x => x.UpdateRushTimeTextUI(RushTime.ToString()));
         if (RushTime == 0)
         {
             combo = 0;
-            scoreUIs.ForEach(x => x.UpdateComboTextUI(Combo.ToString()));
+            scoreUIs?.ForEach(x => x.UpdateComboTextUI(Combo.ToString()));
         }
     }
 
@@ -57,18 +57,18 @@ public class ScoreController : MonoBehaviour
     { 
         Score += _score * (int)(RushTime * 0.1f + 1);
         if (Combo > 1) Score += (Combo - 1) * 10;
-        scoreUIs.ForEach(x => x.UpdateScoreTextUI(Score.ToString()));
+        scoreUIs?.ForEach(x => x.UpdateScoreTextUI(Score.ToString()));
     }
 
     public void IncreaseRushTime(float time = 5) //グロッグ時
     {
         RushTime += time;
-        scoreUIs.ForEach(x => x.UpdateRushTimeTextUI(RushTime.ToString()));
+        scoreUIs?.ForEach(x => x.UpdateRushTimeTextUI(RushTime.ToString()));
     }
 
     public void IncreaseCombo(int _combo = 1) //スマッシュ時
     {
         Combo += _combo;
-        scoreUIs.ForEach(x => x.UpdateComboTextUI(Combo.ToString()));
+        scoreUIs?.ForEach(x => x.UpdateComboTextUI(Combo.ToString()));
     }
 }
