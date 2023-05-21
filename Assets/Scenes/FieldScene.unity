@@ -1256,11 +1256,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 461998418}
   m_CullTransparentMesh: 1
---- !u!1 &473055631 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1064448984379965350, guid: cff979c8e3ded714491ba2650c992e19, type: 3}
-  m_PrefabInstance: {fileID: 1129569245}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &498751111
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1405,7 +1400,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 647939280}
-  m_LocalRotation: {x: 0.42823023, y: -0.000000021989447, z: 0.00000001042034, w: 0.9036697}
+  m_LocalRotation: {x: 0.42823023, y: 0.000000021989438, z: -0.0000000104203375, w: 0.9036697}
   m_LocalPosition: {x: 6.78, y: 4.4, z: 0.78999996}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -2385,7 +2380,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: 0.42823023, y: -0.000000021989447, z: 0.00000001042034, w: 0.9036697}
+  m_LocalRotation: {x: 0.42823023, y: 0.000000021989438, z: -0.0000000104203375, w: 0.9036697}
   m_LocalPosition: {x: 6.78, y: 4.4, z: 0.78999996}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -2911,18 +2906,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 400396069999895836, guid: cff979c8e3ded714491ba2650c992e19, type: 3}
   m_PrefabInstance: {fileID: 1129569245}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1112458171
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 473055631}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e1bc1cd2485c35648888a6c4b158a868, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &1120109998
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3037,7 +3020,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4398706678146001463, guid: cff979c8e3ded714491ba2650c992e19, type: 3}
       propertyPath: m_Enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5287027825230793382, guid: cff979c8e3ded714491ba2650c992e19, type: 3}
       propertyPath: m_IsActive
@@ -3047,7 +3030,8 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 662158887}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 0}
   m_SourcePrefab: {fileID: 100100000, guid: cff979c8e3ded714491ba2650c992e19, type: 3}
 --- !u!1 &1140510736 stripped
 GameObject:
@@ -3302,6 +3286,10 @@ PrefabInstance:
     - target: {fileID: 2929252283123773939, guid: aaa2c939c0359ac4dbce3f49e8b90252, type: 3}
       propertyPath: m_Name
       value: Fixed Joystick
+      objectReference: {fileID: 0}
+    - target: {fileID: 2929252283123773939, guid: aaa2c939c0359ac4dbce3f49e8b90252, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2929252283123773951, guid: aaa2c939c0359ac4dbce3f49e8b90252, type: 3}
       propertyPath: snapX

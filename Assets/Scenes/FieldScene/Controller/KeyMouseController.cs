@@ -33,25 +33,25 @@ public class KeyMouseController : Controller
         moving.x = virtualStick.Horizontal; //横方向の移動入力を取得
         moving.z = virtualStick.Vertical; //縦方向の移動入力を取得
 
-        onMoving.Invoke(moving);
+        onMoving?.Invoke(moving);
     }
 
     //射撃に関する入力を受け付けるメソッド
     public override void InputFiring()
     {
-        if (Input.GetButtonDown("Fire1")) onFiring.Invoke();
+        if (Input.GetButtonDown("Fire1")) onFiring?.Invoke();
     }
 
     //リロードに関する入力を受け付けるメソッド
     public override void InputReloading()
     {
-        if (Input.GetButtonDown("Reload")) onReloading.Invoke();
+        if (Input.GetButtonDown("Reload")) onReloading?.Invoke();
     }
 
     //スマッシュ攻撃に関する入力を受け付けるメソッド
     public override void InputSmashing()
     {
-        if (Input.GetButtonDown("Smash")) onSmashing.Invoke();
+        if (Input.GetButtonDown("Smash")) onSmashing?.Invoke();
     }
 
     //方向転換に関する入力を受け付けるメソッド
