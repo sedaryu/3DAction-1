@@ -12,7 +12,7 @@ public class ScoreController : MonoBehaviour
         private set
         {
             if (value <= 0) rushTime = 0;
-            else if (value >= 20) rushTime = 20;
+            else if (value >= 10) rushTime = 10;
             else rushTime = value;
         }
     }

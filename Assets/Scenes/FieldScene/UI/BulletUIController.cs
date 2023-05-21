@@ -6,13 +6,13 @@ using UnityEngine.UI;
 public class BulletUIController : MonoBehaviour, IBulletUI
 {
     //テキストUI
-    private Text bulletText;
+    //private Text bulletText;
     private Text magazinText;
 
     void Awake()
     {
-        bulletText = transform.Find("Bullet").GetComponent<Text>();
-        magazinText = transform.Find("Magazin").GetComponent<Text>();
+        //bulletText = transform.Find("Bullet").GetComponent<Text>();
+        magazinText = transform.Find("MagazinText").GetComponent<Text>();
     }
 
     public void UpdateMagazinTextUI(string text)
@@ -22,6 +22,6 @@ public class BulletUIController : MonoBehaviour, IBulletUI
 
     public void UpdateBulletTextUI(string text)
     {
-        bulletText.text = text;
+        //bulletText.text = text;
     }
 }

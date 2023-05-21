@@ -1,27 +1,16 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-/// <Summary>
-/// プレイヤーの入力を処理するクラス
-/// </Summary>
-public class KeyMouseController : Controller
+public class GamePadController : Controller
 {
-    //バーチャルスティック
-    private Joystick virtualStick;
-
-    void Awake()
-    {
-        virtualStick = GameObject.Find("Fixed Joystick").GetComponent<Joystick>();
-    }
-
     void Update()
     {
         InputMoving();
         InputFiring();
         InputReloading();
         InputSmashing();
+        InputLooking();
     }
 
     //移動に関する入力を受け付けるメソッド
@@ -29,11 +18,11 @@ public class KeyMouseController : Controller
     {
         Vector3 moving = new Vector3(0, 0, 0);
 
-        //ヴァーチャルスティック入力
-        moving.x = virtualStick.Horizontal; //横方向の移動入力を取得
-        moving.z = virtualStick.Vertical; //縦方向の移動入力を取得
+        //ジョイスティック入力
+        moving.x = Input.GetAxis("GPHorizontal"); //横方向の移動入力を取得
+        moving.z = Input.GetAxis("GPVertical"); //縦方向の移動入力を取得
 
-        onMoving.Invoke(moving);
+        if (moving != null) onMoving.Invoke(moving);
     }
 
     //射撃に関する入力を受け付けるメソッド
@@ -57,6 +46,12 @@ public class KeyMouseController : Controller
     //方向転換に関する入力を受け付けるメソッド
     public override void InputLooking()
     {
-        
+        Vector3 looking = new Vector3(0, 0, 0);
+
+        //ジョイスティック入力
+        looking.x = Input.GetAxis("GPRHorizontal"); //横方向の移動入力を取得
+        looking.z = Input.GetAxis("GPRVertical"); //縦方向の移動入力を取得
+
+        if (looking != null) onLooking.Invoke(looking);
     }
 }

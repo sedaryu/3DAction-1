@@ -7,6 +7,7 @@ using UnityEngine.Events;
 public abstract class Controller : MonoBehaviour
 {
     public UnityAction<Vector3> onMoving;
+    public UnityAction<Vector3> onLooking;
     public UnityAction onFiring;
     public UnityAction onReloading;
     public UnityAction onSmashing;
@@ -18,4 +19,6 @@ public abstract class Controller : MonoBehaviour
     public abstract void InputReloading();
 
     public abstract void InputSmashing();
+
+    public abstract void InputLooking();
 }

@@ -47,6 +47,7 @@ public class PlayerAct : MonoBehaviour
         controller.onFiring += OrderOutputFiring;
         controller.onReloading += OrderOutputReloading;
         controller.onSmashing += OrderOutputSmashing;
+        controller.onLooking += OrderOutputLooking;
 
         targetCollisionDetecter = gameObject.transform.Find("TargetCollider").GetComponent<CollisionDetecter>();
         targetCollisionDetecter.onTriggerEnter += shooter.EnemyEnterTarget;
@@ -68,7 +69,6 @@ public class PlayerAct : MonoBehaviour
     {
         bulletUIs.ForEach(x => x.UpdateMagazinTextUI(parameter.GunParam.Bullet.ToString()));
         lifeUIs.ForEach(x => x.UpdateLifeTextUI(parameter.PlayerParam.HitPoint.ToString()));
-        lifeUIs.ForEach(x => x.UpdateLifeMaxTextUI(parameter.PlayerParam.HitPointMax.ToString()));
     }
 
     //移動に関する各メソッドを実行
@@ -76,6 +76,12 @@ public class PlayerAct : MonoBehaviour
     {
         if (!stater.State["Movable"]) return;
         mover.Move(vector, parameter.PlayerParam.SpeedMax);
+    }
+
+    private void OrderOutputLooking(Vector3 vector)
+    {
+        if (!stater.State["Movable"]) return;
+        mover.Look(vector);
     }
 
     private void OrderOutputFiring()

@@ -24,4 +24,10 @@ public class PlayerMover : MonoBehaviour
         agent.Move(vector * speed * Time.deltaTime);
         transform.rotation = Quaternion.LookRotation(vector);
     }
+
+    public void Look(Vector3 vector)
+    {
+        if (vector == Vector3.zero) return;
+        transform.rotation = Quaternion.LookRotation(vector);
+    }
 }

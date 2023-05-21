@@ -14,7 +14,9 @@ public class Smasher : MonoBehaviour
 
     private List<Collider> targetingEnemies = new List<Collider>();
 
-    private ScoreController scoreController;
+    //private ScoreController scoreController;
+
+    private AdrenalineController adrenalineController;
 
     public void StartTimer(float time)
     {
@@ -22,9 +24,12 @@ public class Smasher : MonoBehaviour
         timer = WaitTimeToDestroy(time);
         StartCoroutine(timer);
 
-        scoreController = GameObject.Find("ScoreController").GetComponent<ScoreController>();
-        scoreController.IncreaseRushTime();
-        scoreController.IncreaseCombo();
+        //scoreController = GameObject.Find("ScoreController").GetComponent<ScoreController>();
+        //scoreController.IncreaseRushTime();
+        //scoreController.IncreaseCombo();
+
+        adrenalineController = GameObject.Find("AdrenalineController").GetComponent<AdrenalineController>();
+        adrenalineController.IncreaseAdrenaline(0.25f);
     }
 
     public IEnumerator WaitTimeToDestroy(float time)
@@ -57,7 +62,8 @@ public class Smasher : MonoBehaviour
         targetingEnemies.ForEach(x => x.GetComponent<ITargetable>().Hit((x.transform.position - transform.position).normalized * knockback, attack));
         Destroy(transform.parent.gameObject, 0.02f);
 
-        scoreController.IncreaseScore();
+        //scoreController.IncreaseScore();
+        adrenalineController.IncreaseAdrenaline(0.25f);
 
         return targetingEnemies.Where(x => x.TryGetComponent<IGrogable>(out IGrogable grog) == true && grog.Groggy == true).ToList();
     }
