@@ -420,7 +420,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _smashParam: {fileID: 11400000, guid: dd85e198f1f485c4bb96d11485e2f35a, type: 2}
-  initialPlayerParam: {fileID: 11400000, guid: 0e2e6ae40e8e56f4596006f3574bcb1b, type: 2}
+  initialPlayerParam: {fileID: 11400000, guid: e3b6d11ca8f7ccd4796386e3fadc38ba, type: 2}
   initialGunParam: {fileID: 11400000, guid: 123761ae75250c6459f42c7f45014a74, type: 2}
 --- !u!114 &7608165040133167950
 MonoBehaviour:

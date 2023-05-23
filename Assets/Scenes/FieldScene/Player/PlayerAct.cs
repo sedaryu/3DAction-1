@@ -29,6 +29,8 @@ public class PlayerAct : MonoBehaviour
     //コリダー
     private CollisionDetecter targetCollisionDetecter;
     private CollisionDetecter bodyCollisionDetecter;
+    //ターゲット
+    private MeshCreator meshCreator;
     //UI
     private List<IBulletUI> bulletUIs;
     private List<ILifeUI> lifeUIs;
@@ -65,6 +67,9 @@ public class PlayerAct : MonoBehaviour
         bodyCollisionDetecter.onTriggerStay += OrderOutputAllowingSmash;
         bodyCollisionDetecter.onTriggerExit += OrderOutputNotAllowingSmash;
 
+        meshCreator = gameObject.transform.Find("TargetCollider").GetComponent<MeshCreator>();
+        meshCreator.CreateMeshCollider(parameter.Range, parameter.Reach);
+
         GameObject canvas = GameObject.Find("Canvas");
         bulletUIs = canvas.GetComponentsInChildren<IBulletUI>().ToList();
         lifeUIs = canvas.GetComponentsInChildren<ILifeUI>().ToList();
@@ -74,10 +79,10 @@ public class PlayerAct : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        bulletUIs?.ForEach(x => x.UpdateMagazinTextUI(parameter.GunParam.Bullet.ToString()));
-        lifeUIs?.ForEach(x => x.UpdateLifeTextUI(parameter.PlayerParam.HitPoint.ToString()));
-        adrenalineUIs?.ForEach(x => x.UpdateAdrenalineUI(adrenaliner.Adrenaline));
-        adrenalineUIs?.ForEach(x => x.UpdateAdrenalineTankUI(adrenaliner.AdrenalineTank));
+        bulletUIs?.ForEach(x => x.UpdateMagazinTextUI(parameter.Parameter("Bullet").ToString()));
+        lifeUIs?.ForEach(x => x.UpdateLifeTextUI(parameter.Parameter("Life").ToString()));
+        adrenalineUIs?.ForEach(x => x.UpdateAdrenalineUI(parameter.Parameter("Adrenaline")));
+        adrenalineUIs?.ForEach(x => x.UpdateAdrenalineTankUI((int)parameter.Parameter("AdrenalineTank")));
     }
 
     private void Update()
@@ -90,7 +95,7 @@ public class PlayerAct : MonoBehaviour
     private void OrderOutputMoving(Vector3 vector)
     {
         if (!stater.State["Movable"]) return;
-        mover.Move(vector, parameter.PlayerParam.SpeedMax);
+        mover.Move(vector, parameter.Parameter("MoveSpeed"));
     }
 
     private void OrderOutputLooking(Vector3 vector)
@@ -103,10 +108,10 @@ public class PlayerAct : MonoBehaviour
     {
         if (!stater.State["Shootable"]) return;
         if (!shooter.IsTarget) return;
-        List<Collider> colliders = shooter.Fire(parameter.GunParam.Bullet, parameter.GunParam.Knockback, 
-                                                parameter.GunParam.Attack, parameter.GunEffect);
-        parameter.SetBullet(-1);
-        bulletUIs?.ForEach(x => x.UpdateMagazinTextUI(parameter.GunParam.Bullet.ToString()));
+        List<Collider> colliders = shooter.Fire((int)parameter.Parameter("Bullet"), parameter.Parameter("Knockback"),
+                                                parameter.Parameter("Attack"), parameter.GunEffect);
+        parameter.SetParameter("Bullet", -1);
+        bulletUIs?.ForEach(x => x.UpdateMagazinTextUI(((int)parameter.Parameter("Bullet")).ToString()));
         if (colliders == null) return;
         smasher.MakeGroggy(colliders);
     }
@@ -114,9 +119,9 @@ public class PlayerAct : MonoBehaviour
     private void OrderOutputReloading()
     {
         if (!stater.State["Shootable"]) return;
-        StartCoroutine(stater.WaitForStatusTransition("Shootable", parameter.PlayerParam.ReloadSpeed));
-        parameter.SetBullet(parameter.GunParam.BulletMax - parameter.GunParam.Bullet);
-        bulletUIs?.ForEach(x => x.UpdateMagazinTextUI(parameter.GunParam.Bullet.ToString()));
+        StartCoroutine(stater.WaitForStatusTransition("Shootable", parameter.Parameter("ReloadSpeed")));
+        parameter.SetParameter("Bullet", parameter.Parameter("BulletMax") - parameter.Parameter("Bullet"));
+        bulletUIs?.ForEach(x => x.UpdateMagazinTextUI(((int)parameter.Parameter("Bullet")).ToString()));
     }
 
     private void OrderOutputSmashing()
@@ -135,7 +140,7 @@ public class PlayerAct : MonoBehaviour
         float damage = damager.Damage(other, 2);
         if (damage == 0) return;
         parameter.Damage(damage);
-        lifeUIs?.ForEach(x => x.UpdateLifeTextUI(parameter.PlayerParam.HitPoint.ToString()));
+        lifeUIs?.ForEach(x => x.UpdateLifeTextUI(((int)parameter.Parameter("Life")).ToString()));
         StartCoroutine(stater.WaitForStatusTransition("Damageable", 2));
     }
 

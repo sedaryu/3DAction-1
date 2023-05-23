@@ -65,21 +65,15 @@ public class GunParam : ScriptableObject
     }
     [SerializeField] private int _bullet;
 
+    public float ReloadSpeed //リロードの速さ
+    {
+        get => _reloadSpeed;
+    }
+    [SerializeField] private float _reloadSpeed;
+
     public GameObject GunPrefab //銃のオブジェクト
     {
         get => _gunPrefab;
     }
     [SerializeField] private GameObject _gunPrefab;
-
-    public GunParam(GunParam initialParam)
-    {
-        _type = initialParam._type;
-        _reach = initialParam._reach;
-        _range = initialParam._range;
-        _attack = initialParam._attack;
-        _knockback = initialParam._knockback;
-        _bulletMax = initialParam._bulletMax;
-        _bullet = initialParam._bullet;
-        _gunPrefab = initialParam._gunPrefab;
-    }
 }

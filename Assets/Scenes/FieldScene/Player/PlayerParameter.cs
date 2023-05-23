@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEditor.VersionControl;
 using UnityEngine;
 
 /// <Summary>
@@ -9,20 +10,6 @@ using UnityEngine;
 /// </Summary>
 public class PlayerParameter : MonoBehaviour
 {
-    //プレイヤーパラメーター
-    public PlayerParam PlayerParam
-    {
-        get => _playerParam;
-    }
-    private PlayerParam _playerParam;
-
-    //銃パラメーター
-    public GunParam GunParam
-    {
-        get => _gunParam;
-    }
-    private GunParam _gunParam;
-
     //スマッシュ技パラメーター
     public SmashParam SmashParam
     {
@@ -32,7 +19,24 @@ public class PlayerParameter : MonoBehaviour
 
     //初期設定パラメーター
     [SerializeField] private PlayerParam initialPlayerParam;
+
+    public float Range
+    { 
+        get => initialGunParam.Range;
+    }
+    public float Reach
+    {
+        get => initialGunParam.Reach;
+    }
     [SerializeField] private GunParam initialGunParam;
+
+
+    public float Parameter(string key)
+    {
+        if (!parameter.ContainsKey(key)) return -1;
+        return parameter[key];
+    }
+    private Dictionary<string, float> parameter;
 
     //銃のエフェクト
     public ParticleSystem GunEffect
@@ -43,10 +47,25 @@ public class PlayerParameter : MonoBehaviour
 
     protected void Awake()
     {
-        _playerParam = new PlayerParam(initialPlayerParam);
-        _gunParam = new GunParam(initialGunParam);
+        SettingParameter();
 
         SettingGunPrefab(); //銃のオブジェクトを生成し、位置を調整する
+    }
+
+    private void SettingParameter()
+    {
+        parameter = new Dictionary<string, float>()
+        { 
+          {"Life", initialPlayerParam.Life}, {"LifeMax", initialPlayerParam.Life}, 
+          {"MoveSpeed", initialPlayerParam.MoveSpeed}, {"MoveSpeedMax", initialPlayerParam.MoveSpeed},
+          {"Attack", initialGunParam.Attack}, {"AttackMax", initialGunParam.Attack},
+          {"Adrenaline", 0}, {"AdrenalineMax", 1},
+          {"AdrenalineTank", 0}, {"AdrenalineTankMax", 3}, 
+          {"AdrenalineSpeed", initialPlayerParam.AdrenalineSpeed}, {"AdrenalineSpeedMax", initialPlayerParam.AdrenalineSpeed},
+          {"Knockback", initialGunParam.Knockback}, {"KnockbackMax", initialGunParam.Knockback},
+          {"Bullet", initialGunParam.Bullet}, {"BulletMax", initialGunParam.Bullet},
+          {"ReloadSpeed", initialGunParam.ReloadSpeed}, {"ReloadSpeedMax", initialGunParam.ReloadSpeed}
+        };
     }
 
     /// <summary>
@@ -54,7 +73,7 @@ public class PlayerParameter : MonoBehaviour
     /// </summary>
     private void SettingGunPrefab()
     {
-        GameObject gunPrefab = Instantiate(GunParam.GunPrefab);
+        GameObject gunPrefab = Instantiate(initialGunParam.GunPrefab);
         string path = "Armature | Humanoid/Hips/Spine/Spine1/Spine2/RightShoulder/RightArm/RightForeArm/RightHand";
         gunPrefab.transform.parent = GameObject.Find("Player").transform.Find(path);
         gunPrefab.transform.localPosition = new Vector3(0, 0.25f, 0);
@@ -70,8 +89,8 @@ public class PlayerParameter : MonoBehaviour
     /// <returns>ダメージの結果HitPointが0以下になった(死亡したら)true、そうでなければfalseを返す</returns>
     public void Damage(float damage)
     {
-        _playerParam.HitPoint -= damage;
-        if (PlayerParam.HitPoint <= 0) Destroy(gameObject);
+        parameter["Life"] -= damage;
+        if (parameter["Life"] <= 0) Destroy(gameObject);
     }
 
     /// <summary>
@@ -79,7 +98,20 @@ public class PlayerParameter : MonoBehaviour
     /// </summary>
     /// <param name="bullet">消費また装填した弾薬の量</param>
     public void SetBullet(float bullet)
-    { 
-        _gunParam.Bullet += (int)bullet;
+    {
+        if (parameter["Bullet"] <= 0) return;
+        parameter["Bullet"] += bullet;
+    }
+
+    public void SetParameter(string key, float param)
+    {
+        if (parameter[key] + param < 0) parameter[key] = 0;
+        else if (parameter[key + "Max"] < parameter[key] + param) parameter[key] = parameter[key + "Max"];
+        else parameter[key] += param;
+    }
+
+    public void RevertParameter(string key, float param)
+    {
+        parameter[key] = parameter[key + "Max"];
     }
 }

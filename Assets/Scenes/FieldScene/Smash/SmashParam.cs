@@ -29,18 +29,6 @@ public class SmashParam : ScriptableObject
     }
     [SerializeField] private float _knockback;
 
-    public float RangeMin
-    {
-        get => _rangeMin;
-    }
-    [SerializeField] private float _rangeMin;
-
-    public float RangeMax
-    {
-        get => _rangeMax;
-    }
-    [SerializeField] private float _rangeMax;
-
     public Smasher SmashCollider //コリダーオブジェクト
     {
         get => _smashCollider;

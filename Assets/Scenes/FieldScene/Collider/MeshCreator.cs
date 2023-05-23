@@ -4,12 +4,6 @@ using UnityEngine;
 
 public class MeshCreator : MonoBehaviour
 {
-    private void Start()
-    {
-        GunParam param = GetComponentInParent<PlayerParameter>().GunParam;
-        CreateMeshCollider(param.Range, param.Reach);
-    }
-
     //GunParamの値に対応したメッシュコリダーの作成
     public void CreateMeshCollider(float range, float reach)
     {

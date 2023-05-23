@@ -4,20 +4,23 @@ using UnityEngine;
 
 //全てのキャラオブジェクトに共通するパラメーター(能力値)をこのクラスで定義・管理する
 [CreateAssetMenu(fileName = "PlayerParam", menuName = "Custom/PlayerParam")]
-public class PlayerParam : MobParam
+public class PlayerParam : ScriptableObject
 {
-    public float ReloadSpeed //リロードの速さ
+    public float Life
     {
-        get => _reloadSpeed;
+        get => _life;
     }
-    [SerializeField] private float _reloadSpeed;
+    [SerializeField] private float _life;
 
-    public PlayerParam(PlayerParam initialParam)
+    public float MoveSpeed
     {
-        _hitPointMax = initialParam.HitPointMax;
-        _hitPoint = initialParam.HitPoint;
-        _speedMax = initialParam.SpeedMax;
-        _speedMin = initialParam.SpeedMin;
-        _reloadSpeed = initialParam.ReloadSpeed;
+        get => _moveSpeed;
     }
+    [SerializeField] private float _moveSpeed;
+
+    public float AdrenalineSpeed
+    {
+        get => _adrenalineSpeed;
+    }
+    [SerializeField] private float _adrenalineSpeed;
 }
