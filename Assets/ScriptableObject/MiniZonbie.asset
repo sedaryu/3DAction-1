@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 329e0a9cb7b1dc2408e214a5cea1329b, type: 3}
-  m_Name: SampleEnemy
+  m_Name: MiniZonbie
   m_EditorClassIdentifier: 
-  _hitPointMax: 10
-  _hitPoint: 10
-  _speedMax: 1
+  _hitPointMax: 0.25
+  _hitPoint: 0.25
+  _speedMax: 3
   _speedMin: 0.5
   _attack: 1
-  _weight: 1
-  _recover: 1.5
+  _weight: 1.5
+  _recover: 0

@@ -25,8 +25,8 @@ public abstract class PlayerShooter : MonoBehaviour
         }
         LookAt(enemies[0].transform); //攻撃した敵の方向を振り向く
         gunEffect.Play(); //エフェクトを再生
-        return enemies.Where(x => x.TryGetComponent<IGrogable>(out IGrogable grog) == true && grog.Groggy == true).ToList();
-        
+        return enemies.Where(x => x.GetComponent<ITargetable>().IsGroggy == true).ToList(); //ITargetableのGroggyがtrueである(撃破された)コリダーを返す
+
     }
 
     public abstract List<Collider> HittingEnemy(List<Collider> targets);

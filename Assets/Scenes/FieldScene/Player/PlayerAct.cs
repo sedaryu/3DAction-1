@@ -21,6 +21,8 @@ public class PlayerAct : MonoBehaviour
     private PlayerDamager damager;
     //スマッシャー
     private PlayerSmasher smasher;
+    //アドレナライナー
+    private PlayerAdrenaliner adrenaliner;
 
     //コントローラー
     private Controller controller;
@@ -30,6 +32,7 @@ public class PlayerAct : MonoBehaviour
     //UI
     private List<IBulletUI> bulletUIs;
     private List<ILifeUI> lifeUIs;
+    private List<IAdrenalineUI> adrenalineUIs;
 
     void Awake()
     {
@@ -40,7 +43,9 @@ public class PlayerAct : MonoBehaviour
         shooter = GetComponent<PlayerShooter>();
         damager = GetComponent<PlayerDamager>();
         smasher = GetComponent<PlayerSmasher>();
+        adrenaliner = GetComponent<PlayerAdrenaliner>();
         smasher.SetSmasher(parameter.SmashParam.SmashCollider, parameter.SmashParam.DestroyTime);
+        smasher.onKilling += OrderOutputIncreasingAdrenaline;
 
         controller = GetComponent<Controller>();
         controller.onMoving += OrderOutputMoving;
@@ -52,23 +57,33 @@ public class PlayerAct : MonoBehaviour
         targetCollisionDetecter = gameObject.transform.Find("TargetCollider").GetComponent<CollisionDetecter>();
         targetCollisionDetecter.onTriggerEnter += shooter.EnemyEnterTarget;
         targetCollisionDetecter.onTriggerExit += shooter.EnemyExitTarget;
+
         bodyCollisionDetecter = gameObject.transform.Find("BodyCollider").GetComponent<CollisionDetecter>();
         bodyCollisionDetecter.onTriggerEnter += OrderOutputDamaging;
         bodyCollisionDetecter.onTriggerEnter += smasher.PlayerEnetrCollider;
+        bodyCollisionDetecter.onTriggerExit += smasher.PlayerExitCollider;
         bodyCollisionDetecter.onTriggerStay += OrderOutputAllowingSmash;
         bodyCollisionDetecter.onTriggerExit += OrderOutputNotAllowingSmash;
-        bodyCollisionDetecter.onTriggerExit += smasher.PlayerExitCollider;
 
         GameObject canvas = GameObject.Find("Canvas");
         bulletUIs = canvas.GetComponentsInChildren<IBulletUI>().ToList();
         lifeUIs = canvas.GetComponentsInChildren<ILifeUI>().ToList();
+        adrenalineUIs = canvas.GetComponentsInChildren<IAdrenalineUI>().ToList();
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        bulletUIs.ForEach(x => x.UpdateMagazinTextUI(parameter.GunParam.Bullet.ToString()));
-        lifeUIs.ForEach(x => x.UpdateLifeTextUI(parameter.PlayerParam.HitPoint.ToString()));
+        bulletUIs?.ForEach(x => x.UpdateMagazinTextUI(parameter.GunParam.Bullet.ToString()));
+        lifeUIs?.ForEach(x => x.UpdateLifeTextUI(parameter.PlayerParam.HitPoint.ToString()));
+        adrenalineUIs?.ForEach(x => x.UpdateAdrenalineUI(adrenaliner.Adrenaline));
+        adrenalineUIs?.ForEach(x => x.UpdateAdrenalineTankUI(adrenaliner.AdrenalineTank));
+    }
+
+    private void Update()
+    {
+        adrenaliner.DecreaseAdrenaline();
+        adrenalineUIs?.ForEach(x => x.UpdateAdrenalineUI(adrenaliner.Adrenaline));
     }
 
     //移動に関する各メソッドを実行
@@ -91,7 +106,7 @@ public class PlayerAct : MonoBehaviour
         List<Collider> colliders = shooter.Fire(parameter.GunParam.Bullet, parameter.GunParam.Knockback, 
                                                 parameter.GunParam.Attack, parameter.GunEffect);
         parameter.SetBullet(-1);
-        bulletUIs.ForEach(x => x.UpdateMagazinTextUI(parameter.GunParam.Bullet.ToString()));
+        bulletUIs?.ForEach(x => x.UpdateMagazinTextUI(parameter.GunParam.Bullet.ToString()));
         if (colliders == null) return;
         smasher.MakeGroggy(colliders);
     }
@@ -101,7 +116,7 @@ public class PlayerAct : MonoBehaviour
         if (!stater.State["Shootable"]) return;
         StartCoroutine(stater.WaitForStatusTransition("Shootable", parameter.PlayerParam.ReloadSpeed));
         parameter.SetBullet(parameter.GunParam.BulletMax - parameter.GunParam.Bullet);
-        bulletUIs.ForEach(x => x.UpdateMagazinTextUI(parameter.GunParam.Bullet.ToString()));
+        bulletUIs?.ForEach(x => x.UpdateMagazinTextUI(parameter.GunParam.Bullet.ToString()));
     }
 
     private void OrderOutputSmashing()
@@ -109,7 +124,7 @@ public class PlayerAct : MonoBehaviour
         if (!stater.State["Smashable"]) return;
         stater.TransferState("Smashable", false);
         if (smasher.RemoveColliderInSmashers()) return;
-        StartCoroutine(stater.WaitForStatusTransition("Damageable", parameter.SmashParam.SmashTime));
+        StartCoroutine(stater.WaitForStatusTransition("Damageable", parameter.SmashParam.SmashTime * 1.25f));
         StartCoroutine(stater.WaitForStatusTransition("Movable", parameter.SmashParam.SmashTime));
         smasher.Smash(parameter.SmashParam.SmashTime, parameter.SmashParam.Knockback, parameter.SmashParam.Attack, parameter.SmashParam.SmashEffect);
     }
@@ -120,8 +135,15 @@ public class PlayerAct : MonoBehaviour
         float damage = damager.Damage(other, 2);
         if (damage == 0) return;
         parameter.Damage(damage);
-        lifeUIs.ForEach(x => x.UpdateLifeTextUI(parameter.PlayerParam.HitPoint.ToString()));
+        lifeUIs?.ForEach(x => x.UpdateLifeTextUI(parameter.PlayerParam.HitPoint.ToString()));
         StartCoroutine(stater.WaitForStatusTransition("Damageable", 2));
+    }
+
+    private void OrderOutputIncreasingAdrenaline()
+    {
+        adrenaliner.IncreaseAdrenaline();
+        adrenalineUIs?.ForEach(x => x.UpdateAdrenalineUI(adrenaliner.Adrenaline));
+        adrenalineUIs?.ForEach(x => x.UpdateAdrenalineTankUI(adrenaliner.AdrenalineTank));
     }
 
     private void OrderOutputAllowingSmash(Collider other)

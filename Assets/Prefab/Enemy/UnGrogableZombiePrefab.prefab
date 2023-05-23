@@ -461,17 +461,17 @@ GameObject:
   - component: {fileID: 5297970525382224827}
   - component: {fileID: 5247845791490222649}
   - component: {fileID: 5247845791490222648}
-  - component: {fileID: 3962403060506947610}
+  - component: {fileID: 8823851953343360398}
   - component: {fileID: 1725541066068554789}
-  - component: {fileID: 2619099750151459165}
-  - component: {fileID: 4156028895094613049}
-  - component: {fileID: 8471874310475154064}
-  - component: {fileID: 1681051938550948791}
-  - component: {fileID: 1426914906959524808}
-  - component: {fileID: 4263913058941884288}
-  - component: {fileID: 5880151544180806449}
+  - component: {fileID: 2094405266893123721}
+  - component: {fileID: 5454617440744034885}
+  - component: {fileID: 6182917810512606351}
+  - component: {fileID: 7462991041348060719}
+  - component: {fileID: 3681297528920599397}
+  - component: {fileID: 744400442024830225}
+  - component: {fileID: 6099969264874449946}
   m_Layer: 7
-  m_Name: SpeedZombiePrefab
+  m_Name: UnGrogableZombiePrefab
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -486,7 +486,7 @@ Transform:
   m_GameObject: {fileID: 5247070304351026479}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -3.33, y: 0.00000011920929, z: 0.31}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.75, y: 0.75, z: 0.75}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5243489131054089439}
@@ -561,7 +561,7 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &3962403060506947610
+--- !u!114 &8823851953343360398
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -585,8 +585,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39edd725aed93aa4193f040205e94629, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initialParam: {fileID: 11400000, guid: e1afd4236b4d14a40bcb567698921072, type: 2}
---- !u!114 &2619099750151459165
+  initialParam: {fileID: 11400000, guid: bad9f60e981fc9746916bcf8e32f1039, type: 2}
+--- !u!114 &2094405266893123721
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -598,7 +598,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0fa9a247951785479c10502c5ea58c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &4156028895094613049
+--- !u!114 &5454617440744034885
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -610,7 +610,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c7fe75635ef50c40ad51669d0736a2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &8471874310475154064
+--- !u!114 &6182917810512606351
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -623,7 +623,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _effecter: {fileID: 11400000, guid: afa137696d85d9646b82ce04af067782, type: 2}
---- !u!114 &1681051938550948791
+--- !u!114 &7462991041348060719
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -635,7 +635,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b5083704abe44641adde420973dd969, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1426914906959524808
+--- !u!114 &3681297528920599397
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -647,7 +647,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e91c16db54866242a80ec0258a3ef0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &4263913058941884288
+--- !u!114 &744400442024830225
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -659,11 +659,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 077b9d79bd8931747af97da5a47f084c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  healable: 1
+  healable: 0
   hittable: 1
-  grogable: 1
+  grogable: 0
   attackable: 1
---- !u!114 &5880151544180806449
+--- !u!114 &6099969264874449946
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

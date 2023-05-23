@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class PlayerSmasher : MonoBehaviour
 {
@@ -11,6 +12,8 @@ public class PlayerSmasher : MonoBehaviour
     private float time;
 
     private bool isSmashing = false;
+
+    public UnityAction onKilling;
 
     //SmashCollider‚Ì”ÍˆÍ“à‚É“ü‚Á‚½‚çƒRƒŠƒ_[‚ğŠi”[
     public List<Smasher> smashers = new List<Smasher>();
@@ -30,8 +33,8 @@ public class PlayerSmasher : MonoBehaviour
     {
         foreach (Collider x in others) 
         {
-            x.TryGetComponent<IGrogable>(out IGrogable grog);
-            grog.Grog(smasher, time);
+            onKilling.Invoke();
+            if (x.TryGetComponent<IGrogable>(out IGrogable grog)) grog.Grog(smasher, time);
         }
     }
 

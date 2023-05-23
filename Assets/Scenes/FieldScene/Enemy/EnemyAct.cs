@@ -39,7 +39,7 @@ public class EnemyAct : MonoBehaviour
         controller.onAttacking += OrderOutputAttacking;
 
         destinater = GetComponent<EnemyDestinater>();
-        destinater.onMoving += OrderOutputMoving;
+        if (destinater!) destinater.onMoving += OrderOutputMoving;
     }
 
     private void OrderOutputMoving(Vector3 vector)

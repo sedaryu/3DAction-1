@@ -4,7 +4,7 @@ using UnityEngine;
 
 public interface IGrogable
 {
-    public bool Groggy { get; }
+    //public bool Groggy { get; }
 
     public void Grog(Smasher smash, float time);
 }

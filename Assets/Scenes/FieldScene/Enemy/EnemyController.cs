@@ -13,13 +13,14 @@ using Vector3 = UnityEngine.Vector3;
 
 public class EnemyController : MonoBehaviour, ITargetable, IGrogable, IAttackable
 {
+    [SerializeField] private bool healable;
     public UnityAction onHealing;
-
+    [SerializeField] private bool hittable;
     public UnityAction<Vector3, float> onHitting;
-
     public event Func<bool> isGroggy;
+    [SerializeField] private bool grogable;
     public UnityAction<Smasher, float> onGrogging;
-
+    [SerializeField] bool attackable;
     public event Func<float> onAttacking;
 
     void Update()
@@ -28,24 +29,25 @@ public class EnemyController : MonoBehaviour, ITargetable, IGrogable, IAttackabl
     }
 
     public void Heal()
-    { 
-        onHealing.Invoke();
+    {
+        if (healable) onHealing.Invoke();
     }
 
     public void Hit(Vector3 vector, float attack)
     {
-        onHitting.Invoke(vector, attack);
+        if (hittable) onHitting.Invoke(vector, attack);
     }
 
-    public bool Groggy { get => isGroggy.Invoke(); }
+    public bool IsGroggy { get => isGroggy.Invoke(); }
 
     public void Grog(Smasher smash, float time)
-    { 
-        onGrogging.Invoke(smash, time);
+    {
+        if (grogable) onGrogging.Invoke(smash, time);
+        else Destroy(gameObject);
     }
 
     public float Attack()
     { 
-        return onAttacking.Invoke();
+        return attackable ? onAttacking.Invoke() : 0;
     }
 }
