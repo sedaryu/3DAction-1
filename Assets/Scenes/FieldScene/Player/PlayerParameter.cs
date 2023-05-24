@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -33,9 +34,10 @@ public class PlayerParameter : MonoBehaviour
 
     public float Parameter(string key)
     {
-        if (!parameter.ContainsKey(key)) return -1;
+        if (!parameter.ContainsKey(key)) throw new NullReferenceException();
         return parameter[key];
     }
+    public bool IsAdrenalinable => parameter["Adrenaline"] > 0;
     private Dictionary<string, float> parameter;
 
     //銃のエフェクト
@@ -58,11 +60,12 @@ public class PlayerParameter : MonoBehaviour
         { 
           {"Life", initialPlayerParam.Life}, {"LifeMax", initialPlayerParam.Life}, 
           {"MoveSpeed", initialPlayerParam.MoveSpeed}, {"MoveSpeedMax", initialPlayerParam.MoveSpeed},
-          {"Attack", initialGunParam.Attack}, {"AttackMax", initialGunParam.Attack},
           {"Adrenaline", 0}, {"AdrenalineMax", 1},
-          {"AdrenalineTank", 0}, {"AdrenalineTankMax", 3}, 
+          {"AdrenalineTank", 0}, {"AdrenalineTankMax", 3},
           {"AdrenalineSpeed", initialPlayerParam.AdrenalineSpeed}, {"AdrenalineSpeedMax", initialPlayerParam.AdrenalineSpeed},
+          {"Attack", initialGunParam.Attack}, {"AttackMax", initialGunParam.Attack},
           {"Knockback", initialGunParam.Knockback}, {"KnockbackMax", initialGunParam.Knockback},
+          {"Critical", initialGunParam.CriticalMin}, {"CriticalMin", initialGunParam.CriticalMin}, {"CriticalAdd", initialGunParam.CriticalAdd},
           {"Bullet", initialGunParam.Bullet}, {"BulletMax", initialGunParam.Bullet},
           {"ReloadSpeed", initialGunParam.ReloadSpeed}, {"ReloadSpeedMax", initialGunParam.ReloadSpeed}
         };
@@ -82,36 +85,41 @@ public class PlayerParameter : MonoBehaviour
         _gunEffect = gunPrefab.transform.Find("ShotEffect").GetComponent<ParticleSystem>();
     }
 
-    /// <summary>
-    /// 受けたダメージぶんHitPointを減少させる目的のメソッド
-    /// </summary>
-    /// <param name="damage">受けたダメージ量</param>
-    /// <returns>ダメージの結果HitPointが0以下になった(死亡したら)true、そうでなければfalseを返す</returns>
-    public void Damage(float damage)
-    {
-        parameter["Life"] -= damage;
-        if (parameter["Life"] <= 0) Destroy(gameObject);
-    }
-
-    /// <summary>
-    /// 攻撃・リロードの際のBulletの増減を管理する目的のメソッド
-    /// </summary>
-    /// <param name="bullet">消費また装填した弾薬の量</param>
-    public void SetBullet(float bullet)
-    {
-        if (parameter["Bullet"] <= 0) return;
-        parameter["Bullet"] += bullet;
-    }
-
     public void SetParameter(string key, float param)
     {
+        if (!parameter.ContainsKey(key)) throw new NullReferenceException();
         if (parameter[key] + param < 0) parameter[key] = 0;
         else if (parameter[key + "Max"] < parameter[key] + param) parameter[key] = parameter[key + "Max"];
         else parameter[key] += param;
+
+        EffectOfParameterChange(key);
     }
 
     public void RevertParameter(string key, float param)
     {
         parameter[key] = parameter[key + "Max"];
+    }
+
+    public void EffectOfParameterChange(string key)
+    {
+        switch (key)
+        {
+            case "Life":
+                if (parameter["Life"] == 0) Destroy(gameObject);
+                break;
+
+            case "Adrenaline":
+                if (parameter["Adrenaline"] == 1)
+                { 
+                    parameter["Adrenaline"] = 0.5f; 
+                    parameter["AdrenalineTank"] = 
+                    parameter["AdrenalineTank"] + 1 >= parameter["AdrenalineTankMax"] ? parameter["AdrenalineTankMax"] : parameter["AdrenalineTank"] + 1;
+                }
+                parameter["Critical"] = parameter["CriticalMin"] + (parameter["CriticalAdd"] * parameter["Adrenaline"]);
+                break;
+
+            default:
+                break;
+        }
     }
 }

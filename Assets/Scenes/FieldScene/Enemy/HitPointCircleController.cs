@@ -5,7 +5,7 @@ using UnityEngine;
 public class HitPointCircleController : MonoBehaviour
 {
     //パラメーター
-    private EnemyParameter status;
+    private EnemyParameter parameter;
     //Fill
     private GameObject fill;
 
@@ -13,7 +13,7 @@ public class HitPointCircleController : MonoBehaviour
 
     void Awake()
     {
-        status = GetComponentInParent<EnemyParameter>();
+        parameter = GetComponentInParent<EnemyParameter>();
         fill = transform.Find("HitPointCircleFill").gameObject;
     }
 
@@ -30,6 +30,6 @@ public class HitPointCircleController : MonoBehaviour
 
     private void FillControll()
     {
-        fill.transform.localScale = new Vector2(1 - status.EnemyParam.HitPoint / status.EnemyParam.HitPointMax, 1 - status.EnemyParam.HitPoint / status.EnemyParam.HitPointMax);
+        fill.transform.localScale = new Vector2(1 - parameter.PercentageParameter("HitPoint"), 1 - parameter.PercentageParameter("HitPoint"));
     }
 }

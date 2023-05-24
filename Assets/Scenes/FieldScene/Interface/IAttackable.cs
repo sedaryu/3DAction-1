@@ -4,5 +4,6 @@ using UnityEngine;
 
 public interface IAttackable
 {
+    public string AttackKey { get; }
     public float Attack();
 }

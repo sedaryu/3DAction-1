@@ -11,6 +11,7 @@ public abstract class Controller : MonoBehaviour
     public UnityAction onFiring;
     public UnityAction onReloading;
     public UnityAction onSmashing;
+    public UnityAction onDecreasingAdrenaline;
 
     public abstract void InputMoving();
 

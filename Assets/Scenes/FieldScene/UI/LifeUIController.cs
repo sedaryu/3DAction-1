@@ -2,8 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using static System.Net.Mime.MediaTypeNames;
+using Text = UnityEngine.UI.Text;
 
-public class LifeUIController : MonoBehaviour, ILifeUI
+public class LifeUIController : MonoBehaviour, IPlayerUI
 {
     //テキストUI
     //private Text lifeMaxText;
@@ -15,13 +17,19 @@ public class LifeUIController : MonoBehaviour, ILifeUI
         lifeText = transform.Find("Life").GetComponent<Text>();
     }
 
-    public void UpdateLifeMaxTextUI(string text)
+    public void UpdateUI(string key, float value)
     {
-        //lifeMaxText.text = text;
+        if (key != "Life") return;
+        lifeText.text = ((int)value).ToString();
     }
 
-    public void UpdateLifeTextUI(string text)
-    {
-        lifeText.text = text;
-    }
+    //public void UpdateLifeMaxTextUI(string text)
+    //{
+    //    //lifeMaxText.text = text;
+    //}
+
+    //public void UpdateLifeTextUI(string text)
+    //{
+    //    lifeText.text = text;
+    //}
 }

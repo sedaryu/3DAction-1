@@ -16,13 +16,18 @@ public class PlayerDamager : MonoBehaviour
         noDamageColor = new Color32(initialColor.r, 0, 0, initialColor.a);
     }
 
-    public float Damage(Collider other, float time)
+    public string Damage(Collider other, float time, out float damage)
     {
-        if (!other.TryGetComponent<IAttackable>(out IAttackable enemy)) return 0;
-        float damage = enemy.Attack();
-        if (damage == 0) return 0;
-        StartCoroutine(WaitForRendererColorTransition(time));
-        return damage;
+        if (!other.TryGetComponent<IAttackable>(out IAttackable enemy))
+        { 
+            damage = 0;
+            return "";
+        }
+        damage = enemy.Attack();
+        string key = enemy.AttackKey;
+        if (damage == 0) return "";
+        if (key == "Life") StartCoroutine(WaitForRendererColorTransition(time));
+        return key;
     }
 
     private IEnumerator WaitForRendererColorTransition(float time)

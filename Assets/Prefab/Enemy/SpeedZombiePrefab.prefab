@@ -661,6 +661,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   healable: 1
   hittable: 1
+  criticalable: 1
   grogable: 1
   attackable: 1
 --- !u!114 &5880151544180806449

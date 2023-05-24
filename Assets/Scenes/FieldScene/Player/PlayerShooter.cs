@@ -11,7 +11,7 @@ public abstract class PlayerShooter : MonoBehaviour
     //targetingEnemiesに捕捉した敵のColliderを格納
     private List<Collider> targetingEnemies = new List<Collider>();
 
-    public List<Collider> Fire(int bullet, float knockback, float attack, ParticleSystem gunEffect)
+    public List<Collider> Fire(int bullet, float knockback, float attack, ParticleSystem gunEffect, float criticalPer = 0)
     {
         if (targetingEnemies.Count <= 0) return null;
 
@@ -24,14 +24,20 @@ public abstract class PlayerShooter : MonoBehaviour
             enemies[i].GetComponent<ITargetable>().Hit(enemyVectors[i] * knockback, attack); //ITargetableのHitメソッドに値を渡し実行
         }
         LookAt(enemies[0].transform); //攻撃した敵の方向を振り向く
+        if (criticalPer != 0 && JudgeCritical(criticalPer)) enemies.ForEach(x => x.GetComponent<ITargetable>().Critical()); //クリティカル判定
         gunEffect.Play(); //エフェクトを再生
         return enemies.Where(x => x.GetComponent<ITargetable>().IsGroggy == true).ToList(); //ITargetableのGroggyがtrueである(撃破された)コリダーを返す
-
     }
 
-    public abstract List<Collider> HittingEnemy(List<Collider> targets);
+    protected abstract List<Collider> HittingEnemy(List<Collider> targets);
 
-    public abstract void LookAt(Transform trans);
+    protected abstract void LookAt(Transform trans);
+
+    private bool JudgeCritical(float criticalPer)
+    {
+        if (Random.Range(0, 1f) <= criticalPer) return true;
+        return false;
+    }
 
     //敵の捕捉
     public void EnemyEnterTarget(Collider other)

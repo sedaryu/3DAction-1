@@ -2,25 +2,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyAct : MonoBehaviour
+public abstract class EnemyAct : MonoBehaviour
 {
     //パラメーター
-    private EnemyParameter parameter;
+    protected EnemyParameter parameter;
     //ステーター
-    private EnemyStater stater;
+    protected EnemyStater stater;
     //エネミームーバー
-    private EnemyMover mover;
+    protected EnemyMover mover;
     //エフェクター
-    private MobEffecter effecter;
+    protected MobEffecter effecter;
     //ノックバッカー
-    private EnemyKnockbacker knockbacker;
+    protected EnemyKnockbacker knockbacker;
     //アニメーター
-    private EnemyAnimator animator;
+    protected EnemyAnimator animator;
 
     //コントローラー
-    private EnemyController controller;
+    protected EnemyController controller;
     //デスティネーター
-    private EnemyDestinater destinater;
+    protected EnemyDestinater destinater;
 
     void Awake()
     {
@@ -31,71 +31,32 @@ public class EnemyAct : MonoBehaviour
         knockbacker = GetComponent<EnemyKnockbacker>();
         animator = GetComponent<EnemyAnimator>();
 
+        destinater = GetComponent<EnemyDestinater>();
+        if (destinater!) destinater.onMoving += OrderOutputMoving;
+
         controller = GetComponent<EnemyController>();
         controller.onHealing += OrderOutputHealing;
         controller.onHitting += OrderOutputHitting;
+        controller.onCriticaling += OrderOutputCriticaling;
         controller.isGroggy += IsGroggy;
         controller.onGrogging += OrderOutputGrogging;
+        controller.attackKey += AttackKey;
         controller.onAttacking += OrderOutputAttacking;
-
-        destinater = GetComponent<EnemyDestinater>();
-        if (destinater!) destinater.onMoving += OrderOutputMoving;
     }
 
-    private void OrderOutputMoving(Vector3 vector)
-    {
-        if (!stater.State["Movable"]) mover.Move(vector, 0);
-        else mover.Move(vector, parameter.EnemyParam.SpeedMax);
-    }
+    protected abstract void OrderOutputMoving(Vector3 vector);
 
-    private void OrderOutputHealing()
-    {
-        if (stater.State["Smashable"]) return;
-        parameter.Heal();
-    }
+    protected abstract void OrderOutputHealing();
 
-    public void OrderOutputHitting(Vector3 vector, float attack)
-    {
-        if (stater.State["Grogable"]) return;
+    protected abstract void OrderOutputHitting(Vector3 vector, float attack);
 
-        parameter.Damage(attack); //HitPointを減少させアニメーションを再生
-        effecter.InstanceEffect("Hit"); //エフェクトを生成
-        int hit = knockbacker.JudgeObstacle(transform, mover.Radius, vector * parameter.EnemyParam.Weight);
-        for (int i = 0; i < hit; i++)
-        {
-            parameter.Damage(attack * 2f); //Hitした攻撃の二倍のダメージを追加で与える
-            effecter.InstanceEffect("ObstacleHit"); //エフェクトも発生させる
-        }
-        knockbacker.Knockback(vector * parameter.EnemyParam.Weight); //ノックバック
+    protected abstract void OrderOutputCriticaling();
 
-        animator.SetTrriger("Damage");
+    protected abstract bool IsGroggy();
 
-        if (parameter.EnemyParam.HitPoint <= 0)
-        {
-            stater.TransferState("Grogable", true);
-            stater.TransferState("Movable", false);
-            stater.TransferState("Attackable", false);
-        }
-    }
+    protected abstract void OrderOutputGrogging(Smasher smash, float time);
 
-    public bool IsGroggy()
-    {
-        return stater.State["Grogable"];
-    }
+    protected abstract string AttackKey();
 
-    public void OrderOutputGrogging(Smasher smash, float time)
-    {
-        if (stater.State["Smashable"]) return;
-        stater.TransferState("Grogable", false);
-        stater.TransferState("Smashable", true);
-
-        Smasher smasherObject = Instantiate(smash, transform);
-        smasherObject.StartTimer(time);
-    }
-
-    public float OrderOutputAttacking()
-    {
-        if (!stater.State["Attackable"]) return 0;
-        return parameter.EnemyParam.Attack;
-    }
+    protected abstract float OrderOutputAttacking();
 }

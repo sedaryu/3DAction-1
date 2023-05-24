@@ -17,10 +17,13 @@ public class EnemyController : MonoBehaviour, ITargetable, IGrogable, IAttackabl
     public UnityAction onHealing;
     [SerializeField] private bool hittable;
     public UnityAction<Vector3, float> onHitting;
+    [SerializeField] private bool criticalable;
+    public UnityAction onCriticaling;
     public event Func<bool> isGroggy;
     [SerializeField] private bool grogable;
     public UnityAction<Smasher, float> onGrogging;
     [SerializeField] bool attackable;
+    public event Func<string> attackKey;
     public event Func<float> onAttacking;
 
     void Update()
@@ -38,13 +41,20 @@ public class EnemyController : MonoBehaviour, ITargetable, IGrogable, IAttackabl
         if (hittable) onHitting.Invoke(vector, attack);
     }
 
-    public bool IsGroggy { get => isGroggy.Invoke(); }
+    public void Critical()
+    {
+        if (criticalable) onCriticaling.Invoke();
+    }
+
+    public bool IsGroggy => isGroggy.Invoke();
 
     public void Grog(Smasher smash, float time)
     {
         if (grogable) onGrogging.Invoke(smash, time);
         else Destroy(gameObject);
     }
+
+    public string AttackKey => attackKey.Invoke();
 
     public float Attack()
     { 

@@ -22,6 +22,8 @@ public class KeyMouseController : Controller
         InputFiring();
         InputReloading();
         InputSmashing();
+
+        onDecreasingAdrenaline.Invoke();
     }
 
     //移動に関する入力を受け付けるメソッド

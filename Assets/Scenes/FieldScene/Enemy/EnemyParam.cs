@@ -4,8 +4,26 @@ using UnityEngine;
 
 //敵キャラ固有のパラメーター(能力値)をこのクラスで定義・管理する
 [CreateAssetMenu(fileName = "EnemyParam", menuName = "Custom/EnemyParam")]
-public class EnemyParam : MobParam
+public class EnemyParam : ScriptableObject
 {
+    public float HitPoint
+    {
+        get => _hitPoint;
+    }
+    [SerializeField] private float _hitPoint = 10;
+
+    public float MoveSpeedMax
+    {
+        get => _moveSpeedMax;
+    }
+    [SerializeField] private float _moveSpeedMax = 1;
+
+    public float MoveSpeedMin
+    {
+        get => _moveSpeedMin;
+    }
+    [SerializeField] private float _moveSpeedMin = 0.5f;
+
     public float Attack //接触した際受けるダメージ量
     {
         get => _attack;
@@ -18,20 +36,15 @@ public class EnemyParam : MobParam
     }
     [SerializeField] private float _weight = 1;
 
-    public float Recover //一秒間に回復するHitPointの量
+    public float HealSpeed //一秒間に回復するHitPointの量
     {
-        get => _recover;
+        get => _healSpeed;
     }
-    [SerializeField] private float _recover;
+    [SerializeField] private float _healSpeed;
 
-    public EnemyParam(EnemyParam initialParam)
+    public string AttackKey
     {
-        _hitPointMax = initialParam.HitPointMax;
-        _hitPoint = initialParam.HitPoint;
-        _speedMax = initialParam.SpeedMax;
-        _speedMin = initialParam.SpeedMin;
-        _attack = initialParam.Attack;
-        _weight = initialParam.Weight;
-        _recover = initialParam.Recover;
+        get => _attackKey;
     }
+    [SerializeField] private string _attackKey;
 }

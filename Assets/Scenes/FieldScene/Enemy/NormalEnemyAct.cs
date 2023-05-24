@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MiniEnemyAct : EnemyAct
+public class NormalEnemyAct : EnemyAct
 {
     protected override void OrderOutputMoving(Vector3 vector)
     {
@@ -72,8 +72,6 @@ public class MiniEnemyAct : EnemyAct
     protected override float OrderOutputAttacking()
     {
         if (!stater.State["Attackable"]) return 0;
-        effecter.InstanceEffect("Hit"); //エフェクトを生成
-        Destroy(gameObject, 0.02f);
         return parameter.Parameter("Attack");
     }
 }

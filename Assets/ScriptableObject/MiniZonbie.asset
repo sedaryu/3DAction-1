@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 329e0a9cb7b1dc2408e214a5cea1329b, type: 3}
   m_Name: MiniZonbie
   m_EditorClassIdentifier: 
-  _hitPointMax: 0.25
   _hitPoint: 0.25
-  _speedMax: 3
-  _speedMin: 0.5
+  _moveSpeedMax: 3
+  _moveSpeedMin: 0.5
   _attack: 1
   _weight: 1.5
-  _recover: 0
+  _healSpeed: 0
+  _attackKey: AdrenalineTank

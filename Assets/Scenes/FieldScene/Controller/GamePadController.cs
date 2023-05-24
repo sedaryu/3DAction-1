@@ -11,6 +11,8 @@ public class GamePadController : Controller
         InputReloading();
         InputSmashing();
         InputLooking();
+
+        onDecreasingAdrenaline.Invoke();
     }
 
     //移動に関する入力を受け付けるメソッド

@@ -17,21 +17,9 @@ MonoBehaviour:
   _range: 5
   _attack: 0.5
   _knockback: 1
+  _criticalMin: 0.15
+  _criticalAdd: 0.025
   _bulletMax: 6
   _bullet: 6
+  _reloadSpeed: 0
   _gunPrefab: {fileID: 5880433771460064881, guid: f7bb2d6b7557d4d4294227ee7e7a1133, type: 3}
-  _hittingEnemy:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1783604777663120986, guid: acb12b7f6b12eff4fa41b7daecd9bb1c, type: 3}
-        m_TargetAssemblyTypeName: HittingEnemy, Assembly-CSharp
-        m_MethodName: PistolHittingEnemy
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2

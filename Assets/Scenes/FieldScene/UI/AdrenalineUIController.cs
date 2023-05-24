@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class AdrenalineUIController : MonoBehaviour, IAdrenalineUI
+public class AdrenalineUIController : MonoBehaviour, IPlayerUI
 {
     private Image adrenalineImage;
     private Text adrenalineTankText;
@@ -14,13 +14,19 @@ public class AdrenalineUIController : MonoBehaviour, IAdrenalineUI
         adrenalineTankText = transform.Find("AdrenalineTankText").GetComponent<Text>();
     }
 
-    public void UpdateAdrenalineUI(float adre)
-    { 
-        adrenalineImage.fillAmount = adre;
+    public void UpdateUI(string key, float value)
+    {
+        if (key == "Adrenaline") adrenalineImage.fillAmount = value;
+        else if (key == "AdrenalineTank") adrenalineTankText.text = ((int)value).ToString();
     }
 
-    public void UpdateAdrenalineTankUI(int tank)
-    {
-        adrenalineTankText.text = tank.ToString();
-    }
+    //public void UpdateAdrenalineUI(float adre)
+    //{ 
+    //    adrenalineImage.fillAmount = adre;
+    //}
+
+    //public void UpdateAdrenalineTankUI(int tank)
+    //{
+    //    adrenalineTankText.text = tank.ToString();
+    //}
 }

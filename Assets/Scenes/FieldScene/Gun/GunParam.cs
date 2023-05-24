@@ -47,6 +47,18 @@ public class GunParam : ScriptableObject
     }
     [SerializeField] private float _knockback;
 
+    public float CriticalMin //最低クリティカル率
+    {
+        get => _criticalMin;
+    }
+    [SerializeField] private float _criticalMin;
+
+    public float CriticalAdd //アドレナリン依存のクリティカル率
+    {
+        get => _criticalAdd;
+    }
+    [SerializeField] private float _criticalAdd;
+
     public int BulletMax //弾数
     {
         get => _bulletMax;
@@ -56,12 +68,6 @@ public class GunParam : ScriptableObject
     public int Bullet //弾数
     {
         get => _bullet;
-        set
-        {
-            if (value <= 0) _bullet = 0;
-            else if (_bulletMax <= value) _bullet = _bulletMax;
-            else _bullet = value;
-        }
     }
     [SerializeField] private int _bullet;
 

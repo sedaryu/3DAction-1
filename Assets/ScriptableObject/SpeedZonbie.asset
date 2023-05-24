@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 329e0a9cb7b1dc2408e214a5cea1329b, type: 3}
   m_Name: SpeedZonbie
   m_EditorClassIdentifier: 
-  _hitPointMax: 10
   _hitPoint: 10
-  _speedMax: 2
-  _speedMin: 1
+  _moveSpeedMax: 2
+  _moveSpeedMin: 1
   _attack: 1
   _weight: 1.25
-  _recover: 2.5
+  _healSpeed: 2.5
+  _attackKey: Life

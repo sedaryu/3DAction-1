@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class PlayerShooterPistol : PlayerShooter
 {
-    public override List<Collider> HittingEnemy(List<Collider> targets)
+    protected override List<Collider> HittingEnemy(List<Collider> targets)
     {
         List<float> distances = targets.Select(x => Vector3.Distance(transform.position, x.transform.position)).ToList(); //敵とプレイヤーの距離をリスト化
         int i = distances.FindIndex(x => x == distances.Min()); //その中で最も短い距離のインデックス番号を取得
@@ -15,7 +15,7 @@ public class PlayerShooterPistol : PlayerShooter
         return targetList;
     }
 
-    public override void LookAt(Transform trans)
+    protected override void LookAt(Transform trans)
     {
         transform.LookAt(trans);
     }
