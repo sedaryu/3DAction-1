@@ -31,7 +31,6 @@ public class PlayerAct : MonoBehaviour
     private MeshCreator meshCreator;
     //UI
     private List<IPlayerUI> playerUIs;
-    //private Dictionary<string, List<T>> 
 
     void Awake()
     {
@@ -51,6 +50,7 @@ public class PlayerAct : MonoBehaviour
         controller.onReloading += OrderOutputReloading;
         controller.onSmashing += OrderOutputSmashing;
         controller.onLooking += OrderOutputLooking;
+        controller.onBursting += OrderOutputBursting;
         controller.onDecreasingAdrenaline += OrderOutputDecreasingAdrenaline;
 
         targetCollisionDetecter = gameObject.transform.Find("TargetCollider").GetComponent<CollisionDetecter>();
@@ -106,7 +106,7 @@ public class PlayerAct : MonoBehaviour
             shooter.Fire((int)parameter.Parameter("Bullet"), parameter.Parameter("Knockback"), parameter.Parameter("Attack"), parameter.GunEffect,
             parameter.Parameter("Critical")) :
             shooter.Fire((int)parameter.Parameter("Bullet"), parameter.Parameter("Knockback"), parameter.Parameter("Attack"), parameter.GunEffect);
-        parameter.SetParameter("Bullet", -1);
+        parameter.ChangeParameter("Bullet", -1);
         playerUIs?.ForEach(x => x.UpdateUI("Bullet", parameter.Parameter("Bullet")));
         if (colliders == null) return;
         smasher.MakeGroggy(colliders);
@@ -116,7 +116,7 @@ public class PlayerAct : MonoBehaviour
     {
         if (!stater.State["Shootable"]) return;
         StartCoroutine(stater.WaitForStatusTransition("Shootable", parameter.Parameter("ReloadSpeed")));
-        parameter.SetParameter("Bullet", parameter.Parameter("BulletMax") - parameter.Parameter("Bullet"));
+        parameter.ChangeParameter("Bullet", parameter.Parameter("BulletMax") - parameter.Parameter("Bullet"));
         playerUIs?.ForEach(x => x.UpdateUI("Bullet", parameter.Parameter("Bullet")));
     }
 
@@ -135,20 +135,29 @@ public class PlayerAct : MonoBehaviour
         if (!stater.State["Damageable"]) return;
         string key = damager.Damage(other, 2, out float damage);
         if (damage == 0) return;
-        parameter.SetParameter(key, -damage);
-        playerUIs?.ForEach(x => x.UpdateUI("Life", parameter.Parameter("Life")));
-        StartCoroutine(stater.WaitForStatusTransition("Damageable", 2));
+        parameter.ChangeParameter(key, -damage);
+        playerUIs?.ForEach(x => x.UpdateUI(key, parameter.Parameter(key)));
+        if (key == "Life") StartCoroutine(stater.WaitForStatusTransition("Damageable", 2));
+    }
+
+    private void OrderOutputBursting()
+    {
+        if (parameter.Parameter("AdrenalineTank") <= 0) return;
+        parameter.ChangeParameter("AdrenalineTank", -1);
+        parameter.SetParameter("Adrenaline", 0.999f);
+        playerUIs?.ForEach(x => x.UpdateUI("Adrenaline", parameter.Parameter("Adrenaline")));
+        playerUIs?.ForEach(x => x.UpdateUI("AdrenalineTank", parameter.Parameter("AdrenalineTank")));
     }
 
     private void OrderOutputDecreasingAdrenaline()
     {
-        parameter.SetParameter("Adrenaline", -parameter.Parameter("AdrenalineSpeed") * Time.deltaTime);
+        parameter.ChangeParameter("Adrenaline", -parameter.Parameter("AdrenalineSpeed") * Time.deltaTime);
         playerUIs?.ForEach(x => x.UpdateUI("Adrenaline", parameter.Parameter("Adrenaline")));
     }
 
     private void OrderOutputIncreasingAdrenaline()
     {
-        parameter.SetParameter("Adrenaline", 0.2f);
+        parameter.ChangeParameter("Adrenaline", 0.1f);
         playerUIs?.ForEach(x => x.UpdateUI("Adrenaline", parameter.Parameter("Adrenaline")));
         playerUIs?.ForEach(x => x.UpdateUI("AdrenalineTank", parameter.Parameter("AdrenalineTank")));
     }

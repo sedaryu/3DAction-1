@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
+    [SerializeField] private float spawnTime;
     [SerializeField] private GameObject[] enemyPrefabs; 
 
     private float spawnArea_x;
@@ -29,7 +30,7 @@ public class EnemySpawner : MonoBehaviour
     void Update()
     {
         time += Time.deltaTime;
-        if (time > 2.5f)
+        if (time > spawnTime)
         { 
             SpawnEnemy();
             time = 0;

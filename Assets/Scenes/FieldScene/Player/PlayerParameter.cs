@@ -85,7 +85,7 @@ public class PlayerParameter : MonoBehaviour
         _gunEffect = gunPrefab.transform.Find("ShotEffect").GetComponent<ParticleSystem>();
     }
 
-    public void SetParameter(string key, float param)
+    public void ChangeParameter(string key, float param)
     {
         if (!parameter.ContainsKey(key)) throw new NullReferenceException();
         if (parameter[key] + param < 0) parameter[key] = 0;
@@ -95,9 +95,14 @@ public class PlayerParameter : MonoBehaviour
         EffectOfParameterChange(key);
     }
 
-    public void RevertParameter(string key, float param)
+    public void SetParameter(string key, float param)
     {
-        parameter[key] = parameter[key + "Max"];
+        if (!parameter.ContainsKey(key)) throw new NullReferenceException();
+        if (param < 0) parameter[key] = 0;
+        else if (parameter[key + "Max"] < param) parameter[key] = parameter[key + "Max"];
+        else parameter[key] = param;
+
+        EffectOfParameterChange(key);
     }
 
     public void EffectOfParameterChange(string key)
@@ -121,5 +126,10 @@ public class PlayerParameter : MonoBehaviour
             default:
                 break;
         }
+    }
+
+    public void RevertParameter(string key, float param)
+    {
+        parameter[key] = parameter[key + "Max"];
     }
 }

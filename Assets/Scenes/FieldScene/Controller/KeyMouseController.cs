@@ -22,6 +22,7 @@ public class KeyMouseController : Controller
         InputFiring();
         InputReloading();
         InputSmashing();
+        InputBursting();
 
         onDecreasingAdrenaline.Invoke();
     }
@@ -60,5 +61,11 @@ public class KeyMouseController : Controller
     public override void InputLooking()
     {
         
+    }
+
+    //アドレナリンのバーストに関する入力を受け付けるメソッド
+    public override void InputBursting()
+    {
+        if (Input.GetButtonDown("Burst")) onBursting?.Invoke();
     }
 }

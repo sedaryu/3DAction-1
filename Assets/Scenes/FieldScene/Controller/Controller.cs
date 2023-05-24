@@ -11,6 +11,7 @@ public abstract class Controller : MonoBehaviour
     public UnityAction onFiring;
     public UnityAction onReloading;
     public UnityAction onSmashing;
+    public UnityAction onBursting;
     public UnityAction onDecreasingAdrenaline;
 
     public abstract void InputMoving();
@@ -22,4 +23,6 @@ public abstract class Controller : MonoBehaviour
     public abstract void InputSmashing();
 
     public abstract void InputLooking();
+
+    public abstract void InputBursting();
 }

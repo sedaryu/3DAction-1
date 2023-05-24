@@ -11,6 +11,7 @@ public class GamePadController : Controller
         InputReloading();
         InputSmashing();
         InputLooking();
+        InputBursting();
 
         onDecreasingAdrenaline.Invoke();
     }
@@ -55,5 +56,11 @@ public class GamePadController : Controller
         looking.z = Input.GetAxis("GPRVertical"); //縦方向の移動入力を取得
 
         if (looking != null) onLooking?.Invoke(looking);
+    }
+
+    //アドレナリンのバーストに関する入力を受け付けるメソッド
+    public override void InputBursting()
+    {
+        if (Input.GetButtonDown("Burst")) onBursting?.Invoke();
     }
 }
