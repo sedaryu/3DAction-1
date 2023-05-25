@@ -8,25 +8,23 @@ public class PlayerSmasher : MonoBehaviour
 {
     private Animator animator;
 
-    private Smasher smasher;
-    private float time;
+    private Smash smash;
 
-    private bool isSmashing = false;
+    public bool IsSmashing { get; private set; } = false;
 
     public UnityAction onKilling;
 
     //SmashColliderの範囲内に入ったらコリダーを格納
-    public List<Smasher> smashers = new List<Smasher>();
+    public List<Smash> smashers = new List<Smash>();
 
     void Awake()
     {
         animator = GetComponent<Animator>();
     }
 
-    public void SetSmasher(Smasher _smasher, float _time)
+    public void SetSmash(Smash _smash)
     {
-        smasher = _smasher;
-        time = _time;
+        smash = _smash;
     }
 
     public void MakeGroggy(List<Collider> others)
@@ -34,30 +32,31 @@ public class PlayerSmasher : MonoBehaviour
         foreach (Collider x in others) 
         {
             onKilling.Invoke();
-            if (x.TryGetComponent<IGrogable>(out IGrogable grog)) grog.Grog(smasher, time);
+            if (x.TryGetComponent<IGrogable>(out IGrogable grog)) grog.Grog(smash);
         }
     }
 
-    public void Smash(float smashTime, float knockback, float attack, GameObject smashEffect)
+    public void Smash()
     {
-        if (isSmashing) return;
-        isSmashing = true;
+        if (IsSmashing) return;
+        IsSmashing = true;
         smashers.ForEach(x => x.StopTimer());
-        StartCoroutine(SmashTime(smashTime, knockback, attack, smashEffect));
+        StartCoroutine(SmashTime());
     }
 
-    private IEnumerator SmashTime(float time, float knockback, float attack, GameObject smashEffect)
+    private IEnumerator SmashTime()
     {
         animator.SetTrigger("StartSmash");
-        yield return new WaitForSeconds(time * 0.8f);
+        yield return new WaitForSeconds(smash.Param.SmashTime * 0.8f);
         animator.SetTrigger("FinishSmash");
-        yield return new WaitForSeconds(time * 0.2f);
-        isSmashing = false;
-        if (RemoveColliderInSmashers()) yield break;
-        foreach (Smasher x in smashers) 
+        yield return new WaitForSeconds(smash.Param.SmashTime * 0.2f);
+        animator.SetTrigger("ExitSmash");
+        IsSmashing = false;
+        RemoveColliderInSmashers();
+        foreach (Smash x in smashers) 
         {
-            Instantiate(smashEffect, x.transform.position, x.transform.rotation);
-            List<Collider> hits = x.Smash(knockback, attack);
+            Instantiate(smash.Param.SmashEffect, x.transform.position, x.transform.rotation);
+            List<Collider> hits = x.Smashing();
             if (hits != null) MakeGroggy(hits);
         }
     }
@@ -65,7 +64,7 @@ public class PlayerSmasher : MonoBehaviour
     //コリダーの捕捉
     public void PlayerEnetrCollider(Collider other)
     {
-        if (!other.TryGetComponent<Smasher>(out Smasher smash)) return;
+        if (!other.TryGetComponent<Smash>(out Smash smash)) return;
         smashers.Add(smash); //敵のColliderを取得
         other.transform.localScale *= 2;
     }
@@ -73,7 +72,7 @@ public class PlayerSmasher : MonoBehaviour
     //コリダーの捕捉解除
     public void PlayerExitCollider(Collider other)
     {
-        if (!other.TryGetComponent<Smasher>(out Smasher smash)) return;
+        if (!other.TryGetComponent<Smash>(out Smash smash)) return;
         smashers.Remove(smash); //Colliderの範囲から外れた場合、リストから除外
         other.transform.localScale *= 0.5f;
     }

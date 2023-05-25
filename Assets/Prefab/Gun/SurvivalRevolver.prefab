@@ -590,6 +590,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6543923735632948427}
+  - component: {fileID: -4458643191778291503}
   m_Layer: 0
   m_Name: SurvivalRevolver
   m_TagString: Untagged
@@ -624,6 +625,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &-4458643191778291503
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5880433771460064881}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87ff38bdf9e3d68489d55d24e1731e54, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  param: {fileID: 11400000, guid: 123761ae75250c6459f42c7f45014a74, type: 2}
 --- !u!1 &7078726425182130050
 GameObject:
   m_ObjectHideFlags: 0
@@ -961,6 +975,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 6543923735632948427}
     m_Modifications:
     - target: {fileID: 1344055806837914101, guid: c1ecef93f41e61c4494b894cbee100c5, type: 3}
@@ -1028,6 +1043,9 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c1ecef93f41e61c4494b894cbee100c5, type: 3}
 --- !u!4 &6049909878662343272 stripped
 Transform:

@@ -41,7 +41,7 @@ public class PlayerAct : MonoBehaviour
         shooter = GetComponent<PlayerShooter>();
         damager = GetComponent<PlayerDamager>();
         smasher = GetComponent<PlayerSmasher>();
-        smasher.SetSmasher(parameter.SmashParam.SmashCollider, parameter.SmashParam.DestroyTime);
+        smasher.SetSmash(parameter.Smash);
         smasher.onKilling += OrderOutputIncreasingAdrenaline;
 
         controller = GetComponent<Controller>();
@@ -82,7 +82,6 @@ public class PlayerAct : MonoBehaviour
 
     private void Update()
     {
-        
     }
 
     //移動に関する各メソッドを実行
@@ -123,11 +122,12 @@ public class PlayerAct : MonoBehaviour
     private void OrderOutputSmashing()
     {
         if (!stater.State["Smashable"]) return;
-        stater.TransferState("Smashable", false);
+        if (smasher.IsSmashing) return;
+        //stater.TransferState("Smashable", false);
         if (smasher.RemoveColliderInSmashers()) return;
-        StartCoroutine(stater.WaitForStatusTransition("Damageable", parameter.SmashParam.SmashTime * 1.25f));
-        StartCoroutine(stater.WaitForStatusTransition("Movable", parameter.SmashParam.SmashTime));
-        smasher.Smash(parameter.SmashParam.SmashTime, parameter.SmashParam.Knockback, parameter.SmashParam.Attack, parameter.SmashParam.SmashEffect);
+        StartCoroutine(stater.WaitForStatusTransition("Damageable", parameter.SmashTime * 1.25f));
+        StartCoroutine(stater.WaitForStatusTransition("Movable", parameter.SmashTime));
+        smasher.Smash();
     }
 
     private void OrderOutputDamaging(Collider other)
@@ -164,13 +164,13 @@ public class PlayerAct : MonoBehaviour
 
     private void OrderOutputAllowingSmash(Collider other)
     {
-        if (!other.TryGetComponent<Smasher>(out Smasher smash)) return;
+        if (!other.TryGetComponent<Smash>(out Smash smash)) return;
         stater.TransferState("Smashable", true);
     }
 
     private void OrderOutputNotAllowingSmash(Collider other)
     {
-        if (!other.TryGetComponent<Smasher>(out Smasher smash)) return;
+        if (!other.TryGetComponent<Smash>(out Smash smash)) return;
         stater.TransferState("Smashable", false);
     }
 }

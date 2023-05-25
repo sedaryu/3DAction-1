@@ -7,7 +7,7 @@ using UnityEngine;
 
 public class SmashAct : MonoBehaviour
 {
-    private Smasher smasher;
+    private Smash smasher;
 
     private CollisionDetecter targetCollisionDetecter;
 
@@ -17,7 +17,7 @@ public class SmashAct : MonoBehaviour
 
     void Awake()
     {
-        smasher = GetComponent<Smasher>();
+        smasher = GetComponent<Smash>();
         targetCollisionDetecter = GetComponent<CollisionDetecter>();
     }
 }

@@ -54,14 +54,13 @@ public class MiniEnemyAct : EnemyAct
         return stater.State["Grogable"];
     }
 
-    protected override void OrderOutputGrogging(Smasher smash, float time)
+    protected override void OrderOutputGrogging(Smash smash)
     {
         if (stater.State["Smashable"]) return;
         stater.TransferState("Grogable", false);
         stater.TransferState("Smashable", true);
 
-        Smasher smasherObject = Instantiate(smash, transform);
-        smasherObject.StartTimer(time);
+        Smash smasherObject = Instantiate(smash, transform);
     }
 
     protected override string AttackKey()

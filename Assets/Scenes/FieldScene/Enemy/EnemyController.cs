@@ -21,7 +21,7 @@ public class EnemyController : MonoBehaviour, ITargetable, IGrogable, IAttackabl
     public UnityAction onCriticaling;
     public event Func<bool> isGroggy;
     [SerializeField] private bool grogable;
-    public UnityAction<Smasher, float> onGrogging;
+    public UnityAction<Smash> onGrogging;
     [SerializeField] bool attackable;
     public event Func<string> attackKey;
     public event Func<float> onAttacking;
@@ -48,9 +48,9 @@ public class EnemyController : MonoBehaviour, ITargetable, IGrogable, IAttackabl
 
     public bool IsGroggy => isGroggy.Invoke();
 
-    public void Grog(Smasher smash, float time)
+    public void Grog(Smash smash)
     {
-        if (grogable) onGrogging.Invoke(smash, time);
+        if (grogable) onGrogging.Invoke(smash);
         else Destroy(gameObject);
     }
 

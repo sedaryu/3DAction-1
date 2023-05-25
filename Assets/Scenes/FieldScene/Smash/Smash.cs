@@ -6,8 +6,12 @@ using System.Threading.Tasks;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class Smasher : MonoBehaviour
+public class Smash : MonoBehaviour
 {
+    public SmashParam Param { get => param; }
+
+    [SerializeField] private SmashParam param;
+
     private MeshRenderer meshRenderer;
 
     private IEnumerator timer;
@@ -16,9 +20,14 @@ public class Smasher : MonoBehaviour
 
     //private ScoreController scoreController;
 
-    public void StartTimer(float time)
+    private void Start()
     {
         meshRenderer = GetComponent<MeshRenderer>();
+        StartTimer(param.DestroyTime);
+    }
+
+    public void StartTimer(float time)
+    {
         timer = WaitTimeToDestroy(time);
         StartCoroutine(timer);
 
@@ -50,11 +59,11 @@ public class Smasher : MonoBehaviour
         StopCoroutine(timer);
     }
 
-    public List<Collider> Smash(float knockback, float attack)
+    public List<Collider> Smashing()
     {
         RemoveDestroyedEnemy();
         //Instantiate(effect, transform.position, Quaternion.identity);
-        targetingEnemies.ForEach(x => x.GetComponent<ITargetable>().Hit((x.transform.position - transform.position).normalized * knockback, attack));
+        targetingEnemies.ForEach(x => x.GetComponent<ITargetable>().Hit((x.transform.position - transform.position).normalized * param.Knockback, param.Attack));
         Destroy(transform.parent.gameObject, 0.02f);
 
         //scoreController.IncreaseScore();

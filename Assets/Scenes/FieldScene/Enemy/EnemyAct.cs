@@ -54,7 +54,7 @@ public abstract class EnemyAct : MonoBehaviour
 
     protected abstract bool IsGroggy();
 
-    protected abstract void OrderOutputGrogging(Smasher smash, float time);
+    protected abstract void OrderOutputGrogging(Smash smash);
 
     protected abstract string AttackKey();
 

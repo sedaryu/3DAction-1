@@ -76,10 +76,4 @@ public class GunParam : ScriptableObject
         get => _reloadSpeed;
     }
     [SerializeField] private float _reloadSpeed;
-
-    public GameObject GunPrefab //銃のオブジェクト
-    {
-        get => _gunPrefab;
-    }
-    [SerializeField] private GameObject _gunPrefab;
 }

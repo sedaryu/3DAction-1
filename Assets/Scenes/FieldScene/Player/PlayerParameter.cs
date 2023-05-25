@@ -11,26 +11,21 @@ using UnityEngine;
 /// </Summary>
 public class PlayerParameter : MonoBehaviour
 {
-    //スマッシュ技パラメーター
-    public SmashParam SmashParam
-    {
-        get => _smashParam;
-    }
-    [SerializeField] private SmashParam _smashParam;
+    //スマッシュ
+    public float SmashTime { get => smash.Param.SmashTime; }
+    public Smash Smash { get => smash; }
+    [SerializeField] private Smash smash;
 
-    //初期設定パラメーター
-    [SerializeField] private PlayerParam initialPlayerParam;
+    //シューズ
+    [SerializeField] private Shoes shoes;
 
-    public float Range
-    { 
-        get => initialGunParam.Range;
-    }
-    public float Reach
-    {
-        get => initialGunParam.Reach;
-    }
-    [SerializeField] private GunParam initialGunParam;
-
+    //ガン
+    public float Range { get => gun.Param.Range; }
+    public float Reach { get => gun.Param.Reach; }
+    //ガンエフェクト
+    public ParticleSystem GunEffect { get => _gunEffect; }
+    private ParticleSystem _gunEffect;
+    [SerializeField] private Gun gun;
 
     public float Parameter(string key)
     {
@@ -39,13 +34,6 @@ public class PlayerParameter : MonoBehaviour
     }
     public bool IsAdrenalinable => parameter["Adrenaline"] > 0;
     private Dictionary<string, float> parameter;
-
-    //銃のエフェクト
-    public ParticleSystem GunEffect
-    {
-        get => _gunEffect;
-    }
-    private ParticleSystem _gunEffect;
 
     protected void Awake()
     {
@@ -58,16 +46,16 @@ public class PlayerParameter : MonoBehaviour
     {
         parameter = new Dictionary<string, float>()
         { 
-          {"Life", initialPlayerParam.Life}, {"LifeMax", initialPlayerParam.Life}, 
-          {"MoveSpeed", initialPlayerParam.MoveSpeed}, {"MoveSpeedMax", initialPlayerParam.MoveSpeed},
+          {"Life", shoes.Param.Life}, {"LifeMax", shoes.Param.Life}, 
+          {"MoveSpeed", shoes.Param.MoveSpeed}, {"MoveSpeedMax", shoes.Param.MoveSpeed},
           {"Adrenaline", 0}, {"AdrenalineMax", 1},
           {"AdrenalineTank", 0}, {"AdrenalineTankMax", 3},
-          {"AdrenalineSpeed", initialPlayerParam.AdrenalineSpeed}, {"AdrenalineSpeedMax", initialPlayerParam.AdrenalineSpeed},
-          {"Attack", initialGunParam.Attack}, {"AttackMax", initialGunParam.Attack},
-          {"Knockback", initialGunParam.Knockback}, {"KnockbackMax", initialGunParam.Knockback},
-          {"Critical", initialGunParam.CriticalMin}, {"CriticalMin", initialGunParam.CriticalMin}, {"CriticalAdd", initialGunParam.CriticalAdd},
-          {"Bullet", initialGunParam.Bullet}, {"BulletMax", initialGunParam.Bullet},
-          {"ReloadSpeed", initialGunParam.ReloadSpeed}, {"ReloadSpeedMax", initialGunParam.ReloadSpeed}
+          {"AdrenalineSpeed", shoes.Param.AdrenalineSpeed}, {"AdrenalineSpeedMax", shoes.Param.AdrenalineSpeed},
+          {"Attack", gun.Param.Attack}, {"AttackMax", gun.Param.Attack},
+          {"Knockback", gun.Param.Knockback}, {"KnockbackMax", gun.Param.Knockback},
+          {"Critical", gun.Param.CriticalMin}, {"CriticalMin", gun.Param.CriticalMin}, {"CriticalAdd", gun.Param.CriticalAdd},
+          {"Bullet", gun.Param.Bullet}, {"BulletMax", gun.Param.Bullet},
+          {"ReloadSpeed", gun.Param.ReloadSpeed}, {"ReloadSpeedMax", gun.Param.ReloadSpeed}
         };
     }
 
@@ -76,13 +64,13 @@ public class PlayerParameter : MonoBehaviour
     /// </summary>
     private void SettingGunPrefab()
     {
-        GameObject gunPrefab = Instantiate(initialGunParam.GunPrefab);
+        Gun gunObject = Instantiate(gun);
         string path = "Armature | Humanoid/Hips/Spine/Spine1/Spine2/RightShoulder/RightArm/RightForeArm/RightHand";
-        gunPrefab.transform.parent = GameObject.Find("Player").transform.Find(path);
-        gunPrefab.transform.localPosition = new Vector3(0, 0.25f, 0);
-        gunPrefab.transform.localRotation = Quaternion.Euler(-90, 180, -90);
-        gunPrefab.transform.localScale = new Vector3(3, 3, 3);
-        _gunEffect = gunPrefab.transform.Find("ShotEffect").GetComponent<ParticleSystem>();
+        gunObject.transform.parent = GameObject.Find("Player").transform.Find(path);
+        gunObject.transform.localPosition = new Vector3(0, 0.25f, 0);
+        gunObject.transform.localRotation = Quaternion.Euler(-90, 180, -90);
+        gunObject.transform.localScale = new Vector3(3, 3, 3);
+        _gunEffect = gunObject.transform.Find("ShotEffect").GetComponent<ParticleSystem>();
     }
 
     public void ChangeParameter(string key, float param)
