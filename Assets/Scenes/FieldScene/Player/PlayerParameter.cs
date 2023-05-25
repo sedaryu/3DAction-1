@@ -101,6 +101,10 @@ public class PlayerParameter : MonoBehaviour
                 if (parameter["Life"] == 0) Destroy(gameObject);
                 break;
 
+            case "MoveSpeed":
+                if (parameter["MoveSpeed"] <= parameter["MoveSpeedMax"] * 0.15f) parameter["MoveSpeed"] = parameter["MoveSpeedMax"] * 0.15f;
+                break;
+
             case "Adrenaline":
                 if (parameter["Adrenaline"] == 1)
                 { 

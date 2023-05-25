@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
@@ -21,6 +22,8 @@ public class PlayerAct : MonoBehaviour
     private PlayerDamager damager;
     //スマッシャー
     private PlayerSmasher smasher;
+    //ギャザラー
+    private PlayerGatherer gatherer;
 
     //コントローラー
     private Controller controller;
@@ -43,6 +46,7 @@ public class PlayerAct : MonoBehaviour
         smasher = GetComponent<PlayerSmasher>();
         smasher.SetSmash(parameter.Smash);
         smasher.onKilling += OrderOutputIncreasingAdrenaline;
+        gatherer = GetComponent<PlayerGatherer>();
 
         controller = GetComponent<Controller>();
         controller.onMoving += OrderOutputMoving;
@@ -59,6 +63,7 @@ public class PlayerAct : MonoBehaviour
 
         bodyCollisionDetecter = gameObject.transform.Find("BodyCollider").GetComponent<CollisionDetecter>();
         bodyCollisionDetecter.onTriggerEnter += OrderOutputDamaging;
+
         bodyCollisionDetecter.onTriggerEnter += smasher.PlayerEnetrCollider;
         bodyCollisionDetecter.onTriggerExit += smasher.PlayerExitCollider;
         bodyCollisionDetecter.onTriggerStay += OrderOutputAllowingSmash;
@@ -88,7 +93,7 @@ public class PlayerAct : MonoBehaviour
     private void OrderOutputMoving(Vector3 vector)
     {
         if (!stater.State["Movable"]) return;
-        mover.Move(vector, parameter.Parameter("MoveSpeed"));
+        mover.Move(vector, parameter.IsAdrenalinable ? parameter.Parameter("MoveSpeedMax") : parameter.Parameter("MoveSpeed"));
     }
 
     private void OrderOutputLooking(Vector3 vector)
@@ -138,6 +143,12 @@ public class PlayerAct : MonoBehaviour
         parameter.ChangeParameter(key, -damage);
         playerUIs?.ForEach(x => x.UpdateUI(key, parameter.Parameter(key)));
         if (key == "Life") StartCoroutine(stater.WaitForStatusTransition("Damageable", 2));
+    }
+
+    private void OrderOutputGathering(Collider other)
+    {
+        float weight = gatherer.Gather(other);
+        parameter.ChangeParameter("MoveSpeed", -weight);
     }
 
     private void OrderOutputBursting()

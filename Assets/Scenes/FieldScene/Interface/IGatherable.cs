@@ -4,5 +4,7 @@ using UnityEngine;
 
 public interface IGatherable
 {
-    public void Gather();
+    public string Gathered(out float weight);
+
+    public void Disappear();
 }
