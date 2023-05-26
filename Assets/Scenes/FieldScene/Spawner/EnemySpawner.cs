@@ -1,36 +1,62 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
-    [SerializeField] private float spawnTime;
-    [SerializeField] private GameObject[] enemyPrefabs; 
+    [SerializeField] private SpawnEnemyList spawnEnemyList;
 
+    private Vector3 spawnArea;
     private float spawnArea_x;
     private float spawnArea_z;
+
+    private GameObject[] spawnObjects;
 
     private Transform player;
 
     private float time;
+    private List<int> random = new List<int>();
 
     private void Awake()
     {
-        spawnArea_x = transform.localScale.x * 5;
-        spawnArea_z = transform.localScale.z * 5;
+        spawnArea = GameObject.Find("BakedPlane").transform.position;
+        spawnArea_x = spawnArea.x * 5;
+        spawnArea_z = spawnArea.z * 5;
+
+        for (int i = 0; i < spawnEnemyList.SpawnEnemies.Length; i++)
+        {
+            for (int n = 0; n < spawnEnemyList.SpawnEnemies[i].appearanceProbability; n++)
+            {
+                random.Add(i);
+            }
+        }
+
+        GetSpawnObject();
+    }
+
+    private void GetSpawnObject()
+    {
+        string[] enemiesPath = spawnEnemyList.SpawnEnemies.ToList().Select(x => x.name).ToArray();
+        spawnObjects = GameObject.Find("LoadAsset").GetComponent<LoadAsset>().LoadObjects(enemiesPath);
     }
 
     // Start is called before the first frame update
     void Start()
     {
         player = GameObject.Find("Player").transform;
+
+        for (int i = 0; i < 20; i++)
+        {
+            SpawnEnemy();
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
         time += Time.deltaTime;
-        if (time > spawnTime)
+        if (time > spawnEnemyList.SpawnTime)
         { 
             SpawnEnemy();
             time = 0;
@@ -39,7 +65,7 @@ public class EnemySpawner : MonoBehaviour
 
     private void SpawnEnemy()
     {
-        GameObject spawn = enemyPrefabs[Random.Range(0, enemyPrefabs.Length)];
+        GameObject spawn = spawnObjects[random[Random.Range(0, 100)]];
         Vector3 spawnPosition;
 
         if (player.position.x < 0 && 0 < player.position.z)

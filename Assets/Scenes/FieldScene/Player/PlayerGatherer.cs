@@ -11,7 +11,6 @@ public class PlayerGatherer : MonoBehaviour
         if (!other.TryGetComponent<IGatherable>(out IGatherable item)) return 0;
 
         items.Add(item.Gathered(out float weight));
-        item.Disappear();
         return weight;
     }
 }

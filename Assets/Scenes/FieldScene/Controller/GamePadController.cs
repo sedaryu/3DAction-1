@@ -25,7 +25,7 @@ public class GamePadController : Controller
         moving.x = Input.GetAxis("GPHorizontal"); //横方向の移動入力を取得
         moving.z = Input.GetAxis("GPVertical"); //縦方向の移動入力を取得
 
-        if (moving != null) onMoving?.Invoke(moving);
+        if (moving != null) onMoving?.Invoke(moving.normalized);
     }
 
     //射撃に関する入力を受け付けるメソッド

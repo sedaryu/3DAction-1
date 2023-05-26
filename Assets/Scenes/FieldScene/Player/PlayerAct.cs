@@ -87,6 +87,7 @@ public class PlayerAct : MonoBehaviour
 
     private void Update()
     {
+
     }
 
     //移動に関する各メソッドを実行

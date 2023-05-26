@@ -16,6 +16,10 @@ public class PlayerMover : MonoBehaviour
         animator = GetComponent<Animator>();
     }
 
+    private void Update()
+    {
+    }
+
     public void Move(Vector3 vector, float speed)
     {
         animator.SetFloat("MoveSpeed", (vector * speed * Time.deltaTime).magnitude);
