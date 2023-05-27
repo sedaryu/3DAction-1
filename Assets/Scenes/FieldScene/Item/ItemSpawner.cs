@@ -48,7 +48,8 @@ public class ItemSpawner : MonoBehaviour
     public void SpawnItem(Vector3 position)
     {
         int rnd = random[Random.Range(0, 100)];
-        if (rnd == spawnItemList.SpawnObjects.Length) return;
+        if (rnd == spawnItemList.SpawnObjects.Length)
+        { Debug.Log("RT"); return; }
         Instantiate(spawnObjects[rnd], position, Quaternion.identity);
     }
 }

@@ -151,6 +151,7 @@ public class PlayerAct : MonoBehaviour
     private void OrderOutputGathering(Collider other)
     {
         float weight = gatherer.Gather(other);
+        if(weight == 0) return;
         parameter.ChangeParameter("MoveSpeed", -weight);
     }
 

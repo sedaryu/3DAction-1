@@ -524,17 +524,8 @@ CapsuleCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5247070304351026479}
   m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
   m_IsTrigger: 1
-  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 2
   m_Radius: 0.4
   m_Height: 1.8
   m_Direction: 1
@@ -661,8 +652,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   healable: 0
   hittable: 1
+  criticalable: 0
   grogable: 0
   attackable: 1
+  itemSpawnable: 1
 --- !u!114 &6099969264874449946
 MonoBehaviour:
   m_ObjectHideFlags: 0

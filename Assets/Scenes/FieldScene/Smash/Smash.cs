@@ -64,7 +64,7 @@ public class Smash : MonoBehaviour
         RemoveDestroyedEnemy();
         //Instantiate(effect, transform.position, Quaternion.identity);
         targetingEnemies.ForEach(x => x.GetComponent<ITargetable>().Hit((x.transform.position - transform.position).normalized * param.Knockback, param.Attack));
-        Destroy(transform.parent.gameObject, 0.02f);
+        Destroy(transform.parent.gameObject);
 
         //scoreController.IncreaseScore();
 

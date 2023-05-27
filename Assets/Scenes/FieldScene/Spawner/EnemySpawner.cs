@@ -20,7 +20,7 @@ public class EnemySpawner : MonoBehaviour
 
     private void Awake()
     {
-        spawnArea = GameObject.Find("BakedPlane").transform.position;
+        spawnArea = GameObject.Find("BakedPlane").transform.localScale;
         spawnArea_x = spawnArea.x * 5;
         spawnArea_z = spawnArea.z * 5;
 

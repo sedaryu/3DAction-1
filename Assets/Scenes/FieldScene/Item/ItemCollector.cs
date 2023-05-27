@@ -17,10 +17,10 @@ public class ItemCollector : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        spawnArea = GameObject.Find("BakedPlane").transform.position;
+        spawnArea = GameObject.Find("BakedPlane").transform.localScale;
         spawnArea_x = spawnArea.x * 5;
         spawnArea_z = spawnArea.z * 5;
-        player = GameObject.Find("BakedPlane").transform;
+        player = GameObject.Find("Player").transform;
         MovePosition();
     }
 
@@ -34,7 +34,7 @@ public class ItemCollector : MonoBehaviour
     { 
         collectItems.AddRange(items);
         countOfCollecting++;
-        StartCoroutine(MovePosition());
+        MovePosition();
 
         if (countOfCollecting == 5) SummaryGame();
     }
@@ -55,15 +55,21 @@ public class ItemCollector : MonoBehaviour
         }
     }
 
-    private IEnumerator MovePosition()
+    private void MovePosition()
     {
-        yield return null;
         Vector3 position;
-        while (true)
-        {
-            position = new Vector3(Random.Range(-spawnArea_x, spawnArea_x), 0, Random.Range(-spawnArea_z, spawnArea_z));
-            if (Vector3.Distance(position, player.position) > 5) break;
-        }
+
+        if (player.position.x < 0 && 0 < player.position.z)
+        { position = new Vector3(Random.Range(0, spawnArea_x), 0, Random.Range(-spawnArea_z, 0)); }
+        else if (player.position.x < 0 && player.position.z < 0)
+        { position = new Vector3(Random.Range(0, spawnArea_x), 0, Random.Range(0, spawnArea_z)); }
+        else if (0 < player.position.x && 0 < player.position.z)
+        { position = new Vector3(Random.Range(-spawnArea_x, 0), 0, Random.Range(-spawnArea_z, 0)); }
+        else if (0 < player.position.x && player.position.z < 0)
+        { position = new Vector3(Random.Range(-spawnArea_x, 0), 0, Random.Range(0, spawnArea_z)); }
+        else
+        { return; }
+
         transform.position = position;
     }
 }

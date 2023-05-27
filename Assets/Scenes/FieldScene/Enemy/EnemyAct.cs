@@ -42,7 +42,6 @@ public abstract class EnemyAct : MonoBehaviour
         controller.onGrogging += OrderOutputGrogging;
         controller.attackKey += AttackKey;
         controller.onAttacking += OrderOutputAttacking;
-        controller.onItemSpawning += OrderOutputSpawningItem;
     }
 
     protected abstract void OrderOutputMoving(Vector3 vector);
