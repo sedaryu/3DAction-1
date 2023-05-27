@@ -75,4 +75,9 @@ public class MiniEnemyAct : EnemyAct
         Destroy(gameObject, 0.02f);
         return parameter.Parameter("Attack");
     }
+
+    protected override void OrderOutputSpawningItem()
+    {
+        GameObject.Find("ItemSpawner").GetComponent<ItemSpawner>().SpawnItem(transform.position);
+    }
 }

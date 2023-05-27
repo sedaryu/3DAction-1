@@ -2,17 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "SpawnEnemyList", menuName = "Custom/SpawnEnemyList")]
-public class SpawnEnemyList : ScriptableObject
+[CreateAssetMenu(fileName = "SpawnObjectList", menuName = "Custom/SpawnObjectList")]
+public class SpawnObjectList : ScriptableObject
 {
     public float SpawnTime => spawnTime;
     [SerializeField] private float spawnTime;
 
-    public SpawnEnemy[] SpawnEnemies => spawnEnemies;
-    [SerializeField] private SpawnEnemy[] spawnEnemies;
+    public SpawnObject[] SpawnObjects => spawnObjects;
+    [SerializeField] private SpawnObject[] spawnObjects;
 
     [System.Serializable]
-    public class SpawnEnemy
+    public class SpawnObject
     {
         public string name;
         public int appearanceProbability = 0;

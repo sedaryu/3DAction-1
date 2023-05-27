@@ -73,4 +73,9 @@ public class NormalEnemyAct : EnemyAct
         if (!stater.State["Attackable"]) return 0;
         return parameter.Parameter("Attack");
     }
+
+    protected override void OrderOutputSpawningItem()
+    {
+        GameObject.Find("ItemSpawner").GetComponent<ItemSpawner>().SpawnItem(transform.position);
+    }
 }

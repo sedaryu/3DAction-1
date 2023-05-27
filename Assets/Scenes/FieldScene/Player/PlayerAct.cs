@@ -63,6 +63,8 @@ public class PlayerAct : MonoBehaviour
 
         bodyCollisionDetecter = gameObject.transform.Find("BodyCollider").GetComponent<CollisionDetecter>();
         bodyCollisionDetecter.onTriggerEnter += OrderOutputDamaging;
+        bodyCollisionDetecter.onTriggerEnter += OrderOutputGathering;
+        bodyCollisionDetecter.onTriggerEnter += OrderOutputReleasing;
 
         bodyCollisionDetecter.onTriggerEnter += smasher.PlayerEnetrCollider;
         bodyCollisionDetecter.onTriggerExit += smasher.PlayerExitCollider;
@@ -150,6 +152,12 @@ public class PlayerAct : MonoBehaviour
     {
         float weight = gatherer.Gather(other);
         parameter.ChangeParameter("MoveSpeed", -weight);
+    }
+
+    private void OrderOutputReleasing(Collider other)
+    { 
+        gatherer.Release(other);
+        parameter.RevertParameter("MoveSpeed");
     }
 
     private void OrderOutputBursting()

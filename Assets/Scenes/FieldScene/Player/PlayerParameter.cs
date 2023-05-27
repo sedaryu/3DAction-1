@@ -120,7 +120,7 @@ public class PlayerParameter : MonoBehaviour
         }
     }
 
-    public void RevertParameter(string key, float param)
+    public void RevertParameter(string key)
     {
         parameter[key] = parameter[key + "Max"];
     }

@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
-    [SerializeField] private SpawnEnemyList spawnEnemyList;
+    [SerializeField] private SpawnObjectList spawnEnemyList;
 
     private Vector3 spawnArea;
     private float spawnArea_x;
@@ -24,9 +24,9 @@ public class EnemySpawner : MonoBehaviour
         spawnArea_x = spawnArea.x * 5;
         spawnArea_z = spawnArea.z * 5;
 
-        for (int i = 0; i < spawnEnemyList.SpawnEnemies.Length; i++)
+        for (int i = 0; i < spawnEnemyList.SpawnObjects.Length; i++)
         {
-            for (int n = 0; n < spawnEnemyList.SpawnEnemies[i].appearanceProbability; n++)
+            for (int n = 0; n < spawnEnemyList.SpawnObjects[i].appearanceProbability; n++)
             {
                 random.Add(i);
             }
@@ -37,8 +37,8 @@ public class EnemySpawner : MonoBehaviour
 
     private void GetSpawnObject()
     {
-        string[] enemiesPath = spawnEnemyList.SpawnEnemies.ToList().Select(x => x.name).ToArray();
-        spawnObjects = GameObject.Find("LoadAsset").GetComponent<LoadAsset>().LoadObjects(enemiesPath);
+        string[] enemiesName = spawnEnemyList.SpawnObjects.ToList().Select(x => x.name).ToArray();
+        spawnObjects = GameObject.Find("LoadAsset").GetComponent<LoadAsset>().LoadObjects("Enemy", enemiesName);
     }
 
     // Start is called before the first frame update

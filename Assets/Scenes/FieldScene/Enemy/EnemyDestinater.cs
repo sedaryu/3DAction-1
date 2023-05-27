@@ -33,6 +33,6 @@ public class EnemyDestinater : MonoBehaviour
 
     public void InputMoving()
     {
-        onMoving.Invoke(destination.position);
+        if (destination != null) onMoving.Invoke(destination.position);
     }
 }
