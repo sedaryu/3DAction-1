@@ -9,4 +9,6 @@ public interface ITargetable
     public void Hit(Vector3 vector, float attack);
 
     public void Critical();
+
+    public void Die();
 }

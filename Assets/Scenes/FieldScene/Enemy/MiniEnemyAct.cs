@@ -6,6 +6,7 @@ public class MiniEnemyAct : EnemyAct
 {
     protected override void OrderOutputMoving(Vector3 vector)
     {
+        if (stater.State["Destroyable"]) return;
         if (!stater.State["Movable"]) mover.Move(vector, 0);
         else mover.Move(vector, parameter.Parameter("MoveSpeed"));
     }
@@ -63,6 +64,15 @@ public class MiniEnemyAct : EnemyAct
         Smash smasherObject = Instantiate(smash, transform);
     }
 
+    protected override void OrderOutputDying()
+    {
+        stater.TransferDestroyableState();
+        mover.DisableAgent();
+        for (int i = 0; i < transform.childCount; i++)
+        { transform.GetChild(i).gameObject.SetActive(false); }
+        Destroy(gameObject, 0.1f);
+    }
+
     protected override string AttackKey()
     {
         return parameter.AttackKey;
@@ -78,6 +88,6 @@ public class MiniEnemyAct : EnemyAct
 
     protected override void OrderOutputSpawningItem()
     {
-        GameObject.Find("ItemSpawner").GetComponent<ItemSpawner>().SpawnItem(transform.position);
+        
     }
 }

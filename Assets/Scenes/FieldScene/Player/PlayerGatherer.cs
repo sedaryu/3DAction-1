@@ -14,11 +14,12 @@ public class PlayerGatherer : MonoBehaviour
         return weight;
     }
 
-    public void Release(Collider other)
+    public bool Release(Collider other)
     {
-        if (!other.TryGetComponent<ItemCollector>(out ItemCollector collector)) return;
+        if (!other.TryGetComponent<ItemCollector>(out ItemCollector collector)) return false;
 
         collector.CollectItems(items);
         items.Clear();
+        return true;
     }
 }

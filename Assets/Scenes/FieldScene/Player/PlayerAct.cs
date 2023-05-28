@@ -156,9 +156,8 @@ public class PlayerAct : MonoBehaviour
     }
 
     private void OrderOutputReleasing(Collider other)
-    { 
-        gatherer.Release(other);
-        parameter.RevertParameter("MoveSpeed");
+    {
+        if (gatherer.Release(other)) parameter.RevertParameter("MoveSpeed");
     }
 
     private void OrderOutputBursting()

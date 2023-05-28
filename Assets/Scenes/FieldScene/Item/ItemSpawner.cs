@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.AI;
 using Random = UnityEngine.Random;
 
 public class ItemSpawner : MonoBehaviour
@@ -48,8 +49,9 @@ public class ItemSpawner : MonoBehaviour
     public void SpawnItem(Vector3 position)
     {
         int rnd = random[Random.Range(0, 100)];
-        if (rnd == spawnItemList.SpawnObjects.Length)
-        { Debug.Log("RT"); return; }
-        Instantiate(spawnObjects[rnd], position, Quaternion.identity);
+        if (rnd == spawnItemList.SpawnObjects.Length) return;
+        Vector3 navmeshPosition = NavMesh.SamplePosition(position, out NavMeshHit hit, 10, 1) ? hit.position : new Vector3(0, 0, 0);
+        Instantiate(spawnObjects[rnd], navmeshPosition, Quaternion.identity);
+        Debug.Log("Spawn!!!");
     }
 }

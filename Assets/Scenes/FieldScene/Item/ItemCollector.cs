@@ -2,9 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class ItemCollector : MonoBehaviour
 {
+    [SerializeField] private int collectCount;
+
     private List<string> collectItems = new List<string>();
     private int countOfCollecting = 0;
 
@@ -36,7 +39,7 @@ public class ItemCollector : MonoBehaviour
         countOfCollecting++;
         MovePosition();
 
-        if (countOfCollecting == 5) SummaryGame();
+        if (countOfCollecting == collectCount) SummaryGame();
     }
 
     private void SummaryGame()
@@ -70,6 +73,6 @@ public class ItemCollector : MonoBehaviour
         else
         { return; }
 
-        transform.position = position;
+        transform.position = NavMesh.SamplePosition(position, out NavMeshHit hit, 10, 1) ? hit.position : new Vector3(0, 0, 0);
     }
 }

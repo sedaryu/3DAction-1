@@ -22,11 +22,12 @@ public class EnemyController : MonoBehaviour, ITargetable, IGrogable, IAttackabl
     public event Func<bool> isGroggy;
     [SerializeField] private bool grogable;
     public UnityAction<Smash> onGrogging;
+    public UnityAction onDying;
     [SerializeField] private bool attackable;
     public event Func<string> attackKey;
     public event Func<float> onAttacking;
-    //[SerializeField] private bool itemSpawnable;
-    //public UnityAction onItemSpawning;
+    [SerializeField] private bool itemSpawnable;
+    public UnityAction onSpawningItem;
 
     void Update()
     {
@@ -53,7 +54,13 @@ public class EnemyController : MonoBehaviour, ITargetable, IGrogable, IAttackabl
     public void Grog(Smash smash)
     {
         if (grogable) onGrogging.Invoke(smash);
-        else Destroy(gameObject);
+        else Die();
+    }
+
+    public void Die()
+    { 
+        onDying.Invoke();
+        if (itemSpawnable) onSpawningItem.Invoke();
     }
 
     public string AttackKey => attackKey.Invoke();

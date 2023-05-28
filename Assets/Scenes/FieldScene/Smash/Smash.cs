@@ -62,12 +62,11 @@ public class Smash : MonoBehaviour
     public List<Collider> Smashing()
     {
         RemoveDestroyedEnemy();
-        //Instantiate(effect, transform.position, Quaternion.identity);
+        targetingEnemies.Remove(transform.parent.gameObject.GetComponent<Collider>());
+        transform.parent.gameObject.GetComponent<ITargetable>().Die();
+        if (targetingEnemies.Count <= 0) return null;
         targetingEnemies.ForEach(x => x.GetComponent<ITargetable>().Hit((x.transform.position - transform.position).normalized * param.Knockback, param.Attack));
-        Destroy(transform.parent.gameObject);
-
-        //scoreController.IncreaseScore();
-
+        Destroy(gameObject);
         return targetingEnemies.Where(x => x.GetComponent<ITargetable>().IsGroggy == true).ToList();
     }
 

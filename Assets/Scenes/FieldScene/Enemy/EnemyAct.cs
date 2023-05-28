@@ -40,8 +40,10 @@ public abstract class EnemyAct : MonoBehaviour
         controller.onCriticaling += OrderOutputCriticaling;
         controller.isGroggy += IsGroggy;
         controller.onGrogging += OrderOutputGrogging;
+        controller.onDying += OrderOutputDying;
         controller.attackKey += AttackKey;
         controller.onAttacking += OrderOutputAttacking;
+        controller.onSpawningItem += OrderOutputSpawningItem;
     }
 
     protected abstract void OrderOutputMoving(Vector3 vector);
@@ -55,6 +57,8 @@ public abstract class EnemyAct : MonoBehaviour
     protected abstract bool IsGroggy();
 
     protected abstract void OrderOutputGrogging(Smash smash);
+
+    protected abstract void OrderOutputDying();
 
     protected abstract string AttackKey();
 

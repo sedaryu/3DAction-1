@@ -8,7 +8,7 @@ public class EnemyStater : MonoBehaviour
     public Dictionary<string, bool> State { get => state; }
 
     private Dictionary<string, bool> state = new Dictionary<string, bool>()
-    { { "Movable", true }, { "Attackable", true }, { "Grogable", false }, { "Smashable", false } };
+    { { "Movable", true }, { "Attackable", true }, { "Grogable", false }, { "Smashable", false }, {"Destroyable", false} };
 
     public void TransferState(string key, bool param)
     { 
@@ -20,5 +20,14 @@ public class EnemyStater : MonoBehaviour
         state[key] = false;
         yield return new WaitForSeconds(time);
         state[key] = true;
+    }
+
+    public void TransferDestroyableState()
+    {
+        state["Movable"] = false;
+        state["Attackable"] = false;
+        state["Grogable"] = true;
+        state["Smashable"] = true;
+        state["Destroyable"] = true;
     }
 }

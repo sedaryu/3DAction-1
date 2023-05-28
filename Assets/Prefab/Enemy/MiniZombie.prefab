@@ -655,7 +655,7 @@ MonoBehaviour:
   criticalable: 0
   grogable: 0
   attackable: 1
-  itemSpawnable: 1
+  itemSpawnable: 0
 --- !u!114 &6099969264874449946
 MonoBehaviour:
   m_ObjectHideFlags: 0

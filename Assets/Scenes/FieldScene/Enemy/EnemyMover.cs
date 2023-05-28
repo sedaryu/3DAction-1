@@ -25,4 +25,9 @@ public class EnemyMover : MonoBehaviour
         agent.destination = vector;
         agent.speed = speed;
     }
+
+    public void DisableAgent()
+    {
+        agent.enabled = false;
+    }
 }
