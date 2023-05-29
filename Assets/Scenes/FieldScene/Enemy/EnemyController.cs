@@ -20,6 +20,7 @@ public class EnemyController : MonoBehaviour, ITargetable, IGrogable, IAttackabl
     [SerializeField] private bool criticalable;
     public UnityAction onCriticaling;
     public event Func<bool> isGroggy;
+    public event Func<bool> isDestroyed;
     [SerializeField] private bool grogable;
     public UnityAction<Smash> onGrogging;
     public UnityAction onDying;
@@ -50,6 +51,8 @@ public class EnemyController : MonoBehaviour, ITargetable, IGrogable, IAttackabl
     }
 
     public bool IsGroggy => isGroggy.Invoke();
+
+    public bool IsDestroyed => isDestroyed.Invoke();
 
     public void Grog(Smash smash)
     {

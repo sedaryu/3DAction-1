@@ -18,6 +18,8 @@ public class EnemySpawner : MonoBehaviour
     private float time;
     private List<int> random = new List<int>();
 
+    private List<GameObject> enemies = new List<GameObject>();
+
     private void Awake()
     {
         spawnArea = GameObject.Find("BakedPlane").transform.localScale;
@@ -57,8 +59,8 @@ public class EnemySpawner : MonoBehaviour
     {
         time += Time.deltaTime;
         if (time > spawnEnemyList.SpawnTime)
-        { 
-            SpawnEnemy();
+        {
+            if (JudgeSpawnEnemy() && player != null) SpawnEnemy();
             time = 0;
         }
     }
@@ -79,6 +81,14 @@ public class EnemySpawner : MonoBehaviour
         else
         { return; }
 
-        Instantiate(spawn, spawnPosition, Quaternion.identity);
+        GameObject enemy = Instantiate(spawn, spawnPosition, Quaternion.identity);
+        enemies.Add(enemy);
+    }
+
+    private bool JudgeSpawnEnemy()
+    {
+        enemies.RemoveAll(x => x == null);
+        if (enemies.Count > 30) return false;
+        return true;
     }
 }

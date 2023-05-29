@@ -56,6 +56,11 @@ public class NormalEnemyAct : EnemyAct
         return stater.State["Grogable"];
     }
 
+    protected override bool IsDestroyed()
+    {
+        return stater.State["Destroyable"];
+    }
+
     protected override void OrderOutputGrogging(Smash smash)
     {
         if (stater.State["Smashable"]) return;
