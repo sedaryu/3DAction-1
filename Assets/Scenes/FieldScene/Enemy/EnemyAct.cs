@@ -22,6 +22,9 @@ public abstract class EnemyAct : MonoBehaviour
     //デスティネーター
     protected EnemyDestinater destinater;
 
+    //UI
+    protected FilledCircleController hpCircleController;
+
     void Awake()
     {
         parameter = GetComponent<EnemyParameter>();
@@ -45,6 +48,8 @@ public abstract class EnemyAct : MonoBehaviour
         controller.attackKey += AttackKey;
         controller.onAttacking += OrderOutputAttacking;
         controller.onSpawningItem += OrderOutputSpawningItem;
+
+        hpCircleController = transform.Find("HitPointCircle").gameObject.GetComponent<FilledCircleController>();
     }
 
     protected abstract void OrderOutputMoving(Vector3 vector);

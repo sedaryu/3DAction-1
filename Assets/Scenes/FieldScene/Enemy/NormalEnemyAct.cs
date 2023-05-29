@@ -16,6 +16,7 @@ public class NormalEnemyAct : EnemyAct
     {
         if (stater.State["Smashable"]) return;
         parameter.SetParameter("HitPoint", parameter.Parameter("HealSpeed") * Time.deltaTime);
+        hpCircleController.UpdateFill(parameter.PercentageParameter("HitPoint"));
     }
 
     protected override void OrderOutputHitting(Vector3 vector, float attack)
@@ -33,6 +34,7 @@ public class NormalEnemyAct : EnemyAct
         knockbacker.Knockback(vector * parameter.Parameter("Weight")); //ノックバック
 
         animator.SetTrriger("Damage");
+        hpCircleController.UpdateFill(parameter.PercentageParameter("HitPoint"));
 
         if (parameter.Parameter("HitPoint") <= 0)
         {

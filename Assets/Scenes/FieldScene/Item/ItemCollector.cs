@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UIElements;
 
 public class ItemCollector : MonoBehaviour
 {
@@ -10,12 +12,15 @@ public class ItemCollector : MonoBehaviour
 
     private List<string> collectItems = new List<string>();
     private int countOfCollecting = 0;
+    private float time = 180;
 
     private Vector3 spawnArea;
     private float spawnArea_x;
     private float spawnArea_z;
 
     private Transform player;
+
+    List<IPlayerUI> playerUIs;
 
     // Start is called before the first frame update
     void Start()
@@ -25,12 +30,23 @@ public class ItemCollector : MonoBehaviour
         spawnArea_z = spawnArea.z * 5;
         player = GameObject.Find("Player").transform;
         MovePosition();
+        GameObject canvas = GameObject.Find("Canvas");
+        playerUIs = canvas.GetComponentsInChildren<IPlayerUI>().ToList();
+        playerUIs?.ForEach(x => x.UpdateUI("CollectorTime", time));
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        time -= Time.deltaTime;
+        playerUIs?.ForEach(x => x.UpdateUI("CollectorTime", time));
+
+        if (time <= 0)
+        {
+            MovePosition();
+            countOfCollecting++;
+            time = 180;
+        }
     }
 
     public void CollectItems(List<string> items)
@@ -38,8 +54,9 @@ public class ItemCollector : MonoBehaviour
         collectItems.AddRange(items);
         countOfCollecting++;
         MovePosition();
-
-        if (countOfCollecting == collectCount) SummaryGame();
+        time = 180;
+        
+        SummaryGame();
     }
 
     private void SummaryGame()
@@ -73,6 +90,6 @@ public class ItemCollector : MonoBehaviour
         else
         { return; }
 
-        transform.position = NavMesh.SamplePosition(position, out NavMeshHit hit, 10, 1) ? hit.position : new Vector3(0, 0, 0);
+        transform.position = position;
     }
 }
