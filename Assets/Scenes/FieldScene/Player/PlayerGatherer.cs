@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class PlayerGatherer : MonoBehaviour
@@ -21,5 +22,14 @@ public class PlayerGatherer : MonoBehaviour
         collector.CollectItems(items);
         items.Clear();
         return true;
+    }
+
+    public string ListUpItems()
+    { 
+        List<string> itemTypes = items.Distinct().ToList();
+        string itemList = "";
+        foreach (string type in itemTypes)
+        { itemList += $"{type}: x{items.Where(x => x == type).Count()}\n"; }
+        return itemList;
     }
 }

@@ -23,6 +23,10 @@ public class LifeUIController : MonoBehaviour, IPlayerUI
         lifeText.text = ((int)value).ToString();
     }
 
+    public void UpdateUI(string key, string value)
+    {
+    }
+
     //public void UpdateLifeMaxTextUI(string text)
     //{
     //    //lifeMaxText.text = text;

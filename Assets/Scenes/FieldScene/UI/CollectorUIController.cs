@@ -18,4 +18,8 @@ public class CollectorUIController : MonoBehaviour, IPlayerUI
         if (key != "CollectorTime") return;
         timeText.text = ((int)value).ToString();
     }
+
+    public void UpdateUI(string key, string value)
+    {
+    }
 }

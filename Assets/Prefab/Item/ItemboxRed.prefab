@@ -396,9 +396,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aaffd38c1f8e0894ea2d19653ff8c826, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: Item
+  type: ItemBox
   weight: 0.25
-  time: 5
+  time: 6
 --- !u!135 &4190786385432872488
 SphereCollider:
   m_ObjectHideFlags: 0

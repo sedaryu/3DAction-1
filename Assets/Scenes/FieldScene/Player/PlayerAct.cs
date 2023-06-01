@@ -85,6 +85,7 @@ public class PlayerAct : MonoBehaviour
         playerUIs?.ForEach(x => x.UpdateUI("Life", parameter.Parameter("Life")));
         playerUIs?.ForEach(x => x.UpdateUI("Adrenaline", parameter.Parameter("Adrenaline")));
         playerUIs?.ForEach(x => x.UpdateUI("AdrenalineTank", parameter.Parameter("AdrenalineTank")));
+        playerUIs?.ForEach(x => x.UpdateUI("Items", gatherer.ListUpItems()));
     }
 
     private void Update()
@@ -153,11 +154,17 @@ public class PlayerAct : MonoBehaviour
         float weight = gatherer.Gather(other);
         if(weight == 0) return;
         parameter.ChangeParameter("MoveSpeed", -weight);
+        playerUIs?.ForEach(x => x.UpdateUI("Items", gatherer.ListUpItems()));
     }
 
     private void OrderOutputReleasing(Collider other)
     {
-        if (gatherer.Release(other)) parameter.RevertParameter("MoveSpeed");
+        if (gatherer.Release(other))
+        {
+            parameter.RevertParameter("MoveSpeed");
+            parameter.ChangeParameter("Life", 1);
+        }
+        playerUIs?.ForEach(x => x.UpdateUI("Items", gatherer.ListUpItems()));
     }
 
     private void OrderOutputBursting()

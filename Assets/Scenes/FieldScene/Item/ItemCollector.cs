@@ -9,10 +9,11 @@ using UnityEngine.UIElements;
 public class ItemCollector : MonoBehaviour
 {
     [SerializeField] private int collectCount;
+    [SerializeField] private float timeCount;
 
     private List<string> collectItems = new List<string>();
     private int countOfCollecting = 0;
-    private float time = 180;
+    private float time;
 
     private Vector3 spawnArea;
     private float spawnArea_x;
@@ -20,7 +21,8 @@ public class ItemCollector : MonoBehaviour
 
     private Transform player;
 
-    List<IPlayerUI> playerUIs;
+    private List<IPlayerUI> playerUIs;
+    private GameController gameController;
 
     // Start is called before the first frame update
     void Start()
@@ -32,7 +34,9 @@ public class ItemCollector : MonoBehaviour
         MovePosition();
         GameObject canvas = GameObject.Find("Canvas");
         playerUIs = canvas.GetComponentsInChildren<IPlayerUI>().ToList();
+        time = timeCount;
         playerUIs?.ForEach(x => x.UpdateUI("CollectorTime", time));
+        gameController = GameObject.Find("GameController").GetComponent<GameController>();
     }
 
     // Update is called once per frame
@@ -45,7 +49,8 @@ public class ItemCollector : MonoBehaviour
         {
             MovePosition();
             countOfCollecting++;
-            time = 180;
+            time = timeCount;
+            SummaryGame();
         }
     }
 
@@ -54,7 +59,7 @@ public class ItemCollector : MonoBehaviour
         collectItems.AddRange(items);
         countOfCollecting++;
         MovePosition();
-        time = 180;
+        time = timeCount;
         
         SummaryGame();
     }
@@ -72,6 +77,11 @@ public class ItemCollector : MonoBehaviour
         for (int i = 0; i < itemNames.Count; i++)
         {
             Debug.Log($"{itemNames[i]} : {itemNumbers[i]}");
+        }
+
+        if (collectCount <= countOfCollecting) 
+        {
+            gameController.JudgeGameClear(GameController.ClearConditions.ItemCollected);
         }
     }
 

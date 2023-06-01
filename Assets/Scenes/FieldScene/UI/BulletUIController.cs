@@ -21,6 +21,10 @@ public class BulletUIController : MonoBehaviour, IPlayerUI
         magazinText.text = ((int)value).ToString();
     }
 
+    public void UpdateUI(string key, string value)
+    {
+    }
+
     //public void UpdateMagazinTextUI(string text)
     //{
     //    magazinText.text = text;

@@ -14,7 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnTime: 0
   spawnObjects:
-  - name: ItemboxRed
-    appearanceProbability: 15
+  - name: Cola
+    appearanceProbability: 30
   - name: ItemboxBlue
+    appearanceProbability: 10
+  - name: Drug
     appearanceProbability: 5

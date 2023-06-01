@@ -20,6 +20,10 @@ public class AdrenalineUIController : MonoBehaviour, IPlayerUI
         else if (key == "AdrenalineTank") adrenalineTankText.text = ((int)value).ToString();
     }
 
+    public void UpdateUI(string key, string value)
+    {
+    }
+
     //public void UpdateAdrenalineUI(float adre)
     //{ 
     //    adrenalineImage.fillAmount = adre;
