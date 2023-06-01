@@ -16,7 +16,7 @@ MonoBehaviour:
   spawnObjects:
   - name: Cola
     appearanceProbability: 30
-  - name: ItemboxBlue
-    appearanceProbability: 10
-  - name: Drug
+  - name: ItemBox
     appearanceProbability: 5
+  - name: Drug
+    appearanceProbability: 10

@@ -277,7 +277,7 @@ GameObject:
   - component: {fileID: 8324862643502044272}
   - component: {fileID: 7374189696337044106}
   m_Layer: 0
-  m_Name: ItemboxBlue
+  m_Name: ItemBox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

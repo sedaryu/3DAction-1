@@ -164,6 +164,7 @@ public class PlayerAct : MonoBehaviour
             parameter.RevertParameter("MoveSpeed");
             parameter.ChangeParameter("Life", 1);
         }
+        playerUIs?.ForEach(x => x.UpdateUI("Life", parameter.Parameter("Life")));
         playerUIs?.ForEach(x => x.UpdateUI("Items", gatherer.ListUpItems()));
     }
 

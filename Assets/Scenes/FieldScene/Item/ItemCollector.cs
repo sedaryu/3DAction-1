@@ -81,7 +81,7 @@ public class ItemCollector : MonoBehaviour
 
         if (collectCount <= countOfCollecting) 
         {
-            gameController.JudgeGameClear(GameController.ClearConditions.ItemCollected);
+            gameController.JudgeGameClear(GameController.ClearConditions.ItemCollected, collectItems);
         }
     }
 
