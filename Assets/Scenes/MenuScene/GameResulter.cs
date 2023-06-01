@@ -15,7 +15,8 @@ public class GameResulter : MonoBehaviour
     void Start()
     {
         itemsText = GameObject.Find("Canvas").transform.Find("ItemsText").GetComponent<Text>();
-        ListUpItems();
+        Time.timeScale = 1;
+        StartCoroutine(ListUpItems());
     }
 
     // Update is called once per frame
@@ -24,7 +25,7 @@ public class GameResulter : MonoBehaviour
         
     }
 
-    private void ListUpItems()
+    private IEnumerator ListUpItems()
     {
         List<string> itemTypes = collectItems.Distinct().ToList();
         List<string> itemList = new List<string>();
@@ -33,7 +34,7 @@ public class GameResulter : MonoBehaviour
 
         foreach (string item in itemList)
         {
-            //yield return new WaitForSeconds(2);
+            yield return new WaitForSeconds(1f);
             itemsText.text += item;
         }
     }
