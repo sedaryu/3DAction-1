@@ -43,13 +43,13 @@ public class GameResulter : MonoBehaviour
         {
             for (int n = 0; n < itemCount[i]; n++)
             {
-                Instantiate(spawnObjects[i], new Vector3(-0.6f, 5.0f, 0.2f + (0.4f * i)), Quaternion.identity);
+                Instantiate(spawnObjects[i], new Vector3(Random.Range(-0.75f, -0.65f), 5.0f, 0.2f + (0.4f * i)), Quaternion.identity);
                 await Task.Delay(100);
             }
         }
         await Task.Delay(1250);
 
-        Task _ = cameraController.MoveCamera(new Vector3(0.2f, 5.5f, 0.6f), new Vector3(37.5f, -90f, 0), 2500);
+        Task task = await cameraController.MoveCamera(new Vector3(0.2f, 5.5f, 0.6f), new Vector3(37.5f, -90f, 0), 7500);
 
         Debug.Log("OK!!");
     }
