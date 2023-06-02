@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
+using static SpawnObjectList;
 using static UnityEditor.Progress;
 
 public class GameResulter : MonoBehaviour
@@ -11,12 +13,15 @@ public class GameResulter : MonoBehaviour
 
     private Text itemsText;
 
+    private CameraController cameraController;
+
     // Start is called before the first frame update
     void Start()
     {
         itemsText = GameObject.Find("Canvas").transform.Find("ItemsText").GetComponent<Text>();
+        cameraController = GameObject.Find("Main Camera").GetComponent<CameraController>();
         Time.timeScale = 1;
-        StartCoroutine(ListUpItems());
+        ListUpItems();
     }
 
     // Update is called once per frame
@@ -24,18 +29,28 @@ public class GameResulter : MonoBehaviour
     {
         
     }
-
-    private IEnumerator ListUpItems()
+    
+    private async Task ListUpItems()
     {
-        List<string> itemTypes = collectItems.Distinct().ToList();
-        List<string> itemList = new List<string>();
+        string[] itemTypes = collectItems.Distinct().ToArray();
+        List<int> itemCount = new List<int>();
         foreach (string type in itemTypes)
-        { itemList.Add($"{type}: x{collectItems.Where(x => x == type).Count()}\n"); }
+        { itemCount.Add(collectItems.Where(x => x == type).Count()); }
 
-        foreach (string item in itemList)
+        GameObject[] spawnObjects = GameObject.Find("LoadAsset").GetComponent<LoadAsset>().LoadObjects("ResultItem", itemTypes);
+
+        for (int i = 0; i < itemTypes.Length; i++)
         {
-            yield return new WaitForSeconds(1f);
-            itemsText.text += item;
+            for (int n = 0; n < itemCount[i]; n++)
+            {
+                Instantiate(spawnObjects[i], new Vector3(-0.6f, 5.0f, 0.2f + (0.4f * i)), Quaternion.identity);
+                await Task.Delay(100);
+            }
         }
+        await Task.Delay(1250);
+
+        Task _ = cameraController.MoveCamera(new Vector3(0.2f, 5.5f, 0.6f), new Vector3(37.5f, -90f, 0), 2500);
+
+        Debug.Log("OK!!");
     }
 }

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class CameraController : MonoBehaviour
@@ -13,19 +14,19 @@ public class CameraController : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown("a"))
+
+    }
+
+    public async Task MoveCamera(Vector3 position, Vector3 rotation, int frame)
+    {
+        float ratio = 1 / (float)frame;
+        for (int i = 0; i < frame; i++)
         {
-            StartCoroutine(RotateCamera(37.5f, -90f, 0));
+            transform.position = Vector3.Lerp(transform.position, position, ratio + (i * ratio));
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(rotation), ratio + (i * ratio));
+            await Task.Delay((int)(Time.deltaTime * 1000f));
         }
     }
 
-    private IEnumerator RotateCamera(float x, float y, float z)
-    {
-        for (int i = 0; i < 1000; i++)
-        {
-            yield return null;
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(x, y, z), 0.01f);
-            if (transform.rotation == Quaternion.Euler(x, y, z)) break;
-        }
-    }
+    //1.5 5.2 -1.5  6.5 -40 0
 }
