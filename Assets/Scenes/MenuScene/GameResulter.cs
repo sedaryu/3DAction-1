@@ -21,7 +21,7 @@ public class GameResulter : MonoBehaviour
         itemsText = GameObject.Find("Canvas").transform.Find("ItemsText").GetComponent<Text>();
         cameraController = GameObject.Find("Main Camera").GetComponent<CameraController>();
         Time.timeScale = 1;
-        ListUpItems();
+        Task _ = ResultItems();
     }
 
     // Update is called once per frame
@@ -30,7 +30,7 @@ public class GameResulter : MonoBehaviour
         
     }
     
-    private async Task ListUpItems()
+    private async Task ResultItems()
     {
         string[] itemTypes = collectItems.Distinct().ToArray();
         List<int> itemCount = new List<int>();
@@ -47,10 +47,19 @@ public class GameResulter : MonoBehaviour
                 await Task.Delay(100);
             }
         }
-        await Task.Delay(1250);
+        await Task.Delay(1750);
 
-        Task task = await cameraController.MoveCamera(new Vector3(0.2f, 5.5f, 0.6f), new Vector3(37.5f, -90f, 0), 7500);
+        Task task = await cameraController.MoveCamera(new Vector3(0.2f, 5.5f, 0.6f), new Vector3(37.5f, -90f, 0), 10000);
 
-        Debug.Log("OK!!");
+        for (int i = 0; i < itemTypes.Length; i++)
+        {
+            Task task1 = await cameraController.MoveCamera(new Vector3(0.2f, 5f, 0.2f + (0.4f * i)), new Vector3(26f, -90f, 0), 2500);
+            itemsText.text = $"{itemTypes[i]} ";
+            await Task.Delay(1000);
+            itemsText.text += "* ";
+            await Task.Delay(1000);
+            itemsText.text += $"{itemCount[i]}";
+            await Task.Delay(1000);
+        }
     }
 }
