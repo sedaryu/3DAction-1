@@ -98,9 +98,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aaffd38c1f8e0894ea2d19653ff8c826, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: Drug
-  weight: 0.2
-  time: 4
+  param: {fileID: 11400000, guid: 8d7a6fb2ef3040948abe8e0db300fe74, type: 2}
 --- !u!135 &8431490340584360213
 SphereCollider:
   m_ObjectHideFlags: 0

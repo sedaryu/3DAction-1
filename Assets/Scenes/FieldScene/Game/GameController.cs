@@ -8,7 +8,7 @@ public class GameController : MonoBehaviour
 {
     [SerializeField] private ClearConditions gameClearCondition;
 
-    private List<string> collectItems;
+    private List<ItemParam> collectItems;
 
     public enum ClearConditions
     { 
@@ -23,7 +23,7 @@ public class GameController : MonoBehaviour
 
     }
 
-    public void JudgeGameClear(ClearConditions condition, List<string> items)
+    public void JudgeGameClear(ClearConditions condition, List<ItemParam> items)
     {
         if (gameClearCondition != condition) return;
 

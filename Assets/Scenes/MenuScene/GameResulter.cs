@@ -9,7 +9,7 @@ using static UnityEditor.Progress;
 
 public class GameResulter : MonoBehaviour
 {
-    public List<string> collectItems;
+    public List<ItemParam> collectItems;
 
     private Text itemsText;
 
@@ -32,14 +32,15 @@ public class GameResulter : MonoBehaviour
     
     private async Task ResultItems()
     {
-        string[] itemTypes = collectItems.Distinct().ToArray();
+        ItemParam[] items = collectItems.Distinct().ToArray();
         List<int> itemCount = new List<int>();
-        foreach (string type in itemTypes)
-        { itemCount.Add(collectItems.Where(x => x == type).Count()); }
+        foreach (ItemParam item in items)
+        { itemCount.Add(collectItems.Where(x => x.Name == item.Name).Count()); }
 
-        GameObject[] spawnObjects = GameObject.Find("LoadAsset").GetComponent<LoadAsset>().LoadObjects("ResultItem", itemTypes);
+        GameObject[] spawnObjects = GameObject.Find("LoadAsset").GetComponent<LoadAsset>()
+                                    .LoadObjects("ResultItem", items.Select(x => x.Name).ToArray());
 
-        for (int i = 0; i < itemTypes.Length; i++)
+        for (int i = 0; i < items.Length; i++)
         {
             for (int n = 0; n < itemCount[i]; n++)
             {
@@ -51,15 +52,21 @@ public class GameResulter : MonoBehaviour
 
         Task task = await cameraController.MoveCamera(new Vector3(0.2f, 5.5f, 0.6f), new Vector3(37.5f, -90f, 0), 10000);
 
-        for (int i = 0; i < itemTypes.Length; i++)
+        for (int i = 0; i < items.Length; i++)
         {
             Task task1 = await cameraController.MoveCamera(new Vector3(0.2f, 5f, 0.2f + (0.4f * i)), new Vector3(26f, -90f, 0), 2500);
-            itemsText.text = $"{itemTypes[i]} ";
+            itemsText.text = $"{items[i].Name} ";
             await Task.Delay(1000);
             itemsText.text += "* ";
             await Task.Delay(1000);
-            itemsText.text += $"{itemCount[i]}";
+            itemsText.text += $"{itemCount[i]} ";
             await Task.Delay(1000);
+            itemsText.text += $"= ";
+            await Task.Delay(1000);
+            itemsText.text += $"{itemCount[i] * items[i].Unique} {items[i].Text}";
+            await Task.Delay(2500);
         }
+        itemsText.text = "";
+        Task task2 = await cameraController.MoveCamera(new Vector3(1.5f, 5.2f, -1.5f), new Vector3(6.5f, -40, 0), 10000);
     }
 }

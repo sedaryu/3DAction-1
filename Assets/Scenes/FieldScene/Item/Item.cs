@@ -4,9 +4,7 @@ using UnityEngine;
 
 public class Item : MonoBehaviour, IGatherable
 {
-    [SerializeField] private string type;
-    [SerializeField] private float weight;
-    [SerializeField] private float time;
+    [SerializeField] private ItemParam param;
     private float delta;
 
     //UI
@@ -14,23 +12,23 @@ public class Item : MonoBehaviour, IGatherable
 
     private void Start()
     {
-        delta = time;
+        delta = param.Time;
         timeCircleController = transform.Find("TimeCircle").gameObject.GetComponent<FilledCircleController>();
     }
 
     private void Update()
     {
         delta -= Time.deltaTime;
-        timeCircleController.UpdateFill(delta / time);
+        timeCircleController.UpdateFill(delta / param.Time);
         if (delta <= 0) Disappear();
     }
 
-    public string Gathered(out float _weight)
+    public ItemParam Gathered(out float weight)
     {
         GetComponent<Collider>().enabled = false;
-        _weight = weight;
+        weight = param.Weight;
         Disappear();
-        return type;
+        return param;
     }
 
     public void Disappear()

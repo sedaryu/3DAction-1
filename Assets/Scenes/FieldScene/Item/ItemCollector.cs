@@ -11,7 +11,7 @@ public class ItemCollector : MonoBehaviour
     [SerializeField] private int collectCount;
     [SerializeField] private float timeCount;
 
-    private List<string> collectItems = new List<string>();
+    private List<ItemParam> collectItems = new List<ItemParam>();
     private int countOfCollecting = 0;
     private float time;
 
@@ -54,7 +54,7 @@ public class ItemCollector : MonoBehaviour
         }
     }
 
-    public void CollectItems(List<string> items)
+    public void CollectItems(List<ItemParam> items)
     { 
         collectItems.AddRange(items);
         countOfCollecting++;
@@ -66,19 +66,6 @@ public class ItemCollector : MonoBehaviour
 
     private void SummaryGame()
     {
-        List<string> itemNames = collectItems.Distinct().ToList();
-        List<int> itemNumbers = new List<int>();
-
-        for (int i = 0; i < itemNames.Count; i++)
-        {
-            itemNumbers.Add(collectItems.Count(x => x == itemNames[i]));
-        }
-
-        for (int i = 0; i < itemNames.Count; i++)
-        {
-            Debug.Log($"{itemNames[i]} : {itemNumbers[i]}");
-        }
-
         if (collectCount <= countOfCollecting) 
         {
             gameController.JudgeGameClear(GameController.ClearConditions.ItemCollected, collectItems);

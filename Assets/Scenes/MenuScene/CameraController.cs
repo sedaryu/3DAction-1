@@ -30,6 +30,4 @@ public class CameraController : MonoBehaviour
         }
         return Task.CompletedTask;
     }
-
-    //1.5 5.2 -1.5  6.5 -40 0
 }

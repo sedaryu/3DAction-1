@@ -34,7 +34,7 @@ Transform:
   m_Children:
   - {fileID: 6797012710905550724}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &1643275436012535226
 MeshFilter:
@@ -94,17 +94,9 @@ SphereCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5475707829522428832}
   m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
   m_IsTrigger: 1
-  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 2
   m_Radius: 0.27
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &6490072161657027289
@@ -119,9 +111,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aaffd38c1f8e0894ea2d19653ff8c826, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: Cola
-  weight: 0.1
-  time: 3
+  param: {fileID: 11400000, guid: bc62e90a506586e43971ab70001acc78, type: 2}
 --- !u!1 &6565688163707421045
 GameObject:
   m_ObjectHideFlags: 0
@@ -238,7 +228,7 @@ Transform:
   m_Children:
   - {fileID: 2978086685572764387}
   m_Father: {fileID: 9018812106316820083}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
 --- !u!212 &824082658458367125
 SpriteRenderer:

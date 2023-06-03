@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class PlayerGatherer : MonoBehaviour
 {
-    private List<string> items = new List<string>();
+    private List<ItemParam> items = new List<ItemParam>();
 
     public float Gather(Collider other)
     {
@@ -26,10 +26,10 @@ public class PlayerGatherer : MonoBehaviour
 
     public string ListUpItems()
     { 
-        List<string> itemTypes = items.Distinct().ToList();
+        List<string> itemNames = items.Select(x => x.Name).Distinct().ToList();
         string itemList = "";
-        foreach (string type in itemTypes)
-        { itemList += $"{type}: x{items.Where(x => x == type).Count()}\n"; }
+        foreach (string name in itemNames)
+        { itemList += $"{name}: x{items.Where(x => x.Name == name).Count()}\n"; }
         return itemList;
     }
 }
