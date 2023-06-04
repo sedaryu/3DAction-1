@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 2
   name: ItemBox
-  unique: 0.05
+  unique: 5
   weight: 5
   time: 6

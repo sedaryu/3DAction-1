@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -8,7 +9,10 @@ public class GameController : MonoBehaviour
 {
     [SerializeField] private ClearConditions gameClearCondition;
 
-    private List<ItemParam> collectItems;
+    public List<ItemParam> collectItems;
+    public float life;
+
+    public UnityAction onGameClear;
 
     public enum ClearConditions
     { 
@@ -23,14 +27,14 @@ public class GameController : MonoBehaviour
 
     }
 
-    public void JudgeGameClear(ClearConditions condition, List<ItemParam> items)
+    public void JudgeGameClear(ClearConditions condition)
     {
         if (gameClearCondition != condition) return;
 
         Time.timeScale = 0;
-
         GameObject.Find("Canvas").transform.Find("GameClearText").gameObject.SetActive(true);
-        collectItems = items;
+
+        onGameClear?.Invoke();
         StartCoroutine(TransferScene());
     }
 
@@ -44,6 +48,6 @@ public class GameController : MonoBehaviour
     private void SetCollectItemsToNextScene(Scene scene, LoadSceneMode _mode)
     {
         SceneManager.sceneLoaded -= SetCollectItemsToNextScene;
-        GameObject.Find("GameResulter").GetComponent<GameResulter>().collectItems = collectItems;
+        GameObject.Find("Menu").GetComponent<GameResulter>().collectItems = collectItems;
     }
 }

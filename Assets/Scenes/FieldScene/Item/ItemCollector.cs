@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UIElements;
 
-public class ItemCollector : MonoBehaviour
+public class ItemCollector : MonoBehaviour, IParametable
 {
     [SerializeField] private int collectCount;
     [SerializeField] private float timeCount;
@@ -36,7 +36,8 @@ public class ItemCollector : MonoBehaviour
         playerUIs = canvas.GetComponentsInChildren<IPlayerUI>().ToList();
         time = timeCount;
         playerUIs?.ForEach(x => x.UpdateUI("CollectorTime", time));
-        gameController = GameObject.Find("GameController").GetComponent<GameController>();
+
+        SetEventOnGameClear();
     }
 
     // Update is called once per frame
@@ -68,7 +69,7 @@ public class ItemCollector : MonoBehaviour
     {
         if (collectCount <= countOfCollecting) 
         {
-            gameController.JudgeGameClear(GameController.ClearConditions.ItemCollected, collectItems);
+            gameController.JudgeGameClear(GameController.ClearConditions.ItemCollected);
         }
     }
 
@@ -88,5 +89,16 @@ public class ItemCollector : MonoBehaviour
         { return; }
 
         transform.position = position;
+    }
+
+    public void SetEventOnGameClear()
+    {
+        gameController = GameObject.Find("GameController").GetComponent<GameController>();
+        gameController.onGameClear += SetParamToNextScene;
+    }
+
+    public void SetParamToNextScene()
+    {
+        gameController.collectItems = collectItems;
     }
 }

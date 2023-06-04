@@ -9,7 +9,7 @@ using UnityEngine;
 /// PlayerParam・GunParam・SmashParamを取得し格納する
 /// Paramの値を増減させる目的のクラス
 /// </Summary>
-public class PlayerParameter : MonoBehaviour
+public class PlayerParameter : MonoBehaviour, IParametable
 {
     //スマッシュ
     public float SmashTime { get => smash.Param.SmashTime; }
@@ -35,11 +35,16 @@ public class PlayerParameter : MonoBehaviour
     public bool IsAdrenalinable => parameter["Adrenaline"] > 0;
     private Dictionary<string, float> parameter;
 
-    protected void Awake()
+    private void Awake()
     {
         SettingParameter();
 
         SettingGunPrefab(); //銃のオブジェクトを生成し、位置を調整する
+    }
+
+    private void Start()
+    {
+        SetEventOnGameClear();
     }
 
     private void SettingParameter()
@@ -123,5 +128,15 @@ public class PlayerParameter : MonoBehaviour
     public void RevertParameter(string key)
     {
         parameter[key] = parameter[key + "Max"];
+    }
+
+    public void SetEventOnGameClear()
+    {
+        GameObject.Find("GameController").GetComponent<GameController>().onGameClear += SetParamToNextScene;
+    }
+
+    public void SetParamToNextScene()
+    {
+        GameObject.Find("GameController").GetComponent<GameController>().life = parameter["Life"];
     }
 }

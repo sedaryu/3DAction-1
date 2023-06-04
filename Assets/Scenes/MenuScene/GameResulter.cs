@@ -11,26 +11,18 @@ public class GameResulter : MonoBehaviour
 {
     public List<ItemParam> collectItems;
 
-    private Text itemsText;
+    private Text headlineText;
 
     private CameraController cameraController;
 
     // Start is called before the first frame update
     void Start()
     {
-        itemsText = GameObject.Find("Canvas").transform.Find("ItemsText").GetComponent<Text>();
+        headlineText = GameObject.Find("Canvas").transform.Find("HeadlineText").GetComponent<Text>();
         cameraController = GameObject.Find("Main Camera").GetComponent<CameraController>();
-        Time.timeScale = 1;
-        Task _ = ResultItems();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
     
-    private async Task ResultItems()
+    public async Task<Task> ResultItems()
     {
         ItemParam[] items = collectItems.Distinct().ToArray();
         List<int> itemCount = new List<int>();
@@ -55,18 +47,20 @@ public class GameResulter : MonoBehaviour
         for (int i = 0; i < items.Length; i++)
         {
             Task task1 = await cameraController.MoveCamera(new Vector3(0.2f, 5f, 0.2f + (0.4f * i)), new Vector3(26f, -90f, 0), 2500);
-            itemsText.text = $"{items[i].Name} ";
+            headlineText.text = $"{items[i].Name} ";
             await Task.Delay(1000);
-            itemsText.text += "* ";
+            headlineText.text += "* ";
             await Task.Delay(1000);
-            itemsText.text += $"{itemCount[i]} ";
+            headlineText.text += $"{itemCount[i]} ";
             await Task.Delay(1000);
-            itemsText.text += $"= ";
+            headlineText.text += $"= ";
             await Task.Delay(1000);
-            itemsText.text += $"{itemCount[i] * items[i].Unique} {items[i].Text}";
+            headlineText.text += $"{(int)(itemCount[i] * items[i].Unique)} {items[i].Text}";
             await Task.Delay(2500);
         }
-        itemsText.text = "";
+        headlineText.text = "";
         Task task2 = await cameraController.MoveCamera(new Vector3(1.5f, 5.2f, -1.5f), new Vector3(6.5f, -40, 0), 10000);
+
+        return Task.CompletedTask;
     }
 }

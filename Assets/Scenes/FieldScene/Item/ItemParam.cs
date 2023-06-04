@@ -33,7 +33,7 @@ public class ItemParam : ScriptableObject
     {
         if (Type == ItemType.Point) return "Point Get!!!";
         else if (Type == ItemType.Life) return "Life Up!!!";
-        else if (Type == ItemType.Random) return "% Up Gacha Rarity!!!";
+        else if (Type == ItemType.Random) return "% Up Rarity!!!";
         else return "";
     }
 }
