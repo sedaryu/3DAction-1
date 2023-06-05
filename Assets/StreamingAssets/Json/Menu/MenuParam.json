@@ -1,0 +1,4 @@
+{
+  "keys": [ "Point", "PointMax", "Life", "LifeMax", "Random", "RandomMax", "Day" ],
+  "values": [ 0, 10000000272564224.0, 5, 5.0, 0, 100.0, 1 ]
+}

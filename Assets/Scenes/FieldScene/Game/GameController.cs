@@ -48,6 +48,9 @@ public class GameController : MonoBehaviour
     private void SetCollectItemsToNextScene(Scene scene, LoadSceneMode _mode)
     {
         SceneManager.sceneLoaded -= SetCollectItemsToNextScene;
-        GameObject.Find("Menu").GetComponent<GameResulter>().collectItems = collectItems;
+        GameResulter resulter = GameObject.Find("Menu").GetComponent<GameResulter>();
+        resulter.isResultable = true;
+        resulter.collectItems = collectItems;
+        resulter.life = life;
     }
 }

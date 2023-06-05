@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 using static SpawnObjectList;
@@ -9,14 +10,17 @@ using static UnityEditor.Progress;
 
 public class GameResulter : MonoBehaviour
 {
+    public bool isResultable = false;
+
     public List<ItemParam> collectItems;
+    public float life;
 
     private Text headlineText;
 
     private CameraController cameraController;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         headlineText = GameObject.Find("Canvas").transform.Find("HeadlineText").GetComponent<Text>();
         cameraController = GameObject.Find("Main Camera").GetComponent<CameraController>();
@@ -24,6 +28,12 @@ public class GameResulter : MonoBehaviour
     
     public async Task<Task> ResultItems()
     {
+        if (!isResultable) return Task.CompletedTask;
+
+        headlineText.text = "StageClear";
+        cameraController.transform.position = new Vector3(0.7f, 4.9f, 0.3f);
+        cameraController.transform.rotation = Quaternion.Euler(5, 50, 0);
+
         ItemParam[] items = collectItems.Distinct().ToArray();
         List<int> itemCount = new List<int>();
         foreach (ItemParam item in items)
@@ -44,6 +54,9 @@ public class GameResulter : MonoBehaviour
 
         Task task = await cameraController.MoveCamera(new Vector3(0.2f, 5.5f, 0.6f), new Vector3(37.5f, -90f, 0), 10000);
 
+        MenuParam param = new LoadJson().LoadMenuParam();
+        param.SetParameter("Life", life);
+
         for (int i = 0; i < items.Length; i++)
         {
             Task task1 = await cameraController.MoveCamera(new Vector3(0.2f, 5f, 0.2f + (0.4f * i)), new Vector3(26f, -90f, 0), 2500);
@@ -53,12 +66,18 @@ public class GameResulter : MonoBehaviour
             await Task.Delay(1000);
             headlineText.text += $"{itemCount[i]} ";
             await Task.Delay(1000);
-            headlineText.text += $"= ";
+            headlineText.text += $"\n= ";
             await Task.Delay(1000);
-            headlineText.text += $"{(int)(itemCount[i] * items[i].Unique)} {items[i].Text}";
+            int value = (int)(itemCount[i] * items[i].Unique);
+            param.ChangeParameter(items[i].Type.ToString(), value);
+            headlineText.text += $"{value} {items[i].Text}";
             await Task.Delay(2500);
         }
+
+        new LoadJson().SaveMenuParam(param);
+
         headlineText.text = "";
+
         Task task2 = await cameraController.MoveCamera(new Vector3(1.5f, 5.2f, -1.5f), new Vector3(6.5f, -40, 0), 10000);
 
         return Task.CompletedTask;
