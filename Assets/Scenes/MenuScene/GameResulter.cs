@@ -28,7 +28,7 @@ public class GameResulter : MonoBehaviour
     
     public async Task<Task> ResultItems()
     {
-        if (!isResultable) return Task.CompletedTask;
+        if (!isResultable) { Debug.Log("Skip"); return Task.CompletedTask; }
 
         headlineText.text = "StageClear";
         cameraController.transform.position = new Vector3(0.7f, 4.9f, 0.3f);
@@ -52,14 +52,14 @@ public class GameResulter : MonoBehaviour
         }
         await Task.Delay(1750);
 
-        Task task = await cameraController.MoveCamera(new Vector3(0.2f, 5.5f, 0.6f), new Vector3(37.5f, -90f, 0), 10000);
+        Task task = await cameraController.MoveCamera(new Vector3(0.2f, 5.5f, 0.6f), new Vector3(37.5f, -90f, 0), 3000);
 
         MenuParam param = new LoadJson().LoadMenuParam();
         param.SetParameter("Life", life);
 
         for (int i = 0; i < items.Length; i++)
         {
-            Task task1 = await cameraController.MoveCamera(new Vector3(0.2f, 5f, 0.2f + (0.4f * i)), new Vector3(26f, -90f, 0), 2500);
+            Task task1 = await cameraController.MoveCamera(new Vector3(0.2f, 5f, 0.2f + (0.4f * i)), new Vector3(26f, -90f, 0), 500);
             headlineText.text = $"{items[i].Name} ";
             await Task.Delay(1000);
             headlineText.text += "* ";
@@ -77,8 +77,6 @@ public class GameResulter : MonoBehaviour
         new LoadJson().SaveMenuParam(param);
 
         headlineText.text = "";
-
-        Task task2 = await cameraController.MoveCamera(new Vector3(1.5f, 5.2f, -1.5f), new Vector3(6.5f, -40, 0), 10000);
 
         return Task.CompletedTask;
     }

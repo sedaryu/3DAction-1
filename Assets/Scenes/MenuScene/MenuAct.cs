@@ -21,12 +21,6 @@ public class MenuAct : MonoBehaviour
     async void Start()
     {
         Task result = await resulter.ResultItems();
-        mainMenu.SetMainMenu();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        Task task = await mainMenu.SetMainMenu();
     }
 }
