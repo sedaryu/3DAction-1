@@ -40,6 +40,18 @@ public class LoadJson
         reader.Close();
         return JsonUtility.FromJson<EquipmentGunParam>(datastr);
     }
+
+    public void SaveEquipmentGunParam(EquipmentGunParam equipGunParam)
+    {
+        StreamWriter writer;
+
+        string jsonstr = JsonUtility.ToJson(equipGunParam);
+
+        writer = new StreamWriter(Application.dataPath + "/StreamingAssets/Json/Menu/EquipmentGunParam.json");
+        writer.Write(jsonstr);
+        writer.Flush();
+        writer.Close();
+    }
 }
 
 [System.Serializable]

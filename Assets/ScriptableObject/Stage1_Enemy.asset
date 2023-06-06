@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnTime: 1.5
   spawnObjects:
-  - name: NormalZombie
+  - name: Zombie
     appearanceProbability: 50
   - name: MiniZombie
     appearanceProbability: 25

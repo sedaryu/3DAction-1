@@ -6,21 +6,21 @@ using UnityEngine.UI;
 
 public class MenuAct : MonoBehaviour
 {
-    private GameResulter resulter;
-    private MainMenu mainMenu;
+    private ResultMode result;
+    private MainMode main;
 
     private void Awake()
     {
         Time.timeScale = 1;
 
-        resulter = GetComponent<GameResulter>();
-        mainMenu = GetComponent<MainMenu>();
+        result = GetComponent<ResultMode>();
+        main = GetComponent<MainMode>();
     }
 
     // Start is called before the first frame update
     async void Start()
     {
-        Task result = await resulter.ResultItems();
-        Task task = await mainMenu.SetMainMenu();
+        Task task0 = await result.ResultItems();
+        Task task1 = await main.SetMainMenu();
     }
 }

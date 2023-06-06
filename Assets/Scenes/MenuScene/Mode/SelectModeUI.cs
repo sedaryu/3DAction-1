@@ -10,13 +10,22 @@ public abstract class SelectModeUI : MonoBehaviour, IPointerClickHandler
 {
     [SerializeField] private Vector3 position;
     [SerializeField] private Vector3 rotation;
-    protected CameraController cameraController;
+    protected string initialText;
+
+    //output
+    protected Text headlineText;
+    protected Text sublineText;
+
+    //input
+    private Text modeText;
+    private BoxCollider2D modeCollider;
+    public List<Collider> colliders = new List<Collider>();
     public UnityAction onClicking;
     public UnityAction onClicked;
 
-    protected Text headlineText;
-    protected Text sublineText;
-    public List<Collider> colliders = new List<Collider>();
+    //camera
+    protected CameraController cameraController;
+    
 
     void Start()
     {
@@ -24,18 +33,20 @@ public abstract class SelectModeUI : MonoBehaviour, IPointerClickHandler
         GameObject canvas = GameObject.Find("Canvas");
         headlineText = canvas.transform.Find("HeadlineText").GetComponent<Text>();
         sublineText = canvas.transform.Find("SublineText").GetComponent<Text>();
+        modeText = GetComponent<Text>();
+        modeCollider = GetComponent<BoxCollider2D>();
     }
 
     public void SetVisible()
     {
-        GetComponent<Text>().enabled = true;
-        GetComponent<BoxCollider2D>().enabled = true;
+        modeText.enabled = true;
+        modeCollider.enabled = true;
     }
 
     public void SetInvisible()
     {
-        GetComponent<Text>().enabled = false;
-        GetComponent<BoxCollider2D>().enabled = false;
+        modeText.enabled = false;
+        modeCollider.enabled = false;
     }
 
     public async void OnPointerClick(PointerEventData eventData)
@@ -48,6 +59,7 @@ public abstract class SelectModeUI : MonoBehaviour, IPointerClickHandler
         headlineText.enabled = true;
         sublineText.enabled = true;
         headlineText.text = gameObject.name;
+        sublineText.text = initialText;
         colliders.ForEach(x => x.enabled = true);
     }
 }
