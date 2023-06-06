@@ -4,13 +4,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
 {
     private Text headlineText;
     private Text sublineText;
-    private List<SelectActionUI> modeUIs;
+    private List<SelectModeUI> modeUIs;
     private BackUI backUI;
     private CameraController cameraController;
 
@@ -22,20 +23,24 @@ public class MainMenu : MonoBehaviour
         sublineText = canvas.transform.Find("SublineText").GetComponent<Text>();
         backUI = canvas.transform.Find("Back").GetComponent<BackUI>();
         backUI.onBack += BackToMainMenu;
-        modeUIs = canvas.GetComponentsInChildren<SelectActionUI>().ToList();
-        modeUIs.ForEach(x => x.onClicking += SetUIsInvisible);
+        modeUIs = canvas.GetComponentsInChildren<SelectModeUI>().ToList();
+        modeUIs.ForEach(x => x.onClicking += SetModeUIs);
         modeUIs.ForEach(x => x.onClicked += backUI.SetVisible);
         cameraController = GameObject.Find("Main Camera").GetComponent<CameraController>();
     }
 
-    private void SetUIsInvisible()
+    private void SetModeUIs()
     {
         modeUIs.ForEach(x => x.SetInvisible());
     }
 
     public async Task<Task> SetMainMenu()
     {
+        headlineText.enabled = false;
+        sublineText.enabled = false;
         Task task = await cameraController.MoveCamera(new Vector3(1.5f, 5.2f, -1.5f), new Vector3(6.5f, -40, 0), 3000);
+        headlineText.enabled = true;
+        sublineText.enabled = true;
 
         MenuParam param = new LoadJson().LoadMenuParam();
         headlineText.text = $"Days {param.Parameter("Day").ToString()}";
@@ -51,7 +56,7 @@ public class MainMenu : MonoBehaviour
 
     public async void BackToMainMenu()
     {
-        Task task = await cameraController.MoveCamera(new Vector3(1.5f, 5.2f, -1.5f), new Vector3(6.5f, -40, 0), 3000);
-        modeUIs.ForEach(x => x.SetVisible());
+        modeUIs.ForEach(x => x.colliders.ForEach(x => x.enabled = false));
+        Task task = await SetMainMenu();
     }
 }

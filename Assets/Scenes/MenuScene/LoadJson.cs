@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using UnityEngine;
 
 public class LoadJson
@@ -28,4 +30,34 @@ public class LoadJson
         writer.Flush();
         writer.Close();
     }
+
+    public EquipmentGunParam LoadEquipmentGunParam()
+    {
+        string datastr = "";
+        StreamReader reader;
+        reader = new StreamReader(Application.dataPath + "/StreamingAssets/Json/Menu/EquipmentGunParam.json");
+        datastr = reader.ReadToEnd();
+        reader.Close();
+        return JsonUtility.FromJson<EquipmentGunParam>(datastr);
+    }
+}
+
+[System.Serializable]
+public class MenuParamJson
+{
+    public List<string> keys;
+    public List<float> values;
+
+    public MenuParamJson(MenuParam menuParam)
+    {
+        keys = menuParam.SaveParameter().Keys.ToList();
+        values = menuParam.SaveParameter().Values.ToList();
+    }
+}
+
+[System.Serializable]
+public class EquipmentGunParam
+{
+    public List<string> guns;
+    public int equipNumber = 0;
 }

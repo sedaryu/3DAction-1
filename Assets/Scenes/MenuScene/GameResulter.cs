@@ -31,8 +31,8 @@ public class GameResulter : MonoBehaviour
         if (!isResultable) { Debug.Log("Skip"); return Task.CompletedTask; }
 
         headlineText.text = "StageClear";
-        cameraController.transform.position = new Vector3(0.7f, 4.9f, 0.3f);
-        cameraController.transform.rotation = Quaternion.Euler(5, 50, 0);
+        cameraController.transform.position = new Vector3(1.1f, 5.05f, 0);
+        cameraController.transform.rotation = Quaternion.Euler(0, 90, 0);
 
         ItemParam[] items = collectItems.Distinct().ToArray();
         List<int> itemCount = new List<int>();

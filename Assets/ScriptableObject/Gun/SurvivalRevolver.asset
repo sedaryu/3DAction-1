@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: SurvivalRevolver
   m_EditorClassIdentifier: 
   _type: 0
+  _name: SurvivalRevolver
   _reach: 7.5
   _range: 5
   _attack: 0.5
@@ -22,4 +23,3 @@ MonoBehaviour:
   _bulletMax: 6
   _bullet: 6
   _reloadSpeed: 1.25
-  _gunPrefab: {fileID: 5880433771460064881, guid: f7bb2d6b7557d4d4294227ee7e7a1133, type: 3}

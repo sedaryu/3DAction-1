@@ -23,6 +23,12 @@ public class GunParam : ScriptableObject
     }
     [SerializeField] private GunType _type;
 
+    public string Name
+    {
+        get => _name;
+    }
+    [SerializeField] private string _name;
+
     public float Reach //Mesh‚Ìc•
     {
         get => _reach;
