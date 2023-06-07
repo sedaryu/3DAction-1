@@ -6,6 +6,12 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "EnemyParam", menuName = "Custom/EnemyParam")]
 public class EnemyParam : ScriptableObject
 {
+    public string Name
+    {
+        get => _name;
+    }
+    [SerializeField] private string _name;
+
     public float HitPoint
     {
         get => _hitPoint;
@@ -47,4 +53,22 @@ public class EnemyParam : ScriptableObject
         get => _attackKey;
     }
     [SerializeField] private string _attackKey;
+
+    public int Rank
+    {
+        get => _rank;
+    }
+    [SerializeField] private int _rank;
+
+    public EnemyType Type
+    {
+        get => _type;
+    }
+    [SerializeField] private EnemyType _type;
+
+    public enum EnemyType
+    { 
+        Normal,
+        Mini
+    }
 }

@@ -36,7 +36,7 @@ public class MainMode : MonoBehaviour
         cameraController = GameObject.Find("Main Camera").GetComponent<CameraController>();
     }
 
-    public async Task<Task> SetMainMenu()
+    public async Task<Task> SetMainMode()
     {
         headlineText.enabled = false;
         sublineText.enabled = false;
@@ -45,7 +45,11 @@ public class MainMode : MonoBehaviour
         sublineText.enabled = true;
 
         MenuParam param = new LoadJson().LoadMenuParam();
+        headlineText.rectTransform.sizeDelta = new Vector2(150, 50);
+        headlineText.rectTransform.anchoredPosition = new Vector3(-5, 5, 0);
         headlineText.text = $"Days {param.Parameter("Day").ToString()}";
+        sublineText.rectTransform.sizeDelta = new Vector2(350, 70);
+        sublineText.rectTransform.anchoredPosition = new Vector3(5, 5, 0);
         sublineText.text = 
         $"Point: {param.Parameter("Point")}\n" +
         $"Life: {param.Parameter("Life")}/{param.Parameter("LifeMax")}\n" +
@@ -59,6 +63,6 @@ public class MainMode : MonoBehaviour
     public async void BackToMainMenu()
     {
         modeUIs.ForEach(x => x.colliders.ForEach(x => x.enabled = false));
-        Task task = await SetMainMenu();
+        Task task = await SetMainMode();
     }
 }

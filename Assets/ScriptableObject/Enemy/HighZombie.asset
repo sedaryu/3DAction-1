@@ -10,12 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 329e0a9cb7b1dc2408e214a5cea1329b, type: 3}
-  m_Name: MiniZonbie
+  m_Name: HighZombie
   m_EditorClassIdentifier: 
-  _hitPoint: 0.25
-  _moveSpeedMax: 3
-  _moveSpeedMin: 0.5
-  _attack: 1
-  _weight: 1.5
-  _healSpeed: 0
-  _attackKey: AdrenalineTank
+  _name: HighZombie
+  _hitPoint: 20
+  _moveSpeedMax: 1.5
+  _moveSpeedMin: 0.75
+  _attack: 2
+  _weight: 1
+  _healSpeed: 2
+  _attackKey: Life
+  _rank: 2
+  _type: 0

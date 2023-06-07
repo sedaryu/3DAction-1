@@ -21,6 +21,6 @@ public class MenuAct : MonoBehaviour
     async void Start()
     {
         Task task0 = await result.ResultItems();
-        Task task1 = await main.SetMainMenu();
+        Task task1 = await main.SetMainMode();
     }
 }

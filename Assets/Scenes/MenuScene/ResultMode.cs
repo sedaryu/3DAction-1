@@ -32,8 +32,12 @@ public class ResultMode : MonoBehaviour
     {
         if (!isResultable) { Debug.Log("Skip"); return Task.CompletedTask; }
 
-        tvText.text = "StageClear!!!";
-        headlineText.text = "Result";
+        Task _ = Task.Run(async () => { await Task.Delay(750); tvText.text = "ThankYouForYourHardWark\n\n\n"; });
+        Task __ = Task.Run(async () => { await Task.Delay(1500); tvText.text += "   PleaseConfirmItemsYouHaveAcquired"; });
+        Task<Task> waitingTime = Task.Run(async () => { await Task.Delay(3000); return Task.CompletedTask; });
+        headlineText.rectTransform.sizeDelta = new Vector2(500, 100);
+        headlineText.rectTransform.anchoredPosition = new Vector3(-5, 190, 0);
+        headlineText.text = "";
         cameraController.transform.position = new Vector3(1.1f, 5.05f, 0);
         cameraController.transform.rotation = Quaternion.Euler(0, 90, 0);
 
@@ -53,7 +57,7 @@ public class ResultMode : MonoBehaviour
                 await Task.Delay(100);
             }
         }
-        await Task.Delay(1750);
+        Task fin = await waitingTime;
 
         Task task = await cameraController.MoveCamera(new Vector3(0.2f, 5.5f, 0.6f), new Vector3(37.5f, -90f, 0), 3000);
 

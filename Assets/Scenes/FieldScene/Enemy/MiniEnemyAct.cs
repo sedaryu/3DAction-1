@@ -32,7 +32,7 @@ public class MiniEnemyAct : EnemyAct
         }
         knockbacker.Knockback(vector * parameter.Parameter("Weight")); //ノックバック
 
-        animator.SetTrriger("Damage");
+        //animator.SetTrriger("Damage");
         hpCircleController.UpdateFill(parameter.PercentageParameter("HitPoint"));
 
         if (parameter.Parameter("HitPoint") <= 0)

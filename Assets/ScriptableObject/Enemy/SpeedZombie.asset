@@ -10,12 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 329e0a9cb7b1dc2408e214a5cea1329b, type: 3}
-  m_Name: HighZombie
+  m_Name: SpeedZombie
   m_EditorClassIdentifier: 
-  _hitPoint: 20
-  _moveSpeedMax: 2.5
-  _moveSpeedMin: 1.5
-  _attack: 2
-  _weight: 0.85
-  _healSpeed: 2
+  _name: SpeedZombie
+  _hitPoint: 10
+  _moveSpeedMax: 2
+  _moveSpeedMin: 1.25
+  _attack: 1
+  _weight: 1.25
+  _healSpeed: 2.5
   _attackKey: Life
+  _rank: 0
+  _type: 0
