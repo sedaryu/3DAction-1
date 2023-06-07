@@ -31,10 +31,7 @@ public class ResultMode : MonoBehaviour
     public async Task<Task> ResultItems()
     {
         if (!isResultable) { Debug.Log("Skip"); return Task.CompletedTask; }
-
-        Task _ = Task.Run(async () => { await Task.Delay(750); tvText.text = "ThankYouForYourHardWark\n\n\n"; });
-        Task __ = Task.Run(async () => { await Task.Delay(1500); tvText.text += "   PleaseConfirmItemsYouHaveAcquired"; });
-        Task<Task> waitingTime = Task.Run(async () => { await Task.Delay(3000); return Task.CompletedTask; });
+        Task<Task> waitingTime = WaitingTime();
         headlineText.rectTransform.sizeDelta = new Vector2(500, 100);
         headlineText.rectTransform.anchoredPosition = new Vector3(-5, 190, 0);
         headlineText.text = "";
@@ -87,5 +84,12 @@ public class ResultMode : MonoBehaviour
         headlineText.text = "";
 
         return Task.CompletedTask;
+    }
+
+    private async Task<Task> WaitingTime()
+    {
+        await Task.Delay(1750); tvText.text = "ThankYouForYourHardWark\n\n";
+        await Task.Delay(2750); tvText.text += "PleaseConfirmItemsYouHaveAcquired";
+        await Task.Delay(2750); return Task.CompletedTask;
     }
 }
