@@ -7,6 +7,12 @@ using UnityEngine;
 
 public class LoadAsset : MonoBehaviour
 {
+
+    public T LoadObject<T>(string type, string name) where T : UnityEngine.Object
+    {
+        return (T)AssetDatabase.LoadAssetAtPath($"Assets/Prefab/{type}/{name}.prefab", typeof(T));
+    }
+
     public GameObject[] LoadObjects(string type, string[] names)
     { 
         List<GameObject> objects = new List<GameObject>();

@@ -11,21 +11,21 @@ using UnityEngine;
 /// </Summary>
 public class PlayerParameter : MonoBehaviour, IParametable
 {
+    public PlayerParam param;
+
     //スマッシュ
-    public float SmashTime { get => smash.Param.SmashTime; }
-    public Smash Smash { get => smash; }
-    [SerializeField] private Smash smash;
+    public float SmashTime { get => param.Smash.Param.SmashTime; }
+    public Smash Smash { get => param.Smash; }
 
     //シューズ
-    [SerializeField] private Shoes shoes;
+    public Shoes Shoes { get => param.Shoes; }
 
     //ガン
-    public float Range { get => gun.Param.Range; }
-    public float Reach { get => gun.Param.Reach; }
+    public float Range { get => param.Gun.Param.Range; }
+    public float Reach { get => param.Gun.Param.Reach; }
+    public Gun Gun { get => param.Gun; }
     //ガンエフェクト
-    public ParticleSystem GunEffect { get => _gunEffect; }
-    private ParticleSystem _gunEffect;
-    [SerializeField] private Gun gun;
+    public ParticleSystem GunEffect { get; private set; }
 
     public float Parameter(string key)
     {
@@ -37,13 +37,14 @@ public class PlayerParameter : MonoBehaviour, IParametable
 
     private void Awake()
     {
-        SettingParameter();
 
-        SettingGunPrefab(); //銃のオブジェクトを生成し、位置を調整する
     }
 
     private void Start()
-    {
+    {        
+        SettingParameter();
+
+        SettingGunPrefab(); //銃のオブジェクトを生成し、位置を調整する
         SetEventOnGameClear();
     }
 
@@ -51,16 +52,16 @@ public class PlayerParameter : MonoBehaviour, IParametable
     {
         parameter = new Dictionary<string, float>()
         { 
-          {"Life", shoes.Param.Life}, {"LifeMax", shoes.Param.Life}, 
-          {"MoveSpeed", shoes.Param.MoveSpeed}, {"MoveSpeedMax", shoes.Param.MoveSpeed},
+          {"Life", Shoes.Param.Life}, {"LifeMax", Shoes.Param.Life}, 
+          {"MoveSpeed", Shoes.Param.MoveSpeed}, {"MoveSpeedMax", Shoes.Param.MoveSpeed},
           {"Adrenaline", 0}, {"AdrenalineMax", 1},
           {"AdrenalineTank", 0}, {"AdrenalineTankMax", 3},
-          {"AdrenalineSpeed", shoes.Param.AdrenalineSpeed}, {"AdrenalineSpeedMax", shoes.Param.AdrenalineSpeed},
-          {"Attack", gun.Param.Attack}, {"AttackMax", gun.Param.Attack},
-          {"Knockback", gun.Param.Knockback}, {"KnockbackMax", gun.Param.Knockback},
-          {"Critical", gun.Param.CriticalMin}, {"CriticalMin", gun.Param.CriticalMin}, {"CriticalAdd", gun.Param.CriticalAdd},
-          {"Bullet", gun.Param.Bullet}, {"BulletMax", gun.Param.Bullet},
-          {"ReloadSpeed", gun.Param.ReloadSpeed}, {"ReloadSpeedMax", gun.Param.ReloadSpeed}
+          {"AdrenalineSpeed", Shoes.Param.AdrenalineSpeed}, {"AdrenalineSpeedMax", Shoes.Param.AdrenalineSpeed},
+          {"Attack", Gun.Param.Attack}, {"AttackMax", Gun.Param.Attack},
+          {"Knockback", Gun.Param.Knockback}, {"KnockbackMax", Gun.Param.Knockback},
+          {"Critical", Gun.Param.CriticalMin}, {"CriticalMin", Gun.Param.CriticalMin}, {"CriticalAdd", Gun.Param.CriticalAdd},
+          {"Bullet", Gun.Param.Bullet}, {"BulletMax", Gun.Param.Bullet},
+          {"ReloadSpeed", Gun.Param.ReloadSpeed}, {"ReloadSpeedMax", Gun.Param.ReloadSpeed}
         };
     }
 
@@ -69,13 +70,13 @@ public class PlayerParameter : MonoBehaviour, IParametable
     /// </summary>
     private void SettingGunPrefab()
     {
-        Gun gunObject = Instantiate(gun);
+        Gun gunObject = Instantiate(Gun);
         string path = "Armature | Humanoid/Hips/Spine/Spine1/Spine2/RightShoulder/RightArm/RightForeArm/RightHand";
         gunObject.transform.parent = GameObject.Find("Player").transform.Find(path);
         gunObject.transform.localPosition = new Vector3(0, 0.25f, 0);
         gunObject.transform.localRotation = Quaternion.Euler(-90, 180, -90);
         gunObject.transform.localScale = new Vector3(3, 3, 3);
-        _gunEffect = gunObject.transform.Find("ShotEffect").GetComponent<ParticleSystem>();
+        GunEffect = gunObject.transform.Find("ShotEffect").GetComponent<ParticleSystem>();
     }
 
     public void ChangeParameter(string key, float param)

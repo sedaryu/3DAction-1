@@ -72,4 +72,6 @@ public class EquipmentGunParam
 {
     public List<string> guns;
     public int equipNumber = 0;
+
+    public string NowEquipingGun => guns[equipNumber];
 }

@@ -90,6 +90,6 @@ public class ResultMode : MonoBehaviour
     {
         await Task.Delay(1750); tvText.text = "ThankYouForYourHardWark\n\n";
         await Task.Delay(2750); tvText.text += "PleaseConfirmItemsYouHaveAcquired";
-        await Task.Delay(2750); return Task.CompletedTask;
+        await Task.Delay(3250); return Task.CompletedTask;
     }
 }

@@ -37,6 +37,11 @@ public class PlayerAct : MonoBehaviour
 
     void Awake()
     {
+    }
+
+    // Start is called before the first frame update
+    void Start()
+    {
         parameter = GetComponent<PlayerParameter>();
         stater = GetComponent<PlayerStater>();
         mover = GetComponent<PlayerMover>();
@@ -76,11 +81,7 @@ public class PlayerAct : MonoBehaviour
 
         GameObject canvas = GameObject.Find("Canvas");
         playerUIs = canvas.GetComponentsInChildren<IPlayerUI>().ToList();
-    }
 
-    // Start is called before the first frame update
-    void Start()
-    {
         playerUIs?.ForEach(x => x.UpdateUI("Bullet", parameter.Parameter("Bullet")));
         playerUIs?.ForEach(x => x.UpdateUI("Life", parameter.Parameter("Life")));
         playerUIs?.ForEach(x => x.UpdateUI("Adrenaline", parameter.Parameter("Adrenaline")));

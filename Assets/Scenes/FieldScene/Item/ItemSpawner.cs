@@ -8,7 +8,7 @@ using Random = UnityEngine.Random;
 
 public class ItemSpawner : MonoBehaviour
 {
-    [SerializeField] private SpawnObjectList spawnItemList;
+    public SpawnObjectList spawnItemList;
 
     private GameObject[] spawnObjects;
 

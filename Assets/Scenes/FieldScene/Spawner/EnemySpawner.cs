@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
-    [SerializeField] private SpawnObjectList spawnEnemyList;
+    public SpawnObjectList spawnEnemyList;
 
     private Vector3 spawnArea;
     private float spawnArea_x;

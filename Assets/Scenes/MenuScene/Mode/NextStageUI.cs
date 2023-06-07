@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 
 public class NextStageUI : SelectModeUI
 {
@@ -15,6 +16,9 @@ public class NextStageUI : SelectModeUI
     [SerializeField] private SpawnObjectList spawnItemList;
     private List<StageParam> stageParams = new List<StageParam>();
     private int selectedStage = 0;
+    [SerializeField] private Shoes shoes;
+    [SerializeField] private Smash smash;
+    private PlayerParam playerParam;
 
     private void Awake()
     {
@@ -27,14 +31,14 @@ public class NextStageUI : SelectModeUI
 
     public void DisplayStageParamOnTV()
     {
-        tvText.text = $"StageType: {stageParams[selectedStage].type.ToString()}\n" +
+        tvText.text = $"StageType: {stageParams[selectedStage].Type.ToString()}\n" +
                       $"Enemy: \n" +
-                      $"-{stageParams[selectedStage].spawnEnemyList.SpawnObjects[0].name} " +
-                      $"AppearRate: {stageParams[selectedStage].spawnEnemyList.SpawnObjects[0].appearanceProbability}\n" +
-                      $"-{stageParams[selectedStage].spawnEnemyList.SpawnObjects[1].name} " +
-                      $"AppearRate: {stageParams[selectedStage].spawnEnemyList.SpawnObjects[1].appearanceProbability}\n" +
-                      $"-{stageParams[selectedStage].spawnEnemyList.SpawnObjects[2].name} " +
-                      $"AppearRate: {stageParams[selectedStage].spawnEnemyList.SpawnObjects[2].appearanceProbability}";
+                      $"-{stageParams[selectedStage].SpawnEnemyList.SpawnObjects[0].name} " +
+                      $"AppearRate: {stageParams[selectedStage].SpawnEnemyList.SpawnObjects[0].appearanceProbability}\n" +
+                      $"-{stageParams[selectedStage].SpawnEnemyList.SpawnObjects[1].name} " +
+                      $"AppearRate: {stageParams[selectedStage].SpawnEnemyList.SpawnObjects[1].appearanceProbability}\n" +
+                      $"-{stageParams[selectedStage].SpawnEnemyList.SpawnObjects[2].name} " +
+                      $"AppearRate: {stageParams[selectedStage].SpawnEnemyList.SpawnObjects[2].appearanceProbability}";
     }
 
     public void OnClickMug()
@@ -46,7 +50,19 @@ public class NextStageUI : SelectModeUI
 
     public void OnClickTelescope()
     {
-        
+        SceneManager.sceneLoaded += SetParamToNextScene;
+        string gun = new LoadJson().LoadEquipmentGunParam().NowEquipingGun;
+        Debug.Log(gun);
+        playerParam = new PlayerParam(new LoadAsset().LoadObject<Gun>("Gun", gun), smash, shoes);
+        SceneManager.LoadScene($"{stageParams[selectedStage].Type.ToString()}FieldScene");
+    }
+
+    private void SetParamToNextScene(Scene scene, LoadSceneMode _mode)
+    {
+        SceneManager.sceneLoaded -= SetParamToNextScene;
+        GameObject.Find("EnemySpawner").GetComponent<EnemySpawner>().spawnEnemyList = stageParams[selectedStage].SpawnEnemyList;
+        GameObject.Find("ItemSpawner").GetComponent<ItemSpawner>().spawnItemList = stageParams[selectedStage].SpawnItemList;
+        GameObject.Find("Player").GetComponent<PlayerParameter>().param = playerParam;
     }
 
     private void GenerateStageParam()

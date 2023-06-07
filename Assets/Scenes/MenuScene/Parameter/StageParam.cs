@@ -4,21 +4,19 @@ using UnityEngine;
 
 public class StageParam
 {
-    public StageType type;
+    public StageType Type { get; private set; }
     public enum StageType
     { 
         Town,
         Forest,
     }
-
-    public SpawnObjectList spawnEnemyList;
-
-    public SpawnObjectList spawnItemList;
+    public SpawnObjectList SpawnEnemyList { get; private set; }
+    public SpawnObjectList SpawnItemList { get; private set; }
 
     public StageParam(StageType stageType, SpawnObjectList enemyList, SpawnObjectList itemList)
     { 
-        type = stageType;
-        spawnEnemyList = enemyList;
-        spawnItemList = itemList;
+        Type = stageType;
+        SpawnEnemyList = enemyList;
+        SpawnItemList = itemList;
     }
 }
