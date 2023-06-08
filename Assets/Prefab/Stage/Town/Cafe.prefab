@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 2608168825266179435}
   - component: {fileID: 451493346974850757}
   - component: {fileID: 1548456474362631938}
+  - component: {fileID: 1405353915828083849}
   m_Layer: 8
   m_Name: Cafe
   m_TagString: Obstacle
@@ -34,7 +35,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 14
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!33 &8219621686559613973
 MeshFilter:
@@ -129,3 +130,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Cafe
   Size: {x: 4.5, y: 0, z: 3}
+--- !u!65 &1405353915828083849
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2813872575706088169}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 5, y: 3.306, z: 5.516}
+  m_Center: {x: 0, y: 1.653, z: 0}

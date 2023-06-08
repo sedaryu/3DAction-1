@@ -8,4 +8,5 @@ public class ParamReceiver : MonoBehaviour
     [NonSerialized] public SpawnObjectList spawnEnemyList;
     [NonSerialized] public SpawnObjectList spawnItemList;
     [NonSerialized] public PlayerParam playerParam;
+    [NonSerialized] public Dictionary<string, Vector2> mainObstacles;
 }
