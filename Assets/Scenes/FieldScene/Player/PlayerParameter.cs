@@ -11,7 +11,7 @@ using UnityEngine;
 /// </Summary>
 public class PlayerParameter : MonoBehaviour, IParametable
 {
-    public PlayerParam param;
+    private PlayerParam param;
 
     //スマッシュ
     public float SmashTime { get => param.Smash.Param.SmashTime; }
@@ -41,7 +41,8 @@ public class PlayerParameter : MonoBehaviour, IParametable
     }
 
     private void Start()
-    {        
+    {
+        param = GameObject.Find("ParamReceiver").GetComponent<ParamReceiver>().playerParam;
         SettingParameter();
 
         SettingGunPrefab(); //銃のオブジェクトを生成し、位置を調整する
@@ -52,7 +53,7 @@ public class PlayerParameter : MonoBehaviour, IParametable
     {
         parameter = new Dictionary<string, float>()
         { 
-          {"Life", Shoes.Param.Life}, {"LifeMax", Shoes.Param.Life}, 
+          {"Life", param.Life}, {"LifeMax", Shoes.Param.Life}, 
           {"MoveSpeed", Shoes.Param.MoveSpeed}, {"MoveSpeedMax", Shoes.Param.MoveSpeed},
           {"Adrenaline", 0}, {"AdrenalineMax", 1},
           {"AdrenalineTank", 0}, {"AdrenalineTankMax", 3},
@@ -104,7 +105,11 @@ public class PlayerParameter : MonoBehaviour, IParametable
         switch (key)
         {
             case "Life":
-                if (parameter["Life"] == 0) Destroy(gameObject);
+                if (parameter["Life"] == 0)
+                {
+                    GameObject.Find("GameController").GetComponent<GameController>().GameOver();
+                    Destroy(gameObject);
+                }
                 break;
 
             case "MoveSpeed":

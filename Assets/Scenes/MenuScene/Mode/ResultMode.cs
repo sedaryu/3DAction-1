@@ -60,6 +60,7 @@ public class ResultMode : MonoBehaviour
 
         MenuParam param = new LoadJson().LoadMenuParam();
         param.SetParameter("Life", life);
+        param.ChangeParameter("Day", 1);
 
         for (int i = 0; i < items.Length; i++)
         {
@@ -88,8 +89,8 @@ public class ResultMode : MonoBehaviour
 
     private async Task<Task> WaitingTime()
     {
-        await Task.Delay(1750); tvText.text = "ThankYouForYourHardWark\n\n";
-        await Task.Delay(2750); tvText.text += "PleaseConfirmItemsYouHaveAcquired";
+        await Task.Delay(1750); tvText.text = "Thank You For Your Hard Wark\n";
+        await Task.Delay(2750); tvText.text += "Please Confirm Items You Have Acquired";
         await Task.Delay(3250); return Task.CompletedTask;
     }
 }

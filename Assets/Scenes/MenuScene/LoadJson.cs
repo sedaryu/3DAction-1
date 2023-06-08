@@ -74,4 +74,10 @@ public class EquipmentGunParam
     public int equipNumber = 0;
 
     public string NowEquipingGun => guns[equipNumber];
+
+    public EquipmentGunParam(List<string> _guns, int _equipNumber)
+    {
+        guns = _guns;
+        equipNumber = _equipNumber;
+    }
 }

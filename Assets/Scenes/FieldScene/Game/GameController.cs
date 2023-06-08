@@ -38,6 +38,18 @@ public class GameController : MonoBehaviour
         StartCoroutine(TransferScene());
     }
 
+    public void GameOver()
+    {
+        Time.timeScale = 0;
+        GameObject text = GameObject.Find("Canvas").transform.Find("GameClearText").gameObject;
+        text.SetActive(true);
+        text.GetComponent<Text>().color = Color.black;
+        text.GetComponent<Text>().text = $"GameOver\nYouHaveSurvived\nFor {new LoadJson().LoadMenuParam().Parameter("Day")} Days";
+        new LoadJson().SaveMenuParam(new MenuParam(new List<string>() { "Point", "PointMax", "Life", "LifeMax", "Random", "RandomMax", "Day", "DayMax" },
+                                                   new List<float>() { 0, 10000000272564224, 5, 5, 0, 100, 1, 10000000272564224 }));
+        new LoadJson().SaveEquipmentGunParam(new EquipmentGunParam(new List<string>() { "SurvivalRevolver" }, 0));
+    }
+
     private IEnumerator TransferScene()
     { 
         yield return new WaitForSecondsRealtime(5);

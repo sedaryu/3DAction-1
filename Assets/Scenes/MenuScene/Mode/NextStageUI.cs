@@ -52,17 +52,29 @@ public class NextStageUI : SelectModeUI
     {
         SceneManager.sceneLoaded += SetParamToNextScene;
         string gun = new LoadJson().LoadEquipmentGunParam().NowEquipingGun;
-        Debug.Log(gun);
-        playerParam = new PlayerParam(new LoadAsset().LoadObject<Gun>("Gun", gun), smash, shoes);
-        SceneManager.LoadScene($"{stageParams[selectedStage].Type.ToString()}FieldScene");
+        playerParam = new PlayerParam(new LoadAsset().LoadObject<Gun>("Gun", gun), smash, shoes, new LoadJson().LoadMenuParam().Parameter("Life"));
+        GameObject.Find("Canvas").transform.Find("Back").gameObject.SetActive(false);
+        colliders.ForEach(x => x.enabled = false);
+        StartCoroutine(TransferFieldScene());
     }
 
     private void SetParamToNextScene(Scene scene, LoadSceneMode _mode)
     {
         SceneManager.sceneLoaded -= SetParamToNextScene;
-        GameObject.Find("EnemySpawner").GetComponent<EnemySpawner>().spawnEnemyList = stageParams[selectedStage].SpawnEnemyList;
-        GameObject.Find("ItemSpawner").GetComponent<ItemSpawner>().spawnItemList = stageParams[selectedStage].SpawnItemList;
-        GameObject.Find("Player").GetComponent<PlayerParameter>().param = playerParam;
+        ParamReceiver receiver = GameObject.Find("ParamReceiver").GetComponent<ParamReceiver>();
+        receiver.spawnEnemyList = stageParams[selectedStage].SpawnEnemyList;
+        receiver.spawnItemList = stageParams[selectedStage].SpawnItemList;
+        receiver.playerParam = playerParam;
+    }
+
+    private IEnumerator TransferFieldScene()
+    {
+        for (int i = 0; i < 5; i++)
+        {
+            tvText.text = $"Ok, \nBegin Preparations \nTransporting You To The Destination \n{5 - i}";
+            yield return new WaitForSeconds(1);
+        }
+        SceneManager.LoadScene($"{stageParams[selectedStage].Type.ToString()}FieldScene");
     }
 
     private void GenerateStageParam()

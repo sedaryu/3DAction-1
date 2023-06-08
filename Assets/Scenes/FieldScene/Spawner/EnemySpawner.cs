@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
-    public SpawnObjectList spawnEnemyList;
+    private SpawnObjectList spawnEnemyList;
 
     private Vector3 spawnArea;
     private float spawnArea_x;
@@ -20,11 +20,19 @@ public class EnemySpawner : MonoBehaviour
 
     private List<GameObject> enemies = new List<GameObject>();
 
+    private int[] debug = new int[3];
+
     private void Awake()
     {
         spawnArea = GameObject.Find("BakedPlane").transform.localScale;
         spawnArea_x = spawnArea.x * 5;
         spawnArea_z = spawnArea.z * 5;
+    }
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        spawnEnemyList = GameObject.Find("ParamReceiver").GetComponent<ParamReceiver>().spawnEnemyList;
 
         for (int i = 0; i < spawnEnemyList.SpawnObjects.Length; i++)
         {
@@ -35,23 +43,19 @@ public class EnemySpawner : MonoBehaviour
         }
 
         GetSpawnObject();
-    }
 
-    private void GetSpawnObject()
-    {
-        string[] enemiesName = spawnEnemyList.SpawnObjects.ToList().Select(x => x.name).ToArray();
-        spawnObjects = GameObject.Find("LoadAsset").GetComponent<LoadAsset>().LoadObjects("Enemy", enemiesName);
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
         player = GameObject.Find("Player").transform;
 
         for (int i = 0; i < 20; i++)
         {
             SpawnEnemy();
         }
+    }
+
+    private void GetSpawnObject()
+    {
+        string[] enemiesName = spawnEnemyList.SpawnObjects.ToList().Select(x => x.name).ToArray();
+        spawnObjects = GameObject.Find("LoadAsset").GetComponent<LoadAsset>().LoadObjects("Enemy", enemiesName);
     }
 
     // Update is called once per frame
@@ -67,7 +71,8 @@ public class EnemySpawner : MonoBehaviour
 
     private void SpawnEnemy()
     {
-        GameObject spawn = spawnObjects[random[Random.Range(0, 100)]];
+        int rnd = random[Random.Range(0, 100)];
+        GameObject spawn = spawnObjects[rnd];
         Vector3 spawnPosition;
 
         if (player.position.x < 0 && 0 < player.position.z)
@@ -83,6 +88,10 @@ public class EnemySpawner : MonoBehaviour
 
         GameObject enemy = Instantiate(spawn, spawnPosition, Quaternion.identity);
         enemies.Add(enemy);
+
+        debug[rnd]++;
+
+        Debug.Log($"{spawnObjects[0].name}: {debug[0]} {spawnObjects[1].name}:{debug[1]} {spawnObjects[2].name}:{debug[2]}");
     }
 
     private bool JudgeSpawnEnemy()

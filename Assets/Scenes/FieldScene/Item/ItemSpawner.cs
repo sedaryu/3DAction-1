@@ -8,14 +8,16 @@ using Random = UnityEngine.Random;
 
 public class ItemSpawner : MonoBehaviour
 {
-    public SpawnObjectList spawnItemList;
+    private SpawnObjectList spawnItemList;
 
     private GameObject[] spawnObjects;
 
     private List<int> random = new List<int>();
 
-    private void Awake()
+    private void Start()
     {
+        spawnItemList = GameObject.Find("ParamReceiver").GetComponent<ParamReceiver>().spawnItemList;
+
         SettingRandom();
 
         GetSpawnObject();
