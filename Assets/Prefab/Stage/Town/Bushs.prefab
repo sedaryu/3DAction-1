@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6711303658242037253}
   - component: {fileID: 7328908633162412361}
-  - component: {fileID: 1269075967126407522}
+  - component: {fileID: -7732011634388945337}
   m_Layer: 8
   m_Name: Bushs
   m_TagString: Obstacle
@@ -35,7 +35,7 @@ Transform:
   - {fileID: 6855163006061578261}
   - {fileID: 4249407447676624451}
   m_Father: {fileID: 0}
-  m_RootOrder: 22
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!208 &7328908633162412361
 NavMeshObstacle:
@@ -53,20 +53,27 @@ NavMeshObstacle:
   m_CarveOnlyStationary: 1
   m_Center: {x: 0, y: 0, z: 0}
   m_TimeToStationary: 0.5
---- !u!114 &1269075967126407522
-MonoBehaviour:
+--- !u!65 &-7732011634388945337
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3453569480609625981}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0fbbb8cddd1434748825616dbc39495e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Name: Bushs
-  Size: {x: 1.5, y: 0, z: 5.5}
+  serializedVersion: 3
+  m_Size: {x: 1, y: 2, z: 5}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &701080001906324686
 PrefabInstance:
   m_ObjectHideFlags: 0

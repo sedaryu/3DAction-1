@@ -42,7 +42,7 @@ public class PlayerParameter : MonoBehaviour, IParametable
 
     private void Start()
     {
-        param = GameObject.Find("ParamReceiver").GetComponent<ParamReceiver>().playerParam;
+        param = GameObject.Find("ParamReceiver").GetComponent<ParamReceiver>().PlayerParam;
         SettingParameter();
 
         SettingGunPrefab(); //銃のオブジェクトを生成し、位置を調整する

@@ -16,7 +16,7 @@ public class ItemSpawner : MonoBehaviour
 
     private void Start()
     {
-        spawnItemList = GameObject.Find("ParamReceiver").GetComponent<ParamReceiver>().spawnItemList;
+        spawnItemList = GameObject.Find("ParamReceiver").GetComponent<ParamReceiver>().SpawnItemList;
 
         SettingRandom();
 

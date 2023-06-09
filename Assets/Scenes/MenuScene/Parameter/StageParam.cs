@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,6 +11,8 @@ public class StageParam
         Town,
         Forest,
     }
+    public Dictionary<string, Vector2> Obstacles { get; private set; }
+    public string[] SubObstacles { get; private set; }
     public SpawnObjectList SpawnEnemyList { get; private set; }
     public SpawnObjectList SpawnItemList { get; private set; }
 
@@ -18,5 +21,11 @@ public class StageParam
         Type = stageType;
         SpawnEnemyList = enemyList;
         SpawnItemList = itemList;
+    }
+
+    public void SetObstacles(Dictionary<string, Vector2> obstacles, string[] subObstacles)
+    { 
+        Obstacles = obstacles;
+        SubObstacles = subObstacles;
     }
 }

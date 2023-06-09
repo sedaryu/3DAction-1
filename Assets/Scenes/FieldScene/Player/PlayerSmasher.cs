@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
@@ -36,20 +37,23 @@ public class PlayerSmasher : MonoBehaviour
         }
     }
 
-    public void Smash()
+    public async Task<Task> Smash()
     {
-        if (IsSmashing) return;
+        if (IsSmashing) return Task.CompletedTask;
         IsSmashing = true;
         smashers.ForEach(x => x.StopTimer());
-        StartCoroutine(SmashTime());
+        Task wait = await SmashTime();
+        return Task.CompletedTask;
     }
 
-    private IEnumerator SmashTime()
+    private async Task<Task> SmashTime()
     {
         animator.SetTrigger("StartSmash");
-        yield return new WaitForSeconds(smash.Param.SmashTime * 0.8f);
+        await Task.Delay((int)((smash.Param.SmashTime * 0.8f) * 1000));
+        //yield return new WaitForSeconds(smash.Param.SmashTime * 0.8f);
         animator.SetTrigger("FinishSmash");
-        yield return new WaitForSeconds(smash.Param.SmashTime * 0.2f);
+        await Task.Delay((int)((smash.Param.SmashTime * 0.2f) * 1000));
+        //yield return new WaitForSeconds(smash.Param.SmashTime * 0.2f);
         animator.SetTrigger("ExitSmash");
         IsSmashing = false;
         RemoveColliderInSmashers();
@@ -59,6 +63,7 @@ public class PlayerSmasher : MonoBehaviour
             List<Collider> hits = x.Smashing();
             if (hits != null) MakeGroggy(hits);
         }
+        return Task.CompletedTask;
     }
 
     //ÉRÉäÉ_Å[ÇÃïﬂë®

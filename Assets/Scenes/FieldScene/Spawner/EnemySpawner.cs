@@ -32,7 +32,7 @@ public class EnemySpawner : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        spawnEnemyList = GameObject.Find("ParamReceiver").GetComponent<ParamReceiver>().spawnEnemyList;
+        spawnEnemyList = GameObject.Find("ParamReceiver").GetComponent<ParamReceiver>().SpawnEnemyList;
 
         for (int i = 0; i < spawnEnemyList.SpawnObjects.Length; i++)
         {

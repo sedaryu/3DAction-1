@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -129,15 +130,18 @@ public class PlayerAct : MonoBehaviour
         playerUIs?.ForEach(x => x.UpdateUI("Bullet", parameter.Parameter("Bullet")));
     }
 
-    private void OrderOutputSmashing()
+    private async void OrderOutputSmashing()
     {
         if (!stater.State["Smashable"]) return;
         if (smasher.IsSmashing) return;
-        //stater.TransferState("Smashable", false);
         if (smasher.RemoveColliderInSmashers()) return;
-        StartCoroutine(stater.WaitForStatusTransition("Damageable", parameter.SmashTime * 1.25f));
-        StartCoroutine(stater.WaitForStatusTransition("Movable", parameter.SmashTime));
-        smasher.Smash();
+        stater.TransferState("Damageable", false);
+        stater.TransferState("Movable", false);
+        //StartCoroutine(stater.WaitForStatusTransition("Damageable", parameter.SmashTime * 1.25f));
+        //StartCoroutine(stater.WaitForStatusTransition("Movable", parameter.SmashTime));
+        Task smash = await smasher.Smash();
+        stater.TransferState("Damageable", true);
+        stater.TransferState("Movable", true);
     }
 
     private void OrderOutputDamaging(Collider other)

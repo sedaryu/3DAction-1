@@ -19,7 +19,6 @@ public class NextStageUI : SelectModeUI
     [SerializeField] private Shoes shoes;
     [SerializeField] private Smash smash;
     private PlayerParam playerParam;
-    private Dictionary<string, Vector2> obstacles;
 
     private void Awake()
     {
@@ -54,7 +53,7 @@ public class NextStageUI : SelectModeUI
         SceneManager.sceneLoaded += SetParamToNextScene;
         string gun = new LoadJson().LoadEquipmentGunParam().NowEquipingGun;
         playerParam = new PlayerParam(new LoadAsset().LoadObject<Gun>("Gun", gun), smash, shoes, new LoadJson().LoadMenuParam().Parameter("Life"));
-        obstacles = new StageMaker().MakeStage();
+        stageParams[selectedStage].SetObstacles(new StageMaker().MakeStage(out string[] subObstacles), subObstacles);
         GameObject.Find("Canvas").transform.Find("Back").gameObject.SetActive(false);
         colliders.ForEach(x => x.enabled = false);
         StartCoroutine(TransferFieldScene());
@@ -64,10 +63,8 @@ public class NextStageUI : SelectModeUI
     {
         SceneManager.sceneLoaded -= SetParamToNextScene;
         ParamReceiver receiver = GameObject.Find("ParamReceiver").GetComponent<ParamReceiver>();
-        receiver.spawnEnemyList = stageParams[selectedStage].SpawnEnemyList;
-        receiver.spawnItemList = stageParams[selectedStage].SpawnItemList;
+        receiver.stageParam = stageParams[selectedStage];
         receiver.playerParam = playerParam;
-        receiver.mainObstacles = obstacles;
     }
 
     private IEnumerator TransferFieldScene()
