@@ -12,6 +12,7 @@ public class NextStageUI : SelectModeUI
     [SerializeField] private TextMeshPro tvText;
     [SerializeField] private Collider mug;
     [SerializeField] private Collider telescope;
+    [SerializeField] private Collider note;
 
     [SerializeField] private SpawnObjectList spawnItemList;
     private List<StageParam> stageParams = new List<StageParam>();
@@ -23,7 +24,7 @@ public class NextStageUI : SelectModeUI
     private void Awake()
     {
         initialText = "Clicking Mugcup, \nChange Next Stage \nClicking Telescope, \nGo To Next Stage";
-        colliders.Add(mug); colliders.Add(telescope);
+        colliders.Add(mug); colliders.Add(telescope); colliders.Add(note);
         onClicked += () => sublineText.rectTransform.sizeDelta = new Vector2(145, 70);
         onClicked += DisplayStageParamOnTV;
         GenerateStageParam();
@@ -57,6 +58,11 @@ public class NextStageUI : SelectModeUI
         GameObject.Find("Canvas").transform.Find("Back").gameObject.SetActive(false);
         colliders.ForEach(x => x.enabled = false);
         StartCoroutine(TransferFieldScene());
+    }
+
+    public void OnClickNote()
+    {
+        Debug.Log("Note");
     }
 
     private void SetParamToNextScene(Scene scene, LoadSceneMode _mode)
