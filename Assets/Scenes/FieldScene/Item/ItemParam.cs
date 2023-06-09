@@ -27,6 +27,18 @@ public class ItemParam : ScriptableObject
     public float Time => time;
     [SerializeField] private float time;
 
+    public float Rank => rank;
+    [SerializeField] private float rank;
+
+    public int Drop => GetDrop();
+    [SerializeField] private int dropMin;
+    [SerializeField] private int dropMax;
+
+    private int GetDrop()
+    { 
+        return Random.Range(dropMin, dropMax + 1);
+    }
+
     public string Text => GetText();
 
     private string GetText()

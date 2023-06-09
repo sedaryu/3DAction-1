@@ -15,5 +15,8 @@ MonoBehaviour:
   type: 0
   name: Vodka
   unique: 35
-  weight: 0.25
+  weight: 0.4
   time: 6
+  rank: 1
+  dropMin: 10
+  dropMax: 20

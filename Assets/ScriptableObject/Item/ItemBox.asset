@@ -15,5 +15,8 @@ MonoBehaviour:
   type: 2
   name: ItemBox
   unique: 5
-  weight: 5
+  weight: 0.6
   time: 6
+  rank: 0
+  dropMin: 5
+  dropMax: 15

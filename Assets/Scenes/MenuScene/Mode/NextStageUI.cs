@@ -9,12 +9,13 @@ using UnityEngine.SceneManagement;
 
 public class NextStageUI : SelectModeUI
 {
+    [SerializeField] private float dayPerRank;
+
     [SerializeField] private TextMeshPro tvText;
-    [SerializeField] private Collider mug;
-    [SerializeField] private Collider telescope;
+    [SerializeField] private Collider keyBoard;
+    [SerializeField] private Collider mouse;
     [SerializeField] private Collider note;
 
-    [SerializeField] private SpawnObjectList spawnItemList;
     private List<StageParam> stageParams = new List<StageParam>();
     private int selectedStage = 0;
     [SerializeField] private Shoes shoes;
@@ -23,9 +24,13 @@ public class NextStageUI : SelectModeUI
 
     private void Awake()
     {
-        initialText = "Clicking Mugcup, \nChange Next Stage \nClicking Telescope, \nGo To Next Stage";
-        colliders.Add(mug); colliders.Add(telescope); colliders.Add(note);
-        onClicked += () => sublineText.rectTransform.sizeDelta = new Vector2(145, 70);
+        initialText = "";
+        colliders.Add(keyBoard); colliders.Add(mouse); colliders.Add(note);
+        onClicked += () => 
+        {
+            headlineText.rectTransform.sizeDelta = new Vector2(0, 0);
+            sublineText.rectTransform.sizeDelta = new Vector2(0, 0);
+        };
         onClicked += DisplayStageParamOnTV;
         GenerateStageParam();
     }
@@ -39,17 +44,24 @@ public class NextStageUI : SelectModeUI
                       $"-{stageParams[selectedStage].SpawnEnemyList.SpawnObjects[1].name} " +
                       $"AppearRate: {stageParams[selectedStage].SpawnEnemyList.SpawnObjects[1].appearanceProbability}\n" +
                       $"-{stageParams[selectedStage].SpawnEnemyList.SpawnObjects[2].name} " +
-                      $"AppearRate: {stageParams[selectedStage].SpawnEnemyList.SpawnObjects[2].appearanceProbability}";
+                      $"AppearRate: {stageParams[selectedStage].SpawnEnemyList.SpawnObjects[2].appearanceProbability}\n" +
+                      $"Item: \n" +
+                      $"-{stageParams[selectedStage].SpawnItemList.SpawnObjects[0].name} " +
+                      $"AppearRate: {stageParams[selectedStage].SpawnItemList.SpawnObjects[0].appearanceProbability}\n" +
+                      $"-{stageParams[selectedStage].SpawnItemList.SpawnObjects[1].name} " +
+                      $"AppearRate: {stageParams[selectedStage].SpawnItemList.SpawnObjects[1].appearanceProbability}\n" +
+                      $"-{stageParams[selectedStage].SpawnItemList.SpawnObjects[2].name} " +
+                      $"AppearRate: {stageParams[selectedStage].SpawnItemList.SpawnObjects[2].appearanceProbability}";
     }
 
-    public void OnClickMug()
+    public void OnClickKeyBoard()
     {
         if (selectedStage == stageParams.Count - 1) selectedStage = 0;
         else selectedStage++;
         DisplayStageParamOnTV();
     }
 
-    public void OnClickTelescope()
+    public void OnClickMouse()
     {
         SceneManager.sceneLoaded += SetParamToNextScene;
         string gun = new LoadJson().LoadEquipmentGunParam().NowEquipingGun;
@@ -86,12 +98,18 @@ public class NextStageUI : SelectModeUI
     private void GenerateStageParam()
     {
         float day = new LoadJson().LoadMenuParam().Parameter("Day");
-        int rank = (int)(day * 0.2f);
-        List<EnemyParam> loads = new List<EnemyParam>();
-        new LoadAsset().LoadParamsAll("Enemy").ToList().ForEach(x => loads.Add(x as EnemyParam));
-        List<EnemyParam> enemies = loads.Where(x => x.Rank <= rank).ToList();
+        int rank = (int)(day * dayPerRank);
+        List<EnemyParam> loadEnemies = new List<EnemyParam>();
+        List<ItemParam> loadItems = new List<ItemParam>();
+        new LoadAsset().LoadParamsAll("Enemy").ToList().ForEach(x => loadEnemies.Add(x as EnemyParam));
+        new LoadAsset().LoadParamsAll("Item").ToList().ForEach(x => loadItems.Add(x as ItemParam));
+        List<EnemyParam> enemies = loadEnemies.Where(x => x.Rank <= rank).ToList();
+        List<ItemParam> items = loadItems.Where(x => x.Rank <= rank).ToList();
         EnemyParam[] normalEnemies = enemies.Where(x => x.Type == EnemyParam.EnemyType.Normal).ToArray();
         EnemyParam[] miniEnemies = enemies.Where(x => x.Type == EnemyParam.EnemyType.Mini).ToArray();
+        ItemParam[] pointItems = items.Where(x => x.Type == ItemParam.ItemType.Point).ToArray();
+        ItemParam[] lifeItems = items.Where(x => x.Type == ItemParam.ItemType.Life).ToArray();
+        ItemParam[] randomItems = items.Where(x => x.Type == ItemParam.ItemType.Random).ToArray();
 
         for (int n = 0; n < 3; n++)
         {
@@ -102,16 +120,37 @@ public class NextStageUI : SelectModeUI
                 if (i == mini) enemyNames.Add(miniEnemies[Random.Range(0, enemies.Count(x => x.Type == EnemyParam.EnemyType.Mini))].Name);
                 else enemyNames.Add(normalEnemies[Random.Range(0, enemies.Count(x => x.Type == EnemyParam.EnemyType.Normal))].Name);
             }
-
-            SpawnObjectList.SpawnObject[] spawnObjects = new SpawnObjectList.SpawnObject[enemyNames.Count];
+            SpawnObjectList.SpawnObject[] spawnEnemies = new SpawnObjectList.SpawnObject[enemyNames.Count];
             int percentage = 100;
-            spawnObjects[0] = new SpawnObjectList.SpawnObject(enemyNames[0], Random.Range(1, 81));
-            percentage -= spawnObjects[0].appearanceProbability;
-            spawnObjects[1] = new SpawnObjectList.SpawnObject(enemyNames[1], Random.Range(1, percentage));
-            percentage -= spawnObjects[1].appearanceProbability;
-            spawnObjects[2] = new SpawnObjectList.SpawnObject(enemyNames[2], percentage);
+            spawnEnemies[0] = new SpawnObjectList.SpawnObject(enemyNames[0], Random.Range(1, 81));
+            percentage -= spawnEnemies[0].appearanceProbability;
+            spawnEnemies[1] = new SpawnObjectList.SpawnObject(enemyNames[1], Random.Range(1, percentage));
+            percentage -= spawnEnemies[1].appearanceProbability;
+            spawnEnemies[2] = new SpawnObjectList.SpawnObject(enemyNames[2], percentage);
 
-            stageParams.Add(new StageParam(StageParam.StageType.Town, new SpawnObjectList(1.5f, spawnObjects), spawnItemList));
+            SpawnObjectList.SpawnObject[] spawnItems = new SpawnObjectList.SpawnObject[3];
+            for (int i = 0; i < 3; i++)
+            {
+                int rnd = Random.Range(0, 10);
+                if (0 <= rnd && rnd <= 4)
+                {
+                    int index = Random.Range(0, pointItems.Length);
+                    spawnItems[i] = new SpawnObjectList.SpawnObject(pointItems[index].Name, pointItems[index].Drop);
+                }
+                else if (5 <= rnd && rnd <= 7)
+                {
+                    int index = Random.Range(0, lifeItems.Length);
+                    spawnItems[i] = new SpawnObjectList.SpawnObject(lifeItems[index].Name, lifeItems[index].Drop);
+                }
+                else
+                {
+                    int index = Random.Range(0, randomItems.Length);
+                    spawnItems[i] = new SpawnObjectList.SpawnObject(randomItems[index].Name, randomItems[index].Drop);
+                }
+            }
+
+            stageParams.Add(new StageParam(StageParam.StageType.Town, 
+                            new SpawnObjectList(1.5f, spawnEnemies), new SpawnObjectList(0, spawnItems)));
         }
     }
 }

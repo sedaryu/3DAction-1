@@ -18,5 +18,5 @@ MonoBehaviour:
     appearanceProbability: 30
   - name: ItemBox
     appearanceProbability: 5
-  - name: Drug
-    appearanceProbability: 10
+  - name: MultiVitamin
+    appearanceProbability: 15

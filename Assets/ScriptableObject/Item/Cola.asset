@@ -17,3 +17,6 @@ MonoBehaviour:
   unique: 10
   weight: 0.1
   time: 3
+  rank: 0
+  dropMin: 15
+  dropMax: 30

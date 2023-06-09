@@ -140,7 +140,7 @@ public class PlayerAct : MonoBehaviour
         //StartCoroutine(stater.WaitForStatusTransition("Damageable", parameter.SmashTime * 1.25f));
         //StartCoroutine(stater.WaitForStatusTransition("Movable", parameter.SmashTime));
         Task smash = await smasher.Smash();
-        stater.TransferState("Damageable", true);
+        StartCoroutine(stater.WaitForStatusTransition("Damageable", parameter.SmashTime * 0.25f));
         stater.TransferState("Movable", true);
     }
 
