@@ -13,4 +13,9 @@ public class ParamReceiver : MonoBehaviour
 
     [NonSerialized] public StageParam stageParam;
     [NonSerialized] public PlayerParam playerParam;
+
+    private void Start()
+    {
+        GameObject.Find("GameController").GetComponent<GameController>().stageParam = stageParam;
+    }
 }

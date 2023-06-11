@@ -11,6 +11,7 @@ public class GameController : MonoBehaviour
 
     public List<ItemParam> collectItems;
     public float life;
+    public StageParam stageParam;
 
     public UnityAction onGameClear;
 
@@ -64,5 +65,6 @@ public class GameController : MonoBehaviour
         resulter.isResultable = true;
         resulter.collectItems = collectItems;
         resulter.life = life;
+        GameObject.Find("Canvas").transform.Find("NextStage").GetComponent<NextStageUI>().prevStageParam = stageParam;
     }
 }

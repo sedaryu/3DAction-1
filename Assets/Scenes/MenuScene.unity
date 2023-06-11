@@ -1528,7 +1528,7 @@ MonoBehaviour:
   tvText: {fileID: 1962025797}
   keyBoard: {fileID: 927742893}
   mouse: {fileID: 1611565784}
-  note: {fileID: 1809292072}
+  note: {fileID: 1809292075}
   shoes: {fileID: 7850561092113557356, guid: 50370270648f1b146964e8f9d8773dee, type: 3}
   smash: {fileID: 2112802496966990078, guid: b9fb99f7f7afef342b6291f6b4c0bdd5, type: 3}
 --- !u!1 &667397075
@@ -2013,7 +2013,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3718861808889215590, guid: 8c2e97a1190b9df40bfdeef2410d812f, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.615
+      value: 0.748
       objectReference: {fileID: 0}
     - target: {fileID: 3718861808889215590, guid: 8c2e97a1190b9df40bfdeef2410d812f, type: 3}
       propertyPath: m_LocalPosition.y
@@ -5364,8 +5364,8 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
---- !u!64 &1809292072
-MeshCollider:
+--- !u!65 &1809292075
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -5374,10 +5374,9 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 0
-  serializedVersion: 4
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300000, guid: 90e7b33988731de488c67b97e8b8f3be, type: 3}
+  serializedVersion: 2
+  m_Size: {x: 0.27, y: 0.026740775, z: 0.3606538}
+  m_Center: {x: 0.12, y: 0, z: 0}
 --- !u!114 &1913150797
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5560,8 +5559,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 0.2
-  m_fontSizeBase: 0.2
+  m_fontSize: 0.175
+  m_fontSizeBase: 0.175
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -5596,7 +5595,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0.3055012, y: 0.30284977, z: 0.3081754, w: 0.46339047}
+  m_margin: {x: 0.3055012, y: 0.29810333, z: 0.3081754, w: 0.46339047}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   _SortingLayer: 0
@@ -6119,7 +6118,9 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 65411172062421724, guid: 00931e932c93cef48ae2d8cc87408c66, type: 3}
+    - {fileID: 65161656924194470, guid: 00931e932c93cef48ae2d8cc87408c66, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 00931e932c93cef48ae2d8cc87408c66, type: 3}
 --- !u!1001 &2137647109
 PrefabInstance:

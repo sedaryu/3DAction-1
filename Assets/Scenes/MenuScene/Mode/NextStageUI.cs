@@ -16,6 +16,8 @@ public class NextStageUI : SelectModeUI
     [SerializeField] private Collider mouse;
     [SerializeField] private Collider note;
 
+    public StageParam prevStageParam;
+    private StageParam savedStageParam;
     private List<StageParam> stageParams = new List<StageParam>();
     private int selectedStage = 0;
     [SerializeField] private Shoes shoes;
@@ -37,36 +39,49 @@ public class NextStageUI : SelectModeUI
 
     public void DisplayStageParamOnTV()
     {
-        tvText.text = $"StageType: {stageParams[selectedStage].Type.ToString()}\n" +
-                      $"Enemy: \n" +
-                      $"-{stageParams[selectedStage].SpawnEnemyList.SpawnObjects[0].name} " +
-                      $"AppearRate: {stageParams[selectedStage].SpawnEnemyList.SpawnObjects[0].appearanceProbability}\n" +
-                      $"-{stageParams[selectedStage].SpawnEnemyList.SpawnObjects[1].name} " +
-                      $"AppearRate: {stageParams[selectedStage].SpawnEnemyList.SpawnObjects[1].appearanceProbability}\n" +
-                      $"-{stageParams[selectedStage].SpawnEnemyList.SpawnObjects[2].name} " +
-                      $"AppearRate: {stageParams[selectedStage].SpawnEnemyList.SpawnObjects[2].appearanceProbability}\n" +
-                      $"Item: \n" +
-                      $"-{stageParams[selectedStage].SpawnItemList.SpawnObjects[0].name} " +
-                      $"AppearRate: {stageParams[selectedStage].SpawnItemList.SpawnObjects[0].appearanceProbability}\n" +
-                      $"-{stageParams[selectedStage].SpawnItemList.SpawnObjects[1].name} " +
-                      $"AppearRate: {stageParams[selectedStage].SpawnItemList.SpawnObjects[1].appearanceProbability}\n" +
-                      $"-{stageParams[selectedStage].SpawnItemList.SpawnObjects[2].name} " +
-                      $"AppearRate: {stageParams[selectedStage].SpawnItemList.SpawnObjects[2].appearanceProbability}";
+        string frontText; StageParam param;
+        if (selectedStage == -1) frontText = $"Clicking Note, You Can Save Previous Stage\n";
+        else frontText = $"Clicking KeyBoard, You Can Select Stage\nClicking Mouse, You Can Decide Next Stage\n";
+
+        if (selectedStage == -1) param = savedStageParam;
+        else param = stageParams[selectedStage];
+
+        if (param == null) tvText.text = frontText;
+        else
+        {
+            tvText.text = frontText +
+            $"StageType: {param.Type.ToString()}\n" +
+            $"Enemy: \n" +
+            $"-{param.SpawnEnemyList.SpawnObjects[0].name} " +
+            $"AppearRate: {param.SpawnEnemyList.SpawnObjects[0].appearanceProbability}\n" +
+            $"-{param.SpawnEnemyList.SpawnObjects[1].name} " +
+            $"AppearRate: {param.SpawnEnemyList.SpawnObjects[1].appearanceProbability}\n" +
+            $"-{param.SpawnEnemyList.SpawnObjects[2].name} " +
+            $"AppearRate: {param.SpawnEnemyList.SpawnObjects[2].appearanceProbability}\n" +
+            $"Item: \n" +
+            $"-{param.SpawnItemList.SpawnObjects[0].name} " +
+            $"AppearRate: {param.SpawnItemList.SpawnObjects[0].appearanceProbability}\n" +
+            $"-{param.SpawnItemList.SpawnObjects[1].name} " +
+            $"AppearRate: {param.SpawnItemList.SpawnObjects[1].appearanceProbability}\n" +
+            $"-{param.SpawnItemList.SpawnObjects[2].name} " +
+            $"AppearRate: {param.SpawnItemList.SpawnObjects[2].appearanceProbability}";
+        }
     }
 
     public void OnClickKeyBoard()
     {
-        if (selectedStage == stageParams.Count - 1) selectedStage = 0;
+        if (selectedStage == stageParams.Count - 1) selectedStage = -1;
         else selectedStage++;
         DisplayStageParamOnTV();
     }
 
     public void OnClickMouse()
     {
+        if (selectedStage == -1 && savedStageParam == null) return;
         SceneManager.sceneLoaded += SetParamToNextScene;
         string gun = new LoadJson().LoadEquipmentGunParam().NowEquipingGun;
         playerParam = new PlayerParam(new LoadAsset().LoadObject<Gun>("Gun", gun), smash, shoes, new LoadJson().LoadMenuParam().Parameter("Life"));
-        stageParams[selectedStage].SetObstacles(new StageMaker().MakeStage(out string[] subObstacles), subObstacles);
+        if (selectedStage != -1) stageParams[selectedStage].SetObstacles(new StageMaker().MakeStage(out string[] subObstacles), subObstacles);
         GameObject.Find("Canvas").transform.Find("Back").gameObject.SetActive(false);
         colliders.ForEach(x => x.enabled = false);
         StartCoroutine(TransferFieldScene());
@@ -75,13 +90,16 @@ public class NextStageUI : SelectModeUI
     public void OnClickNote()
     {
         Debug.Log("Note");
+        savedStageParam = prevStageParam;
+        DisplayStageParamOnTV();
     }
 
     private void SetParamToNextScene(Scene scene, LoadSceneMode _mode)
     {
         SceneManager.sceneLoaded -= SetParamToNextScene;
         ParamReceiver receiver = GameObject.Find("ParamReceiver").GetComponent<ParamReceiver>();
-        receiver.stageParam = stageParams[selectedStage];
+        if (selectedStage == -1) receiver.stageParam = savedStageParam;
+        else receiver.stageParam = stageParams[selectedStage];
         receiver.playerParam = playerParam;
     }
 
@@ -149,8 +167,7 @@ public class NextStageUI : SelectModeUI
                 }
             }
 
-            stageParams.Add(new StageParam(StageParam.StageType.Town, 
-                            new SpawnObjectList(1.5f, spawnEnemies), new SpawnObjectList(0, spawnItems)));
+            stageParams.Add(new StageParam(0, new SpawnObjectList(1.5f, spawnEnemies), new SpawnObjectList(0, spawnItems)));
         }
     }
 }
