@@ -13,13 +13,13 @@ MonoBehaviour:
   m_Name: Firebolt
   m_EditorClassIdentifier: 
   _type: 0
-  _name: 
-  _reach: 0
-  _range: 0
-  _attack: 0
-  _knockback: 0
-  _criticalMin: 0
-  _criticalAdd: 0
-  _bulletMax: 0
-  _bullet: 0
-  _reloadSpeed: 0
+  _name: Firebolt
+  _reach: 10
+  _range: 3
+  _attack: 0.6
+  _knockback: 0.6
+  _criticalMin: 0.06
+  _criticalAdd: 0.12
+  _bulletMax: 14
+  _bullet: 14
+  _reloadSpeed: 1.25
