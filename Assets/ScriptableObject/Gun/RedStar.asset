@@ -20,6 +20,6 @@ MonoBehaviour:
   _knockback: 0.7
   _criticalMin: 0.1
   _criticalAdd: 0.125
-  _bulletMax: 8
-  _bullet: 8
+  _bulletMax: 9
+  _bullet: 9
   _reloadSpeed: 1

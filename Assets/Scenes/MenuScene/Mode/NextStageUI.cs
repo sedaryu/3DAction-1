@@ -28,6 +28,7 @@ public class NextStageUI : SelectModeUI
     {
         initialText = "";
         colliders.Add(keyBoard); colliders.Add(mouse); colliders.Add(note);
+        savedStageParam = new LoadJson().LoadSavedStageParam();
         onClicked += () => 
         {
             headlineText.rectTransform.sizeDelta = new Vector2(0, 0);
@@ -46,7 +47,7 @@ public class NextStageUI : SelectModeUI
         if (selectedStage == -1) param = savedStageParam;
         else param = stageParams[selectedStage];
 
-        if (param == null) tvText.text = frontText;
+        if (param == null || param.SpawnEnemyList == null) tvText.text = frontText;
         else
         {
             tvText.text = frontText +
@@ -89,8 +90,9 @@ public class NextStageUI : SelectModeUI
 
     public void OnClickNote()
     {
-        Debug.Log("Note");
+        if (prevStageParam == null) return;
         savedStageParam = prevStageParam;
+        new LoadJson().SaveSavedStageParam(savedStageParam);
         DisplayStageParamOnTV();
     }
 
@@ -110,7 +112,8 @@ public class NextStageUI : SelectModeUI
             tvText.text = $"Ok, \nBegin Preparations \nTransporting You To The Destination \n{5 - i}";
             yield return new WaitForSeconds(1);
         }
-        SceneManager.LoadScene($"{stageParams[selectedStage].Type.ToString()}FieldScene");
+        if (selectedStage == -1) SceneManager.LoadScene($"{savedStageParam.Type.ToString()}FieldScene");
+        else SceneManager.LoadScene($"{stageParams[selectedStage].Type.ToString()}FieldScene");
     }
 
     private void GenerateStageParam()
@@ -167,7 +170,10 @@ public class NextStageUI : SelectModeUI
                 }
             }
 
-            stageParams.Add(new StageParam(0, new SpawnObjectList(1.5f, spawnEnemies), new SpawnObjectList(0, spawnItems)));
+            stageParams.Add(new StageParam(0, spawnEnemies.ToList().Select(x => x.name).ToList(),
+                                              spawnEnemies.ToList().Select(x => x.appearanceProbability).ToList(),
+                                              spawnItems.ToList().Select(x => x.name).ToList(),
+                                              spawnItems.ToList().Select(x => x.appearanceProbability).ToList()));
         }
     }
 }

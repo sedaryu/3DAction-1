@@ -49,6 +49,7 @@ public class GameController : MonoBehaviour
         new LoadJson().SaveMenuParam(new MenuParam(new List<string>() { "Point", "PointMax", "Life", "LifeMax", "Random", "RandomMax", "Day", "DayMax" },
                                                    new List<float>() { 0, 10000000272564224, 5, 5, 0, 100, 1, 10000000272564224 }));
         new LoadJson().SaveEquipmentGunParam(new EquipmentGunParam(new List<string>() { "SurvivalRevolver" }, 0));
+        new LoadJson().SaveSavedStageParam(new StageParam(0, null, null, null, null));
     }
 
     private IEnumerator TransferScene()
