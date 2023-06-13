@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
@@ -49,7 +50,16 @@ public class GameController : MonoBehaviour
         new LoadJson().SaveMenuParam(new MenuParam(new List<string>() { "Point", "PointMax", "Life", "LifeMax", "Random", "RandomMax", "Day", "DayMax" },
                                                    new List<float>() { 0, 10000000272564224, 5, 5, 0, 100, 1, 10000000272564224 }));
         new LoadJson().SaveEquipmentGunParam(new EquipmentGunParam(new List<string>() { "SurvivalRevolver" }, 0));
-        new LoadJson().SaveSavedStageParam(new StageParam(0, null, null, null, null));
+        StageParam param = new StageParam(0, new List<string>() { "Zombie", "SpeedZombie", "MiniZombie" },
+                                             new List<int>() { 50, 25, 25 },
+                                             new List<string>() { "Cola", "MultiVitamin", "ItemBox" },
+                                             new List<int>() { 15, 5, 5 });
+        Dictionary<string, Vector2> mainObstacles =  new StageMaker().MakeStage(out string[] subObstacles);
+        param.SetObstacles(mainObstacles.Keys.ToList(), mainObstacles.Values.ToList(), subObstacles);
+        new LoadJson().SaveSavedStageParam(new StageParam(0, new List<string>() { "Zombie", "SpeedZombie", "MiniZombie" },
+                                                             new List<int>() { 50, 25, 25 },
+                                                             new List<string>() { "Cola", "MultiVitamin", "ItemBox" },
+                                                             new List<int>() { 15, 5, 5 }));
     }
 
     private IEnumerator TransferScene()
