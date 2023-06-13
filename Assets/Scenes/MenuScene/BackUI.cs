@@ -26,4 +26,10 @@ public class BackUI : MonoBehaviour, IPointerClickHandler
         SetInvisible();
         onBack?.Invoke();
     }
+
+    public void BackToMainMode()
+    {
+        SetInvisible();
+        onBack?.Invoke();
+    }
 }
