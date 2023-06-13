@@ -40,6 +40,13 @@ public class EquipmentModeUI : SelectModeUI
         colliders.Add(bigWrench);
     }
 
+    public void UpdateGunUI()
+    {
+        gunParams.Clear();
+        colliders.Clear();
+        SetGunUI();
+    }
+
     private void UpdateSublineText(int number)
     {
         string equip = number == equipGuns.equipNumber ? "NowEquiping!" : "";

@@ -23,3 +23,4 @@ MonoBehaviour:
   _bulletMax: 6
   _bullet: 6
   _reloadSpeed: 1.25
+  _prise: 2500

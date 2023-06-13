@@ -55,11 +55,12 @@ public abstract class SelectModeUI : MonoBehaviour, IPointerClickHandler
         headlineText.enabled = false;
         sublineText.enabled = false;
         Task task = await cameraController.MoveCamera(position, rotation, 3000);
-        onClicked?.Invoke();
+
         headlineText.enabled = true;
         sublineText.enabled = true;
         headlineText.text = gameObject.name;
         sublineText.text = initialText;
+        onClicked?.Invoke();
         colliders.ForEach(x => x.enabled = true);
     }
 }

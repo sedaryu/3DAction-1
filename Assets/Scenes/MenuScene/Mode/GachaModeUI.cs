@@ -26,7 +26,7 @@ public class GachaModeUI : SelectModeUI
             sublineText.rectTransform.sizeDelta = new Vector2(350, 70);
             sublineText.rectTransform.anchoredPosition = new Vector3(5, 5, 0);
             param = new LoadJson().LoadMenuParam();
-            initialText = $"Clicking GachaBox,\nYou Can Try Rarity Gacha\nGachaRarity: {param.Parameter("Random")}%";
+            sublineText.text = $"Clicking GachaBox,\nYou Can Try Rarity Gacha\nGachaRarity: {param.Parameter("Random")}%";
         };
     }
 
@@ -49,7 +49,8 @@ public class GachaModeUI : SelectModeUI
             GameObject gun = new LoadAsset().LoadObject<GameObject>("Gun", name);
             Instantiate(gun, new Vector3(-1.7f, 5.15f, 0.65f), Quaternion.Euler(0, 0, 90));
             EquipmentGunParam equip = new LoadJson().LoadEquipmentGunParam();
-            if (equip.guns.Count >= 6) equip.guns[5] = gun.name;
+            if (equip.guns.Count >= 6)
+            { equip.guns.RemoveAt(0); equip.guns.Add(gun.name); }
             else equip.guns.Add(gun.name);
             new LoadJson().SaveEquipmentGunParam(equip);
         }
@@ -69,6 +70,7 @@ public class GachaModeUI : SelectModeUI
         MenuParam menuParam = new LoadJson().LoadMenuParam();
         menuParam.SetParameter("Random", 0);
         new LoadJson().SaveMenuParam(menuParam);
+        transform.parent.transform.Find("Equipment").GetComponent<EquipmentModeUI>().UpdateGunUI();
         Task wait = await Task.Run(async () => { await Task.Delay(3000); return Task.CompletedTask; } );
         top.rotation *= Quaternion.Euler(10, 0, 0);
         backUI.BackToMainMode();

@@ -82,4 +82,10 @@ public class GunParam : ScriptableObject
         get => _reloadSpeed;
     }
     [SerializeField] private float _reloadSpeed;
+
+    public int Prise //’l’i
+    {
+        get => _prise;
+    }
+    [SerializeField] private int _prise;
 }
