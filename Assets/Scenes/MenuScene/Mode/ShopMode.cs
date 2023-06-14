@@ -64,6 +64,7 @@ public class ShopMode : SelectModeUI
         { equip.guns.RemoveAt(0); equip.guns.Add(gun.name); }
         else equip.guns.Add(gun.name);
         new LoadJson().SaveEquipmentGunParam(equip);
+        transform.parent.transform.Find("Equipment").GetComponent<EquipmentModeUI>().UpdateGunUI();
         eagleAnimator.SetTrigger("Attack");
     }
 
