@@ -1523,7 +1523,7 @@ MonoBehaviour:
   position: {x: 1.14, y: 5.05, z: 0}
   rotation: {x: 2.5, y: 90, z: 0}
   colliders: []
-  dayPerRank: 0
+  dayPerRank: 0.3
   tvText: {fileID: 1962025797}
   keyBoard: {fileID: 927742893}
   mouse: {fileID: 1611565784}
